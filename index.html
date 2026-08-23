@@ -8,6 +8,23 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="RAVO" />
     <meta name="description" content="RAVO — הבית מסתדר. אתם נושמים." />
+    <!--
+      Keep the pilot out of search results.
+
+      This is a discovery control and NOT a security control: it asks crawlers not to list the page,
+      and it does nothing whatsoever about who may read a household's data. That boundary is Supabase
+      Auth and RLS, and it is unaffected by anything here — an anonymous request to the REST API
+      answers 401 with or without this tag.
+
+      It matters more than the robots.txt beside it, and for a reason that is easy to miss: robots.txt
+      is only honoured at an origin's root, so for lielbs.github.io/homy-household-os-site/ a crawler
+      reads lielbs.github.io/robots.txt — a path this project does not own and which answers 404.
+      A robots.txt shipped in dist is therefore inert on the pilot URL and effective only once the
+      build is served from a domain root. This tag works on both.
+
+      Remove it deliberately if RAVO ever wants a public, indexable page.
+    -->
+    <meta name="robots" content="noindex,nofollow" />
     <link rel="icon" href="./icon.svg" />
     <!-- A tab that cannot render SVG falls back to the raster mark rather than to nothing. -->
     <link rel="alternate icon" href="./icon-192.png" sizes="192x192" />
@@ -34,7 +51,7 @@
         } catch (error) { /* an unreadable localStorage just means the default light theme */ }
       })()
     </script>
-    <script type="module" crossorigin src="./assets/index-DhEKxBY2.js"></script>
+    <script type="module" crossorigin src="./assets/index-BIPgTbDC.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-BJlj-rJB.js">
     <link rel="stylesheet" crossorigin href="./assets/index-C_3W3qAI.css">
   <link rel="manifest" href="./manifest.webmanifest"></head>

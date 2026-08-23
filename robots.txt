@@ -1,0 +1,13 @@
+# RAVO is a private household product in an active pilot. Nothing here is meant to be found in a
+# search result.
+#
+# This file only takes effect where the build is served from an origin root — which today means
+# ravoapp.app, once that domain is activated. For the pilot URL the crawler reads
+# lielbs.github.io/robots.txt instead, a path this project does not own, which is why index.html
+# also carries <meta name="robots" content="noindex,nofollow">.
+#
+# A discovery control, not a security control. Who may read a household's data is decided by
+# Supabase Auth and row-level security, and is unaffected by this file.
+
+User-agent: *
+Disallow: /
