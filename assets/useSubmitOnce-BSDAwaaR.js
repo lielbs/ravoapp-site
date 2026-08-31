@@ -1,1 +1,0 @@
-import{a as e,r as t}from"./jsx-runtime-BJlj-rJB.js";var n=e(t(),1);function r(e){let t=(0,n.useRef)(!1);return(0,n.useEffect)(()=>{e&&(t.current=!1)},[e]),(0,n.useCallback)(e=>{t.current||(t.current=!0,e())},[])}export{r as t};
