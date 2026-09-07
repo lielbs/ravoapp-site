@@ -6,94 +6,365 @@
   <title>RAVO — הבית מסתדר. אתם נושמים.</title>
   <meta name="description" content="RAVO מרכזת משימות, קניות, יומן, חשבונות ושגרות במקום משותף אחד — כדי שיהיה פחות לנהל ויותר לחיות ביחד.">
   <link rel="canonical" href="https://ravoapp.app/">
-  <meta property="og:type" content="website"><meta property="og:locale" content="he_IL">
+  <meta property="og:type" content="website"><meta property="og:locale" content="he_IL"><meta property="og:site_name" content="RAVO">
   <meta property="og:title" content="RAVO — הבית מסתדר. אתם נושמים.">
   <meta property="og:description" content="כל מה שמחזיק את הבית, במקום משותף אחד.">
-  <meta property="og:url" content="https://ravoapp.app/"><meta property="og:image" content="https://ravoapp.app/assets/social-preview.webp">
-  <meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#55613A">
+  <meta property="og:url" content="https://ravoapp.app/">
+  <meta property="og:image" content="https://ravoapp.app/assets/social-preview.png">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="RAVO — פחות לנהל אחד את השני. יותר לחיות ביחד.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RAVO — הבית מסתדר. אתם נושמים.">
+  <meta name="twitter:description" content="כל מה שמחזיק את הבית, במקום משותף אחד.">
+  <meta name="twitter:image" content="https://ravoapp.app/assets/social-preview.png">
+  <meta name="theme-color" content="#0d0f0c">
   <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preload" as="image" href="assets/screens/he/today.webp" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"RAVO","applicationCategory":"LifestyleApplication","operatingSystem":"iOS","url":"https://ravoapp.app/","description":"מערכת הפעלה משותפת לבית ולמשרד קטן.","inLanguage":["he","en"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"RAVO","applicationCategory":"LifestyleApplication","operatingSystem":"iOS","url":"https://ravoapp.app/","image":"https://ravoapp.app/assets/social-preview.png","description":"מערכת הפעלה משותפת לבית ולמשרד קטן: משימות, קניות, יומן, חשבונות, מטבח ושגרות במקום אחד.","inLanguage":["he","en"],"softwareVersion":"1.0","releaseNotes":"בהכנה להשקה ב־App Store."}</script>
 </head>
 <body>
   <a class="skip" href="#main" data-he="דילוג לתוכן" data-en="Skip to content">דילוג לתוכן</a>
+
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="RAVO — דף הבית"><span class="brand-mark">⌂</span><span>RAVO</span></a>
-    <nav aria-label="ניווט ראשי">
-      <a href="#story" data-he="איך זה עובד" data-en="How it works">איך זה עובד</a>
-      <a href="#office" data-he="למשרד" data-en="For office">למשרד</a>
+    <a class="brand" href="#top" aria-label="RAVO">
+      <img class="brand-logo" src="logo.svg" width="44" height="44" alt="">
+      <span class="brand-type">RAVO<small data-he="הבית מסתדר" data-en="Home, in sync">הבית מסתדר</small></span>
+    </a>
+    <nav id="site-nav" aria-label="ניווט ראשי">
+      <a href="#load" data-he="העומס" data-en="The load">העומס</a>
+      <a href="#product" data-he="המוצר" data-en="Product">המוצר</a>
+      <a href="#together" data-he="ביחד" data-en="Together">ביחד</a>
+      <a href="#capture" data-he="לכידה מהירה" data-en="Quick Capture">לכידה מהירה</a>
+      <a href="#office" data-he="למשרד" data-en="Office">למשרד</a>
       <a href="#faq" data-he="שאלות" data-en="FAQ">שאלות</a>
     </nav>
-    <button class="lang" type="button" aria-label="Switch to English" data-lang-switch>EN</button>
+    <div class="header-tools">
+      <button class="lang" type="button" aria-label="Switch to English" data-lang-switch>EN</button>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="תפריט" data-menu-toggle><i></i><i></i></button>
+    </div>
   </header>
 
   <main id="main">
-    <section class="hero wrap" aria-labelledby="hero-title">
-      <div class="hero-copy reveal">
-        <p class="eyebrow" data-he="מערכת ההפעלה של הבית" data-en="The household operating system">מערכת ההפעלה של הבית</p>
-        <h1 id="hero-title" data-he="פחות לנהל אחד את השני.<br>יותר לחיות ביחד." data-en="Less managing each other.<br>More living together.">פחות לנהל אחד את השני.<br>יותר לחיות ביחד.</h1>
-        <p class="lede" data-he="משימות, קניות, יומן, חשבונות ושגרות — כל מה שמחזיק את הבית, במקום משותף אחד." data-en="Tasks, shopping, calendar, bills and routines — everything that keeps home moving, in one shared place.">משימות, קניות, יומן, חשבונות ושגרות — כל מה שמחזיק את הבית, במקום משותף אחד.</p>
-        <div class="availability"><span class="status-dot"></span><span data-he="בקרוב ב־App Store" data-en="Coming soon to the App Store">בקרוב ב־App Store</span></div>
+
+    <!-- ── hero ─────────────────────────────────────────────────────────────────────────────── -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-veil" aria-hidden="true"><span class="veil-roof"></span><span class="veil-glow"></span></div>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="badge"><span class="badge-dot"></span><span data-he="בקרוב ב־App Store" data-en="Coming soon to the App Store">בקרוב ב־App Store</span></p>
+          <h1 id="hero-title" data-he="פחות לנהל<br>אחד את השני.<br><em>יותר לחיות ביחד.</em>" data-en="Less managing<br>each other.<br><em>More living together.</em>">פחות לנהל<br>אחד את השני.<br><em>יותר לחיות ביחד.</em></h1>
+          <p class="lede" data-he="RAVO מרכזת את כל מה שמחזיק את הבית — משימות, קניות, יומן, חשבונות, מטבח ושגרות — במקום משותף אחד." data-en="RAVO brings everything that keeps a home running — tasks, shopping, calendar, bills, kitchen and routines — into one shared place.">RAVO מרכזת את כל מה שמחזיק את הבית — משימות, קניות, יומן, חשבונות, מטבח ושגרות — במקום משותף אחד.</p>
+          <a class="discover" href="#load"><span data-he="איך זה עובד" data-en="See how it works">איך זה עובד</span><i aria-hidden="true">↓</i></a>
+        </div>
+
+        <div class="hero-stage" data-tilt>
+          <!-- The scattered signals a household actually carries. They start loose and unaligned,
+               then settle into an arc beneath the device: the page's first sentence, told without
+               words. Everything inside the frame is a real screenshot. -->
+          <ul class="signals" aria-hidden="true" data-signals>
+            <li style="--l:19%;--t:14%;--r:-4deg;--sx:-58px;--sy:-72px;--sr:-14deg"><span data-he="קניות" data-en="Shopping">קניות</span></li>
+            <li style="--l:82%;--t:11%;--r:3deg;--sx:62px;--sy:-78px;--sr:12deg"><span data-he="חשבון חשמל" data-en="Electricity bill">חשבון חשמל</span></li>
+            <li style="--l:14%;--t:45%;--r:2deg;--sx:-76px;--sy:-22px;--sr:9deg"><span data-he="לקבוע תור" data-en="Book an appointment">לקבוע תור</span></li>
+            <li style="--l:86%;--t:41%;--r:-3deg;--sx:72px;--sy:-30px;--sr:-11deg"><span data-he="להוציא כביסה" data-en="Move the laundry">להוציא כביסה</span></li>
+            <li style="--l:22%;--t:75%;--r:-2deg;--sx:-52px;--sy:60px;--sr:-7deg"><span data-he="ארוחת ערב" data-en="Dinner">ארוחת ערב</span></li>
+            <li style="--l:79%;--t:71%;--r:4deg;--sx:56px;--sy:66px;--sr:15deg"><span data-he="נגמר החלב" data-en="Out of milk">נגמר החלב</span></li>
+          </ul>
+
+          <figure class="device device-hero" style="--dw:min(320px,72%,calc((100svh - 310px) * .4614))">
+            <img class="device-screen" src="assets/screens/he/today.webp" width="720" height="1560"
+                 alt="מסך היום של RAVO: מה דורש תשומת לב, מי אחראי ומה כבר טופל" data-screen-src="today" fetchpriority="high">
+          </figure>
+
+          <p class="stage-caption" aria-hidden="true"><span data-he="מסך אמיתי מתוך RAVO" data-en="A real screen from RAVO">מסך אמיתי מתוך RAVO</span></p>
+        </div>
       </div>
-      <div class="hero-visual reveal" aria-label="מסך היום האמיתי של RAVO">
-        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-        <img src="assets/today.webp" width="720" height="1560" alt="מסך היום של RAVO המציג תמונת מצב של הבית" fetchpriority="high">
-      </div>
+
+      <div class="rail" aria-hidden="true"><div class="rail-track"></div></div>
     </section>
 
-    <section class="problem dark" id="story">
-      <div class="wrap problem-grid">
-        <div class="reveal"><p class="eyebrow clay" data-he="זה לא אמור ליפול על אדם אחד" data-en="It shouldn’t fall on one person">זה לא אמור ליפול על אדם אחד</p><h2 data-he="העומס שלא רואים,<br>מרגישים כל יום." data-en="The invisible load<br>shows up every day.">העומס שלא רואים,<br>מרגישים כל יום.</h2></div>
-        <div class="problem-list reveal">
-          <p data-he="מי היה אמור לקבוע את התור?" data-en="Who was meant to book the appointment?">מי היה אמור לקבוע את התור?</p>
-          <p data-he="רשימת הקניות נשארה בין ההודעות." data-en="The shopping list got lost in messages.">רשימת הקניות נשארה בין ההודעות.</p>
-          <p data-he="החשבון הגיע — אבל למי?" data-en="The bill arrived — but who saw it?">החשבון הגיע — אבל למי?</p>
-          <p data-he="ושוב מישהו צריך להזכיר לכולם." data-en="And once again, someone has to remind everyone.">ושוב מישהו צריך להזכיר לכולם.</p>
+    <!-- ── the invisible load ────────────────────────────────────────────────────────────────── -->
+    <section class="load section-pad" id="load">
+      <div class="wrap">
+        <div class="head reveal">
+          <p class="eyebrow clay" data-he="העומס שלא רואים" data-en="The invisible load">העומס שלא רואים</p>
+          <h2 data-he="בית שלם לא אמור לשבת<br>בראש של אדם אחד." data-en="A whole home shouldn't sit<br>in one person's head.">בית שלם לא אמור לשבת<br>בראש של אדם אחד.</h2>
+          <p class="section-lede" data-he="מי קובע את התור, מה נגמר במזווה, איזה חשבון מחכה ומי הבטיח לטפל. כשהמידע מפוזר בין ראשים, צ׳אטים ופתקים — אדם אחד הופך בלי שהתכוון למנהל הבית." data-en="Who books the appointment, what ran out, which bill is waiting, who promised to handle it. When that lives across heads, chats and notes, one person quietly becomes the household manager.">מי קובע את התור, מה נגמר במזווה, איזה חשבון מחכה ומי הבטיח לטפל. כשהמידע מפוזר בין ראשים, צ׳אטים ופתקים — אדם אחד הופך בלי שהתכוון למנהל הבית.</p>
+        </div>
+
+        <div class="load-grid">
+          <article class="reveal"><span class="n">01</span><p data-he="״מי היה אמור לעשות את זה?״" data-en="“Who was supposed to do that?”">״מי היה אמור לעשות את זה?״</p><small data-he="אין תמונה משותפת" data-en="No shared picture">אין תמונה משותפת</small></article>
+          <article class="reveal"><span class="n">02</span><p data-he="הרשימה נשארה בין שלוש שיחות." data-en="The list is split across three chats.">הרשימה נשארה בין שלוש שיחות.</p><small data-he="המידע מפוזר" data-en="Scattered information">המידע מפוזר</small></article>
+          <article class="reveal"><span class="n">03</span><p data-he="שוב צריך להזכיר. ושוב." data-en="Another reminder. And another.">שוב צריך להזכיר. ושוב.</p><small data-he="הזיכרון של אדם אחד" data-en="One person's memory">הזיכרון של אדם אחד</small></article>
+          <article class="reveal answer">
+            <img src="logo.svg" width="46" height="46" alt="">
+            <p data-he="RAVO מחזירה את התמונה לכולם." data-en="RAVO gives everyone the same picture.">RAVO מחזירה את התמונה לכולם.</p>
+            <small data-he="מקום אחד, משותף" data-en="One shared place">מקום אחד, משותף</small>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="promise wrap centered reveal">
-      <p class="eyebrow" data-he="העיקרון של RAVO" data-en="The RAVO idea">העיקרון של RAVO</p>
-      <h2 data-he="הבית לא מנוהל על ידי אדם אחד.<br>אז גם האפליקציה לא צריכה להיות." data-en="A home isn’t run by one person.<br>Its app shouldn’t be either.">הבית לא מנוהל על ידי אדם אחד.<br>אז גם האפליקציה לא צריכה להיות.</h2>
-      <p data-he="כשכולם רואים את אותה תמונה, האחריות ברורה יותר — בלי עוד שרשרת הודעות ובלי להפוך אדם אחד למנהל הבית." data-en="When everyone sees the same picture, responsibility becomes clear — without another message chain or turning one person into the household manager.">כשכולם רואים את אותה תמונה, האחריות ברורה יותר — בלי עוד שרשרת הודעות ובלי להפוך אדם אחד למנהל הבית.</p>
-    </section>
+    <!-- ── scroll-driven product story ───────────────────────────────────────────────────────── -->
+    <section class="story section-pad" id="product">
+      <div class="wrap story-layout">
+        <div class="story-copy">
+          <div class="head reveal story-intro">
+            <p class="eyebrow" data-he="יום אחד. מקום אחד." data-en="One day. One place.">יום אחד. מקום אחד.</p>
+            <h2 data-he="מהבוקר ועד<br>שהבית נרגע." data-en="From morning until<br>home settles.">מהבוקר ועד<br>שהבית נרגע.</h2>
+            <p class="section-lede" data-he="גללו דרך יום אמיתי ב־RAVO. כל מסך כאן צולם מהמוצר עצמו, בלי ציור מחדש." data-en="Scroll through a real day in RAVO. Every screen here is photographed from the product itself, nothing redrawn.">גללו דרך יום אמיתי ב־RAVO. כל מסך כאן צולם מהמוצר עצמו, בלי ציור מחדש.</p>
+          </div>
 
-    <section class="features wrap" aria-label="היכרות עם RAVO">
-      <article class="feature reveal"><div class="feature-copy"><span>01</span><p class="eyebrow" data-he="היום" data-en="Today">היום</p><h2 data-he="מה שחשוב עכשיו, בלי לחפש." data-en="What matters now, without the hunt.">מה שחשוב עכשיו, בלי לחפש.</h2><p data-he="משימות קרובות, תזכורות ותמונת מצב אחת שמספרת לבית מה צריך לקרות היום." data-en="Upcoming tasks, reminders and one calm view of what needs to happen today.">משימות קרובות, תזכורות ותמונת מצב אחת שמספרת לבית מה צריך לקרות היום.</p></div><div class="shot sage"><img src="assets/today.webp" loading="lazy" width="720" height="1560" alt="מסך היום ב־RAVO"></div></article>
-      <article class="feature reverse reveal"><div class="feature-copy"><span>02</span><p class="eyebrow" data-he="משימות" data-en="Tasks">משימות</p><h2 data-he="רואים מי לקח אחריות. בלי לנדנד." data-en="See who owns it. No nagging needed.">רואים מי לקח אחריות. בלי לנדנד.</h2><p data-he="כל משימה במקום ברור, עם אחראי, זמן וחזרתיות כשצריך. כולם יודעים מה נשאר ומה כבר נעשה." data-en="Every task has a clear owner, time and recurrence when needed. Everyone knows what remains and what’s done.">כל משימה במקום ברור, עם אחראי, זמן וחזרתיות כשצריך. כולם יודעים מה נשאר ומה כבר נעשה.</p></div><div class="shot clay-bg"><img src="assets/tasks.webp" loading="lazy" width="720" height="1560" alt="רשימת המשימות המשותפת ב־RAVO"></div></article>
-      <article class="feature reveal"><div class="feature-copy"><span>03</span><p class="eyebrow" data-he="קניות" data-en="Shopping">קניות</p><h2 data-he="הרשימה של הבית. אצל כולם." data-en="The household list. With everyone.">הרשימה של הבית. אצל כולם.</h2><p data-he="מוסיפים כשנזכרים, מסמנים בחנות, ורואים בזמן אמת מה עוד נשאר." data-en="Add items when you remember, check them in the shop, and see what remains.">מוסיפים כשנזכרים, מסמנים בחנות, ורואים בזמן אמת מה עוד נשאר.</p><button class="demo-check" type="button" aria-pressed="false"><span class="box">✓</span><span data-he="חלב שיבולת שועל" data-en="Oat milk">חלב שיבולת שועל</span><small data-he="נסו לסמן" data-en="Try checking it">נסו לסמן</small></button></div><div class="shot sage"><img src="assets/shopping.webp" loading="lazy" width="720" height="1560" alt="רשימת קניות משותפת ב־RAVO"></div></article>
-      <article class="feature reverse reveal"><div class="feature-copy"><span>04</span><p class="eyebrow" data-he="יומן" data-en="Calendar">יומן</p><h2 data-he="מה קורה השבוע? כולם כבר יודעים." data-en="What’s happening this week? Everyone knows.">מה קורה השבוע? כולם כבר יודעים.</h2><p data-he="תורים, אירועים ותוכניות של הבית בתצוגה משותפת — בלי לחבר פיסות מידע מכמה מקומות." data-en="Appointments, events and plans in a shared view — without piecing information together from several places.">תורים, אירועים ותוכניות של הבית בתצוגה משותפת — בלי לחבר פיסות מידע מכמה מקומות.</p></div><div class="shot clay-bg"><img src="assets/calendar.webp" loading="lazy" width="720" height="1560" alt="היומן המשפחתי של RAVO"></div></article>
-    </section>
+          <article class="step" data-screen="today">
+            <span class="step-time">08:00</span>
+            <h3 data-he="היום מתחיל בתמונה ברורה." data-en="The day starts with a clear picture.">היום מתחיל בתמונה ברורה.</h3>
+            <p data-he="מה דחוף, מה מתקרב ומי כבר לקח אחריות — בלי לפתוח חמש רשימות ובלי לשאול." data-en="What's urgent, what's coming and who already owns it — without opening five lists or asking anyone.">מה דחוף, מה מתקרב ומי כבר לקח אחריות — בלי לפתוח חמש רשימות ובלי לשאול.</p>
+            <figure class="device step-device" style="--dw:min(280px,74vw)"><img class="device-screen" loading="lazy" src="assets/screens/he/today.webp" width="720" height="1560" alt="מסך היום של RAVO" data-screen-src="today"></figure>
+          </article>
 
-    <section class="three-up">
-      <div class="wrap"><div class="section-head reveal"><p class="eyebrow" data-he="כל מה שמחזיק את הבית" data-en="Everything that keeps home moving">כל מה שמחזיק את הבית</p><h2 data-he="פחות קצוות פתוחים." data-en="Fewer loose ends.">פחות קצוות פתוחים.</h2></div>
-        <div class="card-grid">
-          <article class="product-card reveal"><img src="assets/money.webp" loading="lazy" width="720" height="1560" alt="מסך החשבונות של RAVO"><div><h3 data-he="חשבונות וכסף" data-en="Bills & money">חשבונות וכסף</h3><p data-he="מי משלם, מתי, ומה כבר טופל — תיאום ביתי, לא שירות בנקאי ולא ייעוץ פיננסי." data-en="Who pays, when, and what’s handled — household coordination, not banking or financial advice.">מי משלם, מתי, ומה כבר טופל — תיאום ביתי, לא שירות בנקאי ולא ייעוץ פיננסי.</p></div></article>
-          <article class="product-card reveal"><img src="assets/quick-add.webp" loading="lazy" width="720" height="1560" alt="לכידה מהירה של משימה ב־RAVO"><div><h3 data-he="לכידה מהירה" data-en="Quick capture">לכידה מהירה</h3><p data-he="כותבים בעברית מה צריך לקרות. RAVO מסדרת את השאר בתוך המקום הנכון." data-en="Write what needs to happen in Hebrew. RAVO places it where it belongs.">כותבים בעברית מה צריך לקרות. RAVO מסדרת את השאר בתוך המקום הנכון.</p><div class="typing" aria-label="דוגמה חזותית: לקבוע תור לשיננית ביום שלישי"><span data-type-he="לקבוע תור לשיננית ביום שלישי" data-type-en="לקבוע תור לשיננית ביום שלישי"></span><i></i></div></div></article>
-          <article class="product-card reveal"><img src="assets/templates.webp" loading="lazy" width="720" height="1560" alt="תבניות שבועיות ב־RAVO"><div><h3 data-he="שגרות ותבניות" data-en="Routines & templates">שגרות ותבניות</h3><p data-he="דברים שחוזרים לא צריכים להתחיל מאפס. שומרים פעם אחת ומחזירים לשבוע הבא." data-en="Recurring work shouldn’t start from scratch. Save it once and bring it back next week.">דברים שחוזרים לא צריכים להתחיל מאפס. שומרים פעם אחת ומחזירים לשבוע הבא.</p></div></article>
+          <article class="step" data-screen="tasks">
+            <span class="step-time">10:30</span>
+            <h3 data-he="אחריות עוברת מהראש למרחב." data-en="Responsibility moves out of your head.">אחריות עוברת מהראש למרחב.</h3>
+            <p data-he="משימה מקבלת אחראי, תאריך וחזרתיות. אף אחד לא צריך לזכור בשביל כולם, ואף אחד לא צריך לנדנד." data-en="A task gets an owner, a date and a repeat. Nobody has to remember for everyone else, and nobody has to nag.">משימה מקבלת אחראי, תאריך וחזרתיות. אף אחד לא צריך לזכור בשביל כולם, ואף אחד לא צריך לנדנד.</p>
+            <figure class="device step-device" style="--dw:min(280px,74vw)"><img class="device-screen" loading="lazy" src="assets/screens/he/tasks.webp" width="720" height="1560" alt="מסך המשימות של RAVO" data-screen-src="tasks"></figure>
+          </article>
+
+          <article class="step" data-screen="shopping">
+            <span class="step-time">16:20</span>
+            <h3 data-he="מה שנגמר נכנס לרשימה של כולם." data-en="What runs out joins everyone's list.">מה שנגמר נכנס לרשימה של כולם.</h3>
+            <p data-he="מוסיפים כשנזכרים, מסמנים בחנות, וכל מי שבבית רואה מיד מה עוד נשאר." data-en="Add it when you remember, tick it in the aisle, and everyone at home sees what's left straight away.">מוסיפים כשנזכרים, מסמנים בחנות, וכל מי שבבית רואה מיד מה עוד נשאר.</p>
+            <figure class="device step-device" style="--dw:min(280px,74vw)"><img class="device-screen" loading="lazy" src="assets/screens/he/shopping.webp" width="720" height="1560" alt="מסך הקניות של RAVO" data-screen-src="shopping"></figure>
+          </article>
+
+          <article class="step" data-screen="calendar">
+            <span class="step-time">20:00</span>
+            <h3 data-he="מחר כבר לא מפתיע אף אחד." data-en="Tomorrow surprises no one.">מחר כבר לא מפתיע אף אחד.</h3>
+            <p data-he="תורים, חוגים, אירועים ותוכניות של הבית נמצאים ביומן משותף אחד." data-en="Appointments, classes, events and household plans live in one shared calendar.">תורים, חוגים, אירועים ותוכניות של הבית נמצאים ביומן משותף אחד.</p>
+            <figure class="device step-device" style="--dw:min(280px,74vw)"><img class="device-screen" loading="lazy" src="assets/screens/he/calendar.webp" width="720" height="1560" alt="מסך היומן של RAVO" data-screen-src="calendar"></figure>
+          </article>
+
+          <article class="step" data-screen="money">
+            <span class="step-time">21:15</span>
+            <h3 data-he="חשבונות בלי ערפל." data-en="Bills without the fog.">חשבונות בלי ערפל.</h3>
+            <p data-he="מה מחכה לתשלום, מי מטפל ומה כבר שולם. תיאום ביתי — לא שירות בנקאי." data-en="What's waiting, who's handling it and what's already paid. Household coordination, not banking.">מה מחכה לתשלום, מי מטפל ומה כבר שולם. תיאום ביתי — לא שירות בנקאי.</p>
+            <figure class="device step-device" style="--dw:min(280px,74vw)"><img class="device-screen" loading="lazy" src="assets/screens/he/money.webp" width="720" height="1560" alt="מסך החשבונות של RAVO" data-screen-src="money"></figure>
+          </article>
+
+          <article class="step" data-screen="templates">
+            <span class="step-time" data-he="כל שבוע" data-en="Every week">כל שבוע</span>
+            <h3 data-he="מה שחוזר, כבר מוכן." data-en="What repeats is already ready.">מה שחוזר, כבר מוכן.</h3>
+            <p data-he="שגרות ותבניות מחזירות לשבוע הבא את מה שלא צריך להמציא מחדש בכל פעם." data-en="Routines and templates bring back next week's recurring work, without inventing it again.">שגרות ותבניות מחזירות לשבוע הבא את מה שלא צריך להמציא מחדש בכל פעם.</p>
+            <figure class="device step-device" style="--dw:min(280px,74vw)"><img class="device-screen" loading="lazy" src="assets/screens/he/templates.webp" width="720" height="1560" alt="מסך השגרות של RAVO" data-screen-src="templates"></figure>
+          </article>
+        </div>
+
+        <div class="story-pin">
+          <div class="pin-inner">
+            <div class="pin-halo" aria-hidden="true"></div>
+            <figure class="device device-pin" style="--dw:min(300px,74%,calc((100svh - 268px) * .4614))">
+              <img class="device-screen is-on" data-pin="today" src="assets/screens/he/today.webp" width="720" height="1560" alt="מסך היום של RAVO" data-screen-src="today">
+              <img class="device-screen" data-pin="tasks" loading="lazy" src="assets/screens/he/tasks.webp" width="720" height="1560" alt="מסך המשימות של RAVO" data-screen-src="tasks">
+              <img class="device-screen" data-pin="shopping" loading="lazy" src="assets/screens/he/shopping.webp" width="720" height="1560" alt="מסך הקניות של RAVO" data-screen-src="shopping">
+              <img class="device-screen" data-pin="calendar" loading="lazy" src="assets/screens/he/calendar.webp" width="720" height="1560" alt="מסך היומן של RAVO" data-screen-src="calendar">
+              <img class="device-screen" data-pin="money" loading="lazy" src="assets/screens/he/money.webp" width="720" height="1560" alt="מסך החשבונות של RAVO" data-screen-src="money">
+              <img class="device-screen" data-pin="templates" loading="lazy" src="assets/screens/he/templates.webp" width="720" height="1560" alt="מסך השגרות של RAVO" data-screen-src="templates">
+            </figure>
+            <ol class="pin-ticks" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li><li></li></ol>
+            <p class="pin-label" aria-live="polite"><span class="pin-dot"></span><strong data-pin-label>היום</strong><small>RAVO HOME</small></p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="household wrap feature reveal"><div class="feature-copy"><p class="eyebrow" data-he="בית משותף" data-en="Shared household">בית משותף</p><h2 data-he="לכל אחד יש מקום.<br>לאדם אחד אין את כל העומס." data-en="Everyone has a place.<br>No one carries all the load.">לכל אחד יש מקום.<br>לאדם אחד אין את כל העומס.</h2><p data-he="בני הבית רואים את מה שרלוונטי להם, מקבלים אחריות ברורה, ופחות דברים נופלים בין הכיסאות." data-en="Household members see what’s relevant, get clear responsibility, and fewer things fall through the cracks.">בני הבית רואים את מה שרלוונטי להם, מקבלים אחריות ברורה, ופחות דברים נופלים בין הכיסאות.</p></div><div class="shot sage"><img src="assets/household.webp" loading="lazy" width="720" height="1560" alt="מסך בני הבית ב־RAVO"></div></section>
+    <!-- ── shared responsibility ─────────────────────────────────────────────────────────────── -->
+    <section class="together section-pad" id="together">
+      <div class="wrap">
+        <div class="head reveal center">
+          <p class="eyebrow clay" data-he="אחריות משותפת, באמת" data-en="Shared responsibility, for real">אחריות משותפת, באמת</p>
+          <h2 data-he="מהראש של אחד<br><em>לבית של כולם.</em>" data-en="Out of one head,<br><em>into the whole home.</em>">מהראש של אחד<br><em>לבית של כולם.</em></h2>
+        </div>
 
-    <section class="office dark" id="office"><div class="wrap office-grid"><div class="office-copy reveal"><p class="eyebrow clay">RAVO OFFICE</p><h2 data-he="אותו שקט,<br>גם במשרד." data-en="The same calm,<br>at the office.">אותו שקט,<br>גם במשרד.</h2><p data-he="לצוותים קטנים שרוצים לראות מה דורש טיפול: משימות, רכש, ציוד משרדי, הוצאות, יומן, ספקים, ציוד, תחזוקה והודעות — במרחב אחד." data-en="For small teams that need a shared view of tasks, procurement, supplies, expenses, calendar, vendors, equipment, maintenance and announcements.">לצוותים קטנים שרוצים לראות מה דורש טיפול: משימות, רכש, ציוד משרדי, הוצאות, יומן, ספקים, ציוד, תחזוקה והודעות — במרחב אחד.</p></div><div class="office-shots reveal"><img src="assets/office.webp" loading="lazy" width="720" height="1560" alt="מסך היום במשרד ב־RAVO Office"><img src="assets/maintenance.webp" loading="lazy" width="720" height="1560" alt="מסך התחזוקה ב־RAVO Office"></div></div></section>
+        <div class="handover reveal" data-handover>
+          <div class="handover-side from">
+            <p class="handover-title" data-he="אצלי בראש" data-en="In my head">אצלי בראש</p>
+            <ul class="thoughts">
+              <li data-he="להזמין תור לטכנאי" data-en="Book the technician">להזמין תור לטכנאי</li>
+              <li data-he="להוסיף קפה לרשימה" data-en="Add coffee to the list">להוסיף קפה לרשימה</li>
+              <li data-he="לשלם חשבון מים" data-en="Pay the water bill">לשלם חשבון מים</li>
+            </ul>
+          </div>
+          <div class="handover-arrow" aria-hidden="true"><span></span><img src="logo.svg" width="40" height="40" alt=""><span></span></div>
+          <div class="handover-side to">
+            <p class="handover-title" data-he="בבית" data-en="At home">בבית</p>
+            <div class="live-demo" aria-label="הדגמה מקומית של רשימת הבית">
+              <div class="demo-top">
+                <span><small data-he="הבית של משפחת ברק" data-en="The Barak household">הבית של משפחת ברק</small><strong data-he="מה קורה היום" data-en="What's happening today">מה קורה היום</strong></span>
+                <span class="avatars"><i>נ</i><i>ל</i><i>מ</i></span>
+              </div>
+              <div class="progress"><i></i></div>
+              <button class="demo-task" type="button" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="demo-body"><strong data-he="להזמין תור לטכנאי" data-en="Book the technician">להזמין תור לטכנאי</strong><small data-he="באחריות ליאל · היום" data-en="Liel · today">באחריות ליאל · היום</small></span><b aria-hidden="true">ל</b></button>
+              <button class="demo-task" type="button" aria-pressed="false"><span class="check" aria-hidden="true">✓</span><span class="demo-body"><strong data-he="להוסיף קפה לרשימה" data-en="Add coffee to the list">להוסיף קפה לרשימה</strong><small data-he="באחריות מאיה · היום" data-en="Maya · today">באחריות מאיה · היום</small></span><b aria-hidden="true">מ</b></button>
+              <button class="demo-task" type="button" aria-pressed="true"><span class="check" aria-hidden="true">✓</span><span class="demo-body"><strong data-he="לשלם חשבון מים" data-en="Pay the water bill">לשלם חשבון מים</strong><small data-he="הושלם" data-en="Completed">הושלם</small></span><b aria-hidden="true">נ</b></button>
+              <p class="demo-toast" role="status"><span aria-hidden="true">✓</span><span data-he="נשמר. עכשיו כולם יודעים." data-en="Saved. Now everyone knows.">נשמר. עכשיו כולם יודעים.</span></p>
+              <p class="demo-note" data-he="הדגמה בדפדפן בלבד — לא נשמר שום מידע." data-en="A browser-only demo — nothing is saved.">הדגמה בדפדפן בלבד — לא נשמר שום מידע.</p>
+            </div>
+          </div>
+        </div>
 
-    <section class="trust wrap"><div class="section-head reveal"><p class="eyebrow" data-he="פרטיות בלי דרמה" data-en="Privacy, without drama">פרטיות בלי דרמה</p><h2 data-he="הבית שלכם הוא לא מוצר פרסום." data-en="Your home isn’t an advertising product.">הבית שלכם הוא לא מוצר פרסום.</h2></div><div class="trust-grid"><article class="reveal"><span>01</span><h3 data-he="מרחבים נפרדים" data-en="Separate workspaces">מרחבים נפרדים</h3><p data-he="הגישה מבוססת חשבון והרשאות. מידע של בית אחד אינו פתוח לבית אחר." data-en="Access is account- and permission-based. One household’s information isn’t open to another.">הגישה מבוססת חשבון והרשאות. מידע של בית אחד אינו פתוח לבית אחר.</p></article><article class="reveal"><span>02</span><h3 data-he="בלי מכירת מידע" data-en="No data sales">בלי מכירת מידע</h3><p data-he="אין פרסומות, אין מכירת מידע אישי ואין עוגיות מעקב של צד שלישי באתר הזה." data-en="No ads, no sale of personal information and no third-party tracking cookies on this site.">אין פרסומות, אין מכירת מידע אישי ואין עוגיות מעקב של צד שלישי באתר הזה.</p></article><article class="reveal"><span>03</span><h3 data-he="שליטה בחשבון" data-en="Account control">שליטה בחשבון</h3><p data-he="מחיקת חשבון זמינה בתוך המוצר. התקשורת מוצפנת וההרשאות נאכפות במסד הנתונים." data-en="Account deletion is available in-product. Transport is encrypted and permissions are enforced in the database.">מחיקת חשבון זמינה בתוך המוצר. התקשורת מוצפנת וההרשאות נאכפות במסד הנתונים.</p></article></div></section>
+        <p class="together-close reveal" data-he="RAVO לא מחלקת ציונים ולא מנהלת אנשים. היא נותנת לבית הקשר משותף: מה צריך לקרות, מי מטפל, ומה כבר מאחורינו." data-en="RAVO doesn't score anyone and doesn't manage people. It gives the household shared context: what needs doing, who has it, and what's already behind you.">RAVO לא מחלקת ציונים ולא מנהלת אנשים. היא נותנת לבית הקשר משותף: מה צריך לקרות, מי מטפל, ומה כבר מאחורינו.</p>
+      </div>
+    </section>
 
-    <section class="faq" id="faq"><div class="wrap narrow"><div class="section-head reveal"><p class="eyebrow" data-he="שאלות נפוצות" data-en="Frequently asked questions">שאלות נפוצות</p><h2 data-he="לפני שמתחילים." data-en="Before getting started.">לפני שמתחילים.</h2></div>
-      <details><summary data-he="מה זה RAVO?" data-en="What is RAVO?">מה זה RAVO?</summary><p data-he="RAVO היא מערכת הפעלה משותפת לבית: מקום אחד למשימות, קניות, יומן, חשבונות ושגרות." data-en="RAVO is a shared household operating system: one place for tasks, shopping, calendar, bills and routines.">RAVO היא מערכת הפעלה משותפת לבית: מקום אחד למשימות, קניות, יומן, חשבונות ושגרות.</p></details>
-      <details><summary data-he="למי זה מתאים?" data-en="Who is it for?">למי זה מתאים?</summary><p data-he="לבתים שרוצים פחות עומס סמוי ופחות תיאומים מפוזרים. יש גם סביבת Office לצוותים ומשרדים קטנים." data-en="For households that want less invisible load and fewer scattered conversations. There’s also an Office workspace for small teams.">לבתים שרוצים פחות עומס סמוי ופחות תיאומים מפוזרים. יש גם סביבת Office לצוותים ומשרדים קטנים.</p></details>
-      <details><summary data-he="האם כולם בבית צריכים להשתמש באפליקציה?" data-en="Does everyone at home need the app?">האם כולם בבית צריכים להשתמש באפליקציה?</summary><p data-he="הערך גדל כשבני הבית משתתפים, אבל לכל אחד אפשר להגדיר תפקיד והרשאות שמתאימים לו." data-en="It becomes more useful as household members participate, with roles and permissions suited to each person.">הערך גדל כשבני הבית משתתפים, אבל לכל אחד אפשר להגדיר תפקיד והרשאות שמתאימים לו.</p></details>
-      <details><summary data-he="האם המידע שלי פרטי?" data-en="Is my information private?">האם המידע שלי פרטי?</summary><p data-he="הגישה פרטית ומבוססת חשבון. אין מכירת מידע או פרסום ממוקד. פרטים מלאים נמצאים במדיניות הפרטיות." data-en="Access is private and account-based. There is no data sale or targeted advertising. Full details are in the privacy policy.">הגישה פרטית ומבוססת חשבון. אין מכירת מידע או פרסום ממוקד. פרטים מלאים נמצאים במדיניות הפרטיות.</p></details>
-      <details><summary data-he="מתי RAVO תהיה זמינה?" data-en="When will RAVO be available?">מתי RAVO תהיה זמינה?</summary><p data-he="RAVO מתכוננת להשקה ב־App Store. קישור רשמי יופיע כאן כשהעמוד הציבורי יהיה זמין. מחיר, אם יהיה, יפורסם לפני השקה בתשלום." data-en="RAVO is preparing for App Store release. The official link will appear here when the public listing is available. Any pricing will be published before a paid launch.">RAVO מתכוננת להשקה ב־App Store. קישור רשמי יופיע כאן כשהעמוד הציבורי יהיה זמין. מחיר, אם יהיה, יפורסם לפני השקה בתשלום.</p></details>
-    </div></section>
+    <!-- ── quick capture ─────────────────────────────────────────────────────────────────────── -->
+    <section class="capture section-pad" id="capture">
+      <div class="wrap capture-grid">
+        <div class="capture-copy reveal">
+          <p class="eyebrow" data-he="לכידה מהירה" data-en="Quick Capture">לכידה מהירה</p>
+          <h2 data-he="כותבים משפט.<br><em>RAVO מבינה אותו.</em>" data-en="Type a sentence.<br><em>RAVO reads it.</em>">כותבים משפט.<br><em>RAVO מבינה אותו.</em></h2>
+          <p class="section-lede" data-he="במקום למלא טופס, כותבים בעברית כמו שחושבים. RAVO מזהה את התאריך, השעה והסכום, ומציעה לאן זה שייך — ואתם מאשרים." data-en="Instead of filling in a form, write it the way you'd say it. In Hebrew RAVO picks out the date, the time and the amount and suggests where it belongs — and you confirm.">במקום למלא טופס, כותבים בעברית כמו שחושבים. RAVO מזהה את התאריך, השעה והסכום, ומציעה לאן זה שייך — ואתם מאשרים.</p>
+          <p class="capture-fine" data-he="ההבנה החופשית בנויה לעברית. באנגלית RAVO קוראת את התאריך והשעה ומבקשת מכם לבחור לאן זה הולך." data-en="Free-text reading is tuned for Hebrew. In English RAVO picks up the date and time, and asks you to choose where it goes.">ההבנה החופשית בנויה לעברית. באנגלית RAVO קוראת את התאריך והשעה ומבקשת מכם לבחור לאן זה הולך.</p>
+        </div>
 
-    <section class="finale dark"><div class="wrap centered reveal"><span class="brand-symbol">⌂</span><h2 data-he="הבית מסתדר.<br>אתם נושמים." data-en="Home falls into place.<br>You can breathe.">הבית מסתדר.<br>אתם נושמים.</h2><p data-he="RAVO — המתכון לשלום בית." data-en="RAVO — a calmer way to live together.">RAVO — המתכון לשלום בית.</p><div class="availability light"><span class="status-dot"></span><span data-he="בקרוב ב־App Store" data-en="Coming soon to the App Store">בקרוב ב־App Store</span></div></div></section>
+        <div class="capture-demo reveal" data-capture>
+          <div class="capture-window">
+            <p class="capture-head"><span class="capture-dots" aria-hidden="true"><i></i><i></i><i></i></span><span data-he="הוספה מהירה" data-en="Quick add">הוספה מהירה</span></p>
+            <p class="capture-field"><span data-capture-text></span><i class="caret" aria-hidden="true"></i></p>
+            <div class="capture-result" data-capture-result aria-hidden="true">
+              <p class="result-head"><span class="result-tick" aria-hidden="true">✓</span><span data-he="נקלט כמשימה" data-en="Filed as a task">נקלט כמשימה</span></p>
+              <ul class="chips">
+                <li><small data-he="מתי" data-en="When">מתי</small><strong data-he="מחר" data-en="Tomorrow">מחר</strong></li>
+                <li><small data-he="שעה" data-en="Time">שעה</small><strong>18:00</strong></li>
+                <li><small data-he="לאן" data-en="Where">לאן</small><strong data-he="קניות" data-en="Shopping">קניות</strong></li>
+              </ul>
+            </div>
+          </div>
+          <p class="demo-note" data-he="הדגמה בדפדפן בלבד — לא נשלח שום מידע." data-en="A browser-only demo — nothing is sent.">הדגמה בדפדפן בלבד — לא נשלח שום מידע.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── the wider system ──────────────────────────────────────────────────────────────────── -->
+    <section class="system section-pad">
+      <div class="wrap">
+        <div class="head reveal">
+          <p class="eyebrow" data-he="כל מה שמחזיק את הבית" data-en="Everything that keeps home moving">כל מה שמחזיק את הבית</p>
+          <h2 data-he="מערכת אחת.<br>פחות קצוות פתוחים." data-en="One system.<br>Fewer loose ends.">מערכת אחת.<br>פחות קצוות פתוחים.</h2>
+          <p class="section-lede" data-he="לא עוד אוסף כלים שלא מדברים זה עם זה. ב־RAVO היומיום מחובר סביב אותו בית ואותם אנשים." data-en="Not another pile of tools that don't talk to each other. In RAVO everyday life connects around the same home and the same people.">לא עוד אוסף כלים שלא מדברים זה עם זה. ב־RAVO היומיום מחובר סביב אותו בית ואותם אנשים.</p>
+        </div>
+
+        <div class="bento">
+          <article class="tile tile-kitchen reveal">
+            <span class="kicker">01 / KITCHEN</span>
+            <h3 data-he="המטבח מדבר עם הרשימה." data-en="The kitchen talks to the list.">המטבח מדבר עם הרשימה.</h3>
+            <p data-he="ארוחות ומזווה חיים יחד, כך שרואים מה כבר יש בבית ומה חסר לקנייה." data-en="Meals and pantry live together, so you can see what's already home and what belongs on the list.">ארוחות ומזווה חיים יחד, כך שרואים מה כבר יש בבית ומה חסר לקנייה.</p>
+            <div class="orbit" aria-hidden="true"><i data-he="ארוחות" data-en="Meals">ארוחות</i><i data-he="מזווה" data-en="Pantry">מזווה</i><i data-he="קניות" data-en="Shopping">קניות</i></div>
+          </article>
+
+          <article class="tile tile-people reveal">
+            <span class="kicker">02 / HOUSEHOLD</span>
+            <h3 data-he="לכל אחד יש מקום." data-en="Everyone has a place.">לכל אחד יש מקום.</h3>
+            <p data-he="תפקידים והרשאות שומרים על מה שרלוונטי לכל אחד: הילדים משתתפים, המבוגרים שומרים שליטה." data-en="Roles and permissions keep things relevant: children take part, adults stay in control.">תפקידים והרשאות שומרים על מה שרלוונטי לכל אחד: הילדים משתתפים, המבוגרים שומרים שליטה.</p>
+            <figure class="device tile-device" style="--dw:56%"><img class="device-screen" loading="lazy" src="assets/screens/he/household.webp" width="720" height="1560" alt="מסך בני הבית של RAVO" data-screen-src="household"></figure>
+          </article>
+
+          <article class="tile tile-capture reveal">
+            <span class="kicker">03 / QUICK CAPTURE</span>
+            <h3 data-he="כותבים כמו שחושבים." data-en="Write it as you think it.">כותבים כמו שחושבים.</h3>
+            <p data-he="שורה אחת בעברית, ו־RAVO מציעה לאן זה שייך." data-en="One Hebrew line, and RAVO suggests where it belongs.">שורה אחת בעברית, ו־RAVO מציעה לאן זה שייך.</p>
+            <figure class="device tile-device" style="--dw:56%"><img class="device-screen" loading="lazy" src="assets/screens/he/quick-add.webp" width="720" height="1560" alt="מסך ההוספה המהירה של RAVO" data-screen-src="quick-add"></figure>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── office ────────────────────────────────────────────────────────────────────────────── -->
+    <section class="office section-pad" id="office">
+      <div class="office-wash" aria-hidden="true"></div>
+      <div class="wrap">
+        <div class="head reveal center office-head">
+          <p class="office-badge"><img src="logo.svg" width="30" height="30" alt=""><span>RAVO OFFICE</span></p>
+          <h2 data-he="אותו סדר.<br><em>גם במקום העבודה.</em>" data-en="The same order.<br><em>At work, too.</em>">אותו סדר.<br><em>גם במקום העבודה.</em></h2>
+          <p class="section-lede" data-he="אותה מערכת, מותאמת למרחב משותף אחר. לצוותים קטנים שרוצים לראות מה דורש טיפול — בלי להכניס מערכת כבדה." data-en="The same system, adapted to a different shared space. For small teams that want to see what needs handling — without installing something heavy.">אותה מערכת, מותאמת למרחב משותף אחר. לצוותים קטנים שרוצים לראות מה דורש טיפול — בלי להכניס מערכת כבדה.</p>
+        </div>
+
+        <div class="office-stage reveal">
+          <figure class="device office-a" style="--dw:min(300px,44vw)"><img class="device-screen" loading="lazy" src="assets/screens/he/office.webp" width="720" height="1560" alt="מסך היום במשרד של RAVO Office" data-screen-src="office"></figure>
+          <figure class="device office-b" style="--dw:min(272px,40vw)"><img class="device-screen" loading="lazy" src="assets/screens/he/maintenance.webp" width="720" height="1560" alt="מסך התחזוקה של RAVO Office" data-screen-src="maintenance"></figure>
+        </div>
+
+        <ul class="office-tags reveal">
+          <li data-he="תפעול" data-en="Operations">תפעול</li>
+          <li data-he="משימות" data-en="Tasks">משימות</li>
+          <li data-he="רכש" data-en="Procurement">רכש</li>
+          <li data-he="הוצאות" data-en="Expenses">הוצאות</li>
+          <li data-he="ספקים" data-en="Vendors">ספקים</li>
+          <li data-he="ציוד" data-en="Equipment">ציוד</li>
+          <li data-he="תחזוקה" data-en="Maintenance">תחזוקה</li>
+          <li data-he="הודעות" data-en="Announcements">הודעות</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── privacy ───────────────────────────────────────────────────────────────────────────── -->
+    <section class="trust section-pad">
+      <div class="wrap">
+        <div class="head reveal">
+          <p class="eyebrow clay" data-he="פרטיות בלי דרמה" data-en="Privacy, without drama">פרטיות בלי דרמה</p>
+          <h2 data-he="הבית שלכם הוא<br>לא מוצר פרסום." data-en="Your home is not<br>an advertising product.">הבית שלכם הוא<br>לא מוצר פרסום.</h2>
+        </div>
+        <div class="trust-grid">
+          <article class="reveal"><span class="n">01</span><h3 data-he="מרחבים נפרדים" data-en="Separate workspaces">מרחבים נפרדים</h3><p data-he="הגישה מבוססת חשבון, חברות במרחב והרשאות. מידע של בית אחד אינו פתוח לבית אחר." data-en="Access depends on an account, workspace membership and permissions. One household is never open to another.">הגישה מבוססת חשבון, חברות במרחב והרשאות. מידע של בית אחד אינו פתוח לבית אחר.</p></article>
+          <article class="reveal"><span class="n">02</span><h3 data-he="בלי כלכלת תשומת לב" data-en="No attention economy">בלי כלכלת תשומת לב</h3><p data-he="אין פרסומות, אין מכירת מידע אישי ואין עוגיות מעקב של צד שלישי באתר הזה." data-en="No advertising, no sale of personal information and no third-party tracking cookies on this website.">אין פרסומות, אין מכירת מידע אישי ואין עוגיות מעקב של צד שלישי באתר הזה.</p></article>
+          <article class="reveal"><span class="n">03</span><h3 data-he="שליטה בחשבון" data-en="Account control">שליטה בחשבון</h3><p data-he="מחיקת חשבון זמינה מתוך המוצר, התקשורת מוצפנת וההרשאות נאכפות במסד הנתונים." data-en="Account deletion is available in-product, transport is encrypted and permissions are enforced in the database.">מחיקת חשבון זמינה מתוך המוצר, התקשורת מוצפנת וההרשאות נאכפות במסד הנתונים.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── faq ───────────────────────────────────────────────────────────────────────────────── -->
+    <section class="faq section-pad" id="faq">
+      <div class="narrow">
+        <div class="head reveal"><p class="eyebrow" data-he="שאלות נפוצות" data-en="Frequently asked">שאלות נפוצות</p><h2 data-he="לפני שמתחילים." data-en="Before you start.">לפני שמתחילים.</h2></div>
+        <details><summary data-he="מה זה RAVO?" data-en="What is RAVO?">מה זה RAVO?</summary><p data-he="מערכת הפעלה משותפת לבית: מקום אחד למשימות, קניות, יומן, חשבונות, מטבח ושגרות, שכל בני הבית רואים." data-en="A shared operating system for the home: one place for tasks, shopping, calendar, bills, kitchen and routines that everyone at home can see.">מערכת הפעלה משותפת לבית: מקום אחד למשימות, קניות, יומן, חשבונות, מטבח ושגרות, שכל בני הבית רואים.</p></details>
+        <details><summary data-he="למי זה מתאים?" data-en="Who is it for?">למי זה מתאים?</summary><p data-he="לבתים שרוצים פחות עומס סמוי ופחות תיאומים מפוזרים. יש גם RAVO Office לצוותים ומשרדים קטנים." data-en="Households that want less invisible load and fewer scattered conversations. There is also RAVO Office for small teams and offices.">לבתים שרוצים פחות עומס סמוי ופחות תיאומים מפוזרים. יש גם RAVO Office לצוותים ומשרדים קטנים.</p></details>
+        <details><summary data-he="האם כולם בבית צריכים להשתמש?" data-en="Does everyone at home need it?">האם כולם בבית צריכים להשתמש?</summary><p data-he="הערך גדל כשבני הבית משתתפים, אבל לכל אחד אפשר להגדיר תפקיד והרשאות שמתאימים לו — כולל ילדים." data-en="It gets more useful as household members join, and each person can have a role and permissions that suit them — children included.">הערך גדל כשבני הבית משתתפים, אבל לכל אחד אפשר להגדיר תפקיד והרשאות שמתאימים לו — כולל ילדים.</p></details>
+        <details><summary data-he="באיזו שפה זה עובד?" data-en="Which languages does it work in?">באיזו שפה זה עובד?</summary><p data-he="הממשק זמין בעברית ובאנגלית. ההבנה של טקסט חופשי בהוספה מהירה בנויה לעברית; באנגלית נקראים התאריך והשעה ואתם בוחרים לאן זה הולך." data-en="The interface is available in Hebrew and English. Free-text reading in Quick Capture is built for Hebrew; in English the date and time are picked up and you choose where it goes.">הממשק זמין בעברית ובאנגלית. ההבנה של טקסט חופשי בהוספה מהירה בנויה לעברית; באנגלית נקראים התאריך והשעה ואתם בוחרים לאן זה הולך.</p></details>
+        <details><summary data-he="האם המידע שלי פרטי?" data-en="Is my information private?">האם המידע שלי פרטי?</summary><p data-he="הגישה פרטית ומבוססת חשבון. אין מכירת מידע ואין פרסום ממוקד. הפרטים המלאים במדיניות הפרטיות." data-en="Access is private and account-based. There is no data sale and no targeted advertising. Full detail is in the privacy policy.">הגישה פרטית ומבוססת חשבון. אין מכירת מידע ואין פרסום ממוקד. הפרטים המלאים במדיניות הפרטיות.</p></details>
+        <details><summary data-he="מתי האפליקציה תהיה זמינה?" data-en="When will the app be available?">מתי האפליקציה תהיה זמינה?</summary><p data-he="RAVO מתכוננת להשקה ב־App Store. הקישור הרשמי, והמחיר אם יהיה כזה, יפורסמו כאן לפני ההשקה." data-en="RAVO is preparing for App Store release. The official link, and any pricing, will be published here beforehand.">RAVO מתכוננת להשקה ב־App Store. הקישור הרשמי, והמחיר אם יהיה כזה, יפורסמו כאן לפני ההשקה.</p></details>
+      </div>
+    </section>
+
+    <!-- ── finale ────────────────────────────────────────────────────────────────────────────── -->
+    <section class="finale">
+      <div class="finale-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="wrap finale-inner reveal">
+        <img src="logo.svg" width="88" height="88" alt="">
+        <p class="eyebrow" data-he="RAVO" data-en="RAVO">RAVO</p>
+        <h2 data-he="הבית מסתדר.<br><em>אתם נושמים.</em>" data-en="Home falls into place.<br><em>You can breathe.</em>">הבית מסתדר.<br><em>אתם נושמים.</em></h2>
+        <p class="badge"><span class="badge-dot"></span><span data-he="בקרוב ב־App Store" data-en="Coming soon to the App Store">בקרוב ב־App Store</span></p>
+      </div>
+    </section>
   </main>
 
-  <footer><div class="wrap footer-grid"><div><a class="brand footer-brand" href="#top"><span class="brand-mark">⌂</span><span>RAVO</span></a><p data-he="פחות לנהל. יותר לחיות ביחד." data-en="Less managing. More living together.">פחות לנהל. יותר לחיות ביחד.</p></div><div class="footer-links"><a href="support/" data-he="תמיכה" data-en="Support">תמיכה</a><a href="privacy/" data-he="פרטיות" data-en="Privacy">פרטיות</a><a href="terms/" data-he="תנאי שימוש" data-en="Terms">תנאי שימוש</a><a href="accessibility/" data-he="נגישות" data-en="Accessibility">נגישות</a><a href="subscription-policy/" data-he="מדיניות מנוי" data-en="Subscription policy">מדיניות מנוי</a></div><div class="contact"><p data-he="יש שאלה?" data-en="Have a question?">יש שאלה?</p><a href="mailto:support@ravoapp.app">support@ravoapp.app</a></div></div><div class="wrap fineprint">© <span data-year></span> RAVO <span data-he="· כל הזכויות שמורות" data-en="· All rights reserved">· כל הזכויות שמורות</span></div></footer>
+  <footer>
+    <div class="wrap footer-grid">
+      <div>
+        <a class="brand" href="#top"><img class="brand-logo" src="logo.svg" width="44" height="44" alt=""><span class="brand-type">RAVO<small data-he="הבית מסתדר" data-en="Home, in sync">הבית מסתדר</small></span></a>
+        <p data-he="פחות לנהל. יותר לחיות ביחד." data-en="Less managing. More living together.">פחות לנהל. יותר לחיות ביחד.</p>
+      </div>
+      <nav class="footer-links" aria-label="מידע משפטי">
+        <a href="support/" data-he="תמיכה" data-en="Support">תמיכה</a>
+        <a href="privacy/" data-he="פרטיות" data-en="Privacy">פרטיות</a>
+        <a href="terms/" data-he="תנאי שימוש" data-en="Terms">תנאי שימוש</a>
+        <a href="accessibility/" data-he="נגישות" data-en="Accessibility">נגישות</a>
+        <a href="subscription-policy/" data-he="מדיניות מנוי" data-en="Subscription policy">מדיניות מנוי</a>
+      </nav>
+      <div class="contact">
+        <p data-he="יש שאלה?" data-en="Have a question?">יש שאלה?</p>
+        <a href="mailto:support@ravoapp.app">support@ravoapp.app</a>
+      </div>
+    </div>
+    <p class="wrap fineprint">© <span data-year></span> RAVO <span data-he="· כל הזכויות שמורות" data-en="· All rights reserved">· כל הזכויות שמורות</span></p>
+  </footer>
   <script src="script.js" defer></script>
 </body>
 </html>

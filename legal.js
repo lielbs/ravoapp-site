@@ -1,3 +1,15 @@
+async function retirePreviousSiteWorker() {
+  if ('serviceWorker' in navigator) {
+    const registrations = await navigator.serviceWorker.getRegistrations()
+    await Promise.all(registrations.map(registration => registration.unregister()))
+  }
+  if ('caches' in window) {
+    const cacheNames = await caches.keys()
+    await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)))
+  }
+}
+void retirePreviousSiteWorker()
+
 const copy = {
   support: {
     he: ['תמיכה', `<p class="legal-note">RAVO מרכזת את מה שמחזיק בית או משרד — משימות, קניות, חשבונות ויומן — במרחב משותף. אם משהו לא עובד כצפוי, אנחנו כאן.</p><h2>איך פונים אלינו?</h2><p>שלחו מייל אל <a href="mailto:support@ravoapp.app">support@ravoapp.app</a>. אנחנו משתדלים להשיב בתוך יום עסקים.</p><p>כדי שנוכל לעזור מהר, כתבו מה ניסיתם לעשות, מה קרה במקום ומאיזה מכשיר. אין צורך לשלוח תוכן פרטי, סיסמאות או פרטי תשלום.</p><h2>שאלות נפוצות</h2><h3>שכחתי סיסמה</h3><p>במסך הכניסה למוצר אפשר לבקש איפוס סיסמה ולקבל קוד בדוא״ל.</p><h3>הזמנה לא עובדת</h3><p>הזמנה תקפה לשבעה ימים ומיועדת לכתובת שאליה נשלחה. אם פגה, בקשו מבעל המרחב לשלוח חדשה.</p><h3>איך מוחקים חשבון?</h3><p>מחיקת חשבון זמינה מתוך הגדרות המוצר ומתבצעת מיד. אין צורך לפנות לתמיכה.</p>`],
@@ -21,19 +33,68 @@ const copy = {
   }
 }
 
+/*
+ * Every visible string on these pages is set from here, in both languages: the chrome as well as
+ * the body. A legal page that keeps its navigation in English while the policy is in Hebrew is a
+ * page that was translated halfway, and half a translation reads as carelessness on exactly the
+ * pages where carelessness costs the most.
+ */
+const CHROME = {
+  he: {
+    back: 'חזרה לאתר',
+    updated: 'עודכן: 6 בספטמבר 2026',
+    tagline: 'הבית מסתדר',
+    skip: 'דילוג לתוכן',
+    switchLabel: 'Switch to English',
+    nav: 'מידע משפטי'
+  },
+  en: {
+    back: 'Back to website',
+    updated: 'Updated: 6 September 2026',
+    tagline: 'Home, in sync',
+    skip: 'Skip to content',
+    switchLabel: 'החלפה לעברית',
+    nav: 'Legal information'
+  }
+}
+
+const ORDER = ['support', 'privacy', 'terms', 'accessibility', 'subscription-policy']
+const SHORT = {
+  support: { he: 'תמיכה', en: 'Support' },
+  privacy: { he: 'פרטיות', en: 'Privacy' },
+  terms: { he: 'תנאי שימוש', en: 'Terms' },
+  accessibility: { he: 'נגישות', en: 'Accessibility' },
+  'subscription-policy': { he: 'מדיניות מנוי', en: 'Subscription policy' }
+}
+
 const key = document.body.dataset.page
 const switcher = document.querySelector('[data-lang-switch]')
+
 function render(language) {
   const [title, html] = copy[key][language]
+  const chrome = CHROME[language]
   document.documentElement.lang = language
   document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr'
   document.title = `${title} — RAVO`
   document.querySelector('h1').textContent = title
   document.querySelector('.legal-content').innerHTML = html
-  document.querySelector('[data-back]').textContent = language === 'he' ? 'חזרה לאתר' : 'Back to website'
-  document.querySelector('[data-updated]').textContent = language === 'he' ? 'עודכן: 6 בספטמבר 2026' : 'Updated: 6 September 2026'
+  document.querySelector('[data-back]').textContent = chrome.back
+  document.querySelector('[data-updated]').textContent = chrome.updated
+  document.querySelector('[data-tagline]').textContent = chrome.tagline
+  document.querySelector('[data-skip]').textContent = chrome.skip
+
+  const nav = document.querySelector('[data-legal-nav]')
+  nav.setAttribute('aria-label', chrome.nav)
+  // The page you are on is not a link to itself.
+  nav.innerHTML = ORDER.filter(slug => slug !== key)
+    .map(slug => `<a href="../${slug}/">${SHORT[slug][language]}</a>`).join('')
+
   switcher.textContent = language === 'he' ? 'EN' : 'עברית'
-  localStorage.setItem('ravo-marketing-language', language)
+  switcher.setAttribute('aria-label', chrome.switchLabel)
+  try { localStorage.setItem('ravo-marketing-language', language) } catch { /* private mode */ }
 }
-render(localStorage.getItem('ravo-marketing-language') === 'en' ? 'en' : 'he')
+
+let saved = 'he'
+try { saved = localStorage.getItem('ravo-marketing-language') === 'en' ? 'en' : 'he' } catch { /* private mode */ }
+render(saved)
 switcher.addEventListener('click', () => render(document.documentElement.lang === 'he' ? 'en' : 'he'))
