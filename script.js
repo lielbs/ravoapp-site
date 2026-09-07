@@ -2,6 +2,25 @@ const root = document.documentElement
 const switcher = document.querySelector('[data-lang-switch]')
 const saved = localStorage.getItem('ravo-marketing-language')
 
+// ravoapp.app used to host the installable product. Remove any worker and caches left by that
+// deployment once this network-delivered marketing page has taken control of the tab.
+async function retirePreviousSiteWorker() {
+  if ('serviceWorker' in navigator) {
+    const registrations = await navigator.serviceWorker.getRegistrations()
+    await Promise.all(registrations
+      .filter(registration => new URL(registration.scope).origin === location.origin)
+      .map(registration => registration.unregister()))
+  }
+  if ('caches' in window) {
+    const cacheNames = await caches.keys()
+    await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)))
+  }
+  const url = new URL(location.href)
+  if (url.searchParams.delete('ravo-site')) history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
+}
+
+void retirePreviousSiteWorker()
+
 function setLanguage(language) {
   const english = language === 'en'
   root.lang = english ? 'en' : 'he'
