@@ -49,13 +49,15 @@ const SCREENS = {
   household: { he: 'מסך בני הבית של RAVO', en: 'The RAVO Household screen' },
   'quick-add': { he: 'מסך ההוספה המהירה של RAVO', en: 'The RAVO Quick Add screen' },
   office: { he: 'מסך היום במשרד של RAVO Office', en: 'The RAVO Office Today screen' },
-  maintenance: { he: 'מסך התחזוקה של RAVO Office', en: 'The RAVO Office Maintenance screen' }
+  maintenance: { he: 'מסך התחזוקה של RAVO Office', en: 'The RAVO Office Maintenance screen' },
+  memory: { he: 'מסך החיפוש והזיכרון של RAVO', en: 'The RAVO search and memory screen' }
 }
 
 const PIN_LABEL = {
   today: { he: 'היום', en: 'Today' }, tasks: { he: 'משימות', en: 'Tasks' },
   shopping: { he: 'קניות', en: 'Shopping' }, calendar: { he: 'יומן', en: 'Calendar' },
-  money: { he: 'חשבונות', en: 'Bills' }, templates: { he: 'שגרות', en: 'Routines' }
+  money: { he: 'חשבונות', en: 'Bills' }, templates: { he: 'שגרות', en: 'Routines' },
+  memory: { he: 'חיפוש וזיכרון', en: 'Search and memory' }
 }
 
 /*
@@ -103,6 +105,9 @@ function applyLanguage(next) {
   langSwitch.textContent = english ? 'עברית' : 'EN'
   langSwitch.setAttribute('aria-label', english ? 'החלפה לעברית' : 'Switch to English')
   document.querySelector('[data-menu-toggle]')?.setAttribute('aria-label', english ? 'Menu' : 'תפריט')
+  document.getElementById('site-nav')?.setAttribute('aria-label', english ? 'Main navigation' : 'ניווט ראשי')
+  document.querySelector('.workspace-bridge')?.setAttribute('aria-label', english ? 'One account for Home and Office' : 'חשבון אחד לבית ולמשרד')
+  document.querySelector('.guide-stack')?.setAttribute('aria-label', english ? 'Three short steps' : 'שלושה צעדים קצרים')
 
   const track = document.querySelector('.rail-track')
   const items = RAIL[next]
@@ -182,6 +187,7 @@ const steps = document.querySelectorAll('.step')
 const pinScreens = document.querySelectorAll('[data-pin]')
 const ticks = document.querySelectorAll('.pin-ticks li')
 const pinLabel = document.querySelector('[data-pin-label]')
+const storyPin = document.querySelector('.story-pin')
 let currentScreen = 'today'
 
 function paintPinLabel(name) {
@@ -190,6 +196,7 @@ function paintPinLabel(name) {
 
 function showScreen(name, index) {
   currentScreen = name
+  if (storyPin) storyPin.dataset.screen = name
   steps.forEach((step, position) => step.classList.toggle('active', position === index))
   pinScreens.forEach(screen => screen.classList.toggle('is-on', screen.dataset.pin === name))
   ticks.forEach((tick, position) => tick.classList.toggle('on', position === index))
