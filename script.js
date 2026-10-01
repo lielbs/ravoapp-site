@@ -302,4 +302,143 @@ reduced.addEventListener('change', event => {
   startTyping()
 })
 
+/* ── the explorer ──────────────────────────────────────────────────────────────────────────────
+   Press a part of RAVO and the phone goes there.
+
+   The frame holds one live <img>. Changing `src` on it alone would blink white for a frame while
+   the next file decodes, so the outgoing screen is copied into a ghost layer above it, the live
+   image is repointed, and the ghost is faded out once the new one has actually decoded. The result
+   is a cross-dissolve that never shows an empty frame, from two elements rather than eight.
+
+   It is a real tablist: arrow keys move between screens, Home and End jump to the ends, and only
+   the selected tab is in the tab order — which is what a screen reader user expects from something
+   that announces itself as tabs. */
+
+const exploreTabs = [...document.querySelectorAll('[data-explore]')]
+const exploreScreen = document.querySelector('[data-explore-screen]')
+const exploreGhost = document.querySelector('[data-explore-ghost]')
+const explorePanels = [...document.querySelectorAll('[data-explore-panel]')]
+let exploreCurrent = exploreTabs[0]?.dataset.explore ?? 'today'
+
+function showExplore(name, { focus = false } = {}) {
+  if (!exploreScreen || name === exploreCurrent) return
+  const previous = exploreScreen.src
+
+  exploreTabs.forEach(tab => {
+    const on = tab.dataset.explore === name
+    tab.setAttribute('aria-selected', String(on))
+    tab.tabIndex = on ? 0 : -1
+    if (on && focus) tab.focus()
+  })
+  explorePanels.forEach(panel => { panel.hidden = panel.dataset.explorePanel !== name })
+
+  exploreCurrent = name
+  // Kept in sync so the language switch reloads *this* screen rather than the one it opened on.
+  exploreScreen.dataset.screenSrc = name
+  exploreScreen.alt = SCREENS[name][language]
+
+  if (motionOff || !exploreGhost) { exploreScreen.src = `assets/screens/${language}/${name}.webp`; return }
+
+  exploreGhost.src = previous
+  exploreGhost.classList.add('is-on')
+  exploreScreen.src = `assets/screens/${language}/${name}.webp`
+  const clear = () => exploreGhost.classList.remove('is-on')
+  if (exploreScreen.decode) exploreScreen.decode().then(clear, clear)
+  else exploreScreen.addEventListener('load', clear, { once: true })
+}
+
+exploreTabs.forEach(tab => {
+  tab.addEventListener('click', () => showExplore(tab.dataset.explore))
+})
+
+document.querySelector('[data-explore-tabs]')?.addEventListener('keydown', event => {
+  const keys = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 1, ArrowUp: -1 }
+  const index = exploreTabs.findIndex(tab => tab.dataset.explore === exploreCurrent)
+  let next = null
+  if (event.key in keys) {
+    // In a right-to-left tablist the right arrow has to walk backwards, or the highlight moves
+    // away from the finger rather than with it.
+    const rtl = root.dir === 'rtl' && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')
+    next = (index + (rtl ? -keys[event.key] : keys[event.key]) + exploreTabs.length) % exploreTabs.length
+  } else if (event.key === 'Home') next = 0
+  else if (event.key === 'End') next = exploreTabs.length - 1
+  if (next === null) return
+  event.preventDefault()
+  showExplore(exploreTabs[next].dataset.explore, { focus: true })
+})
+
+/* The other screens are fetched once the page is idle, so the first press is instant without
+   costing anything on the critical path. Skipped on a metered or slow connection, where eight
+   speculative images are a real cost to someone who may never press a tab. */
+function prefetchScreens() {
+  const link = navigator.connection
+  if (link?.saveData || /2g/.test(link?.effectiveType ?? '')) return
+  for (const tab of exploreTabs) {
+    const image = new Image()
+    image.src = `assets/screens/${language}/${tab.dataset.explore}.webp`
+  }
+}
+if (exploreTabs.length) {
+  const idle = window.requestIdleCallback ?? (callback => setTimeout(callback, 1800))
+  idle(prefetchScreens)
+}
+
+/* ── the sticky action ─────────────────────────────────────────────────────────────────────────
+   On a phone the hero's badge scrolls away and there is nothing to press for the next several
+   screens. This brings it back once the hero is gone, and gets out of the way again at the closing
+   frame, which has a badge of its own — two identical actions stacked on top of each other is how
+   a page starts nagging. */
+const stickyCta = document.querySelector('[data-sticky-cta]')
+const heroSection = document.querySelector('.hero')
+const finaleSection = document.querySelector('.finale')
+if (stickyCta && heroSection) {
+  let heroGone = false
+  let atFinale = false
+  const paint = () => {
+    const show = heroGone && !atFinale
+    stickyCta.classList.toggle('show', show)
+    stickyCta.setAttribute('aria-hidden', String(!show))
+  }
+  new IntersectionObserver(([entry]) => { heroGone = !entry.isIntersecting; paint() },
+    { rootMargin: '-120px 0px 0px 0px' }).observe(heroSection)
+  if (finaleSection) {
+    new IntersectionObserver(([entry]) => { atFinale = entry.isIntersecting; paint() },
+      { rootMargin: '0px 0px -25% 0px' }).observe(finaleSection)
+  }
+}
+
+
+/* ── where you are in the page ─────────────────────────────────────────────────────────────────
+   The bar used to be a list of places you could go and said nothing about where you were. Each
+   link now lights while its own section is the one on screen.
+
+   The section nearest the top of the viewport wins rather than the first one to intersect: with
+   sections this tall, two are in view most of the time, and "first to fire" makes the highlight
+   jump backwards as you scroll down. */
+const navLinks = [...document.querySelectorAll('.site-header nav a[href^="#"]')]
+const navTargets = navLinks
+  .map(link => ({ link, section: document.querySelector(link.getAttribute('href')) }))
+  .filter(item => item.section)
+
+if (navTargets.length) {
+  let ticking = false
+  const paintCurrent = () => {
+    ticking = false
+    const line = innerHeight * 0.32
+    let winner = null
+    for (const item of navTargets) {
+      const box = item.section.getBoundingClientRect()
+      if (box.top <= line && box.bottom > line) winner = item
+    }
+    for (const item of navTargets) item.link.classList.toggle('current', item === winner)
+  }
+  addEventListener('scroll', () => {
+    if (ticking) return
+    ticking = true
+    requestAnimationFrame(paintCurrent)
+  }, { passive: true })
+  paintCurrent()
+}
+
+
 applyLanguage(language)

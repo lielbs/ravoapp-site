@@ -126,32 +126,103 @@ em{font-style:normal;color:var(--clay)}
 }
 .on-paper>*{position:relative}
 
-/* ── header ────────────────────────────────────────────────────────────────────────────────── */
+/* ── header ────────────────────────────────────────────────────────────────────────────────────
+   A floating capsule of glass, and the only piece of chrome that follows the visitor down the page.
+
+   Three things were wrong with the first version and are fixed here.
+
+   THE MENU BUTTON HAD TWO BARS. Two parallel lines are not a menu — they are an equals sign. The
+   icon is three bars, which is the shape everyone on earth already reads as "more", and it folds
+   into an X on open rather than swapping to a different glyph.
+
+   THE NAVIGATION MARKED ITSELF WITH A HOVER UNDERLINE and nothing else, so the bar never said where
+   in the page you were. Each link now sits in a pill that lights on hover and stays lit for the
+   section actually on screen — the bar became a position indicator instead of a list of jumps.
+
+   THE BAR WAS FLAT. It is the first glass on the page and it was a translucent rectangle. It now
+   carries the same lit top edge as every other glass surface here, so the material is consistent
+   from the first scroll. */
 .site-header{
   position:sticky;top:12px;z-index:120;height:74px;margin:14px auto 0;
   width:min(1300px,calc(100% - 32px));padding-inline:16px 12px;
-  display:flex;align-items:center;gap:30px;
-  background:rgba(13,15,12,.82);border:1px solid rgba(188,205,142,.18);border-radius:22px;
-  backdrop-filter:blur(20px) saturate(140%);box-shadow:0 18px 50px rgba(0,0,0,.3);
-  transition:background .3s,border-color .3s;
+  display:flex;align-items:center;gap:22px;
+  background:rgba(13,15,12,.72);border:1px solid rgba(188,205,142,.2);border-radius:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,.34);
+  transition:background .35s var(--ease),border-color .35s,box-shadow .35s;
 }
-.site-header.scrolled{background:rgba(13,15,12,.94);border-color:rgba(188,205,142,.28)}
-.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.09em;color:var(--ink)}
-.brand-logo{width:44px;height:44px;border-radius:13px;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 8px 22px rgba(0,0,0,.35)}
+@supports (backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px)){
+  .site-header{-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%)}
+}
+/* The lit edge. One hairline, drawn not borrowed. */
+.site-header::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.13),transparent 46%);
+  mix-blend-mode:screen;
+}
+.site-header.scrolled{
+  background:rgba(13,15,12,.92);border-color:rgba(188,205,142,.3);
+  box-shadow:0 22px 60px rgba(0,0,0,.5);
+}
+
+.brand{position:relative;display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.09em;color:var(--ink)}
+.brand-logo{
+  width:44px;height:44px;border-radius:13px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.1),0 8px 22px rgba(0,0,0,.4),0 0 24px -6px rgba(188,205,142,.45);
+  transition:transform .4s var(--ease-out),box-shadow .4s;
+}
+.brand:hover .brand-logo{transform:translateY(-1px) scale(1.04);box-shadow:0 0 0 1px rgba(255,255,255,.16),0 10px 26px rgba(0,0,0,.45),0 0 32px -4px rgba(188,205,142,.7)}
 .brand-type{display:grid;font-size:20px;line-height:1}
 .brand-type small{margin-top:5px;font:600 11px/1.2 Assistant,sans-serif;letter-spacing:0;color:var(--subtle)}
-.site-header nav{display:flex;gap:26px;margin-inline-start:auto;font-weight:700;font-size:14px;color:var(--muted)}
-.site-header nav a{position:relative;padding:8px 0;transition:color .2s}
-.site-header nav a::after{content:"";position:absolute;inset-inline:0;bottom:2px;height:2px;background:var(--clay);transform:scaleX(0);transition:transform .25s var(--ease)}
+
+.site-header nav{
+  display:flex;align-items:center;gap:2px;margin-inline-start:auto;
+  font-weight:700;font-size:13.5px;color:var(--muted);
+}
+.site-header nav a{
+  position:relative;padding:9px 13px;border-radius:999px;white-space:nowrap;
+  transition:color .22s,background .28s var(--ease-out);
+}
+/* The pill itself, scaled from the centre so it opens rather than appears. */
+.site-header nav a::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;
+  background:rgba(188,205,142,.1);border:1px solid rgba(188,205,142,.18);
+  opacity:0;transform:scale(.86);
+  transition:opacity .25s,transform .32s var(--ease-out);
+}
 .site-header nav a:hover,.site-header nav a:focus-visible{color:var(--ink)}
-.site-header nav a:hover::after{transform:scaleX(1)}
-.header-tools{display:flex;align-items:center;gap:10px}
-.lang{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;min-width:50px;min-height:42px;padding:8px 14px;cursor:pointer;font-size:12px;font-weight:800;color:var(--ink);transition:border-color .2s,color .2s}
-.lang:hover{border-color:var(--sage);color:var(--sage)}
-.menu-toggle{display:none;width:44px;height:42px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2);cursor:pointer;place-items:center;gap:5px}
-.menu-toggle i{display:block;width:17px;height:2px;border-radius:2px;background:var(--ink);transition:transform .3s var(--ease),opacity .2s}
-.menu-toggle[aria-expanded=true] i:first-child{transform:translateY(3.5px) rotate(45deg)}
-.menu-toggle[aria-expanded=true] i:last-child{transform:translateY(-3.5px) rotate(-45deg)}
+.site-header nav a:hover::before{opacity:1;transform:none}
+/* Where the visitor actually is. Held, not hovered. */
+.site-header nav a.current{color:var(--sage)}
+.site-header nav a.current::before{opacity:1;transform:none;background:rgba(188,205,142,.14);border-color:rgba(188,205,142,.34)}
+
+.header-tools{display:flex;align-items:center;gap:9px}
+.lang{
+  display:inline-grid;place-items:center;
+  border:1px solid var(--line);background:var(--surface-2);border-radius:999px;
+  min-width:50px;min-height:44px;padding:0 14px;cursor:pointer;
+  font-size:12px;font-weight:800;color:var(--ink);
+  transition:border-color .2s,color .2s,background .25s;
+}
+.lang:hover{border-color:var(--sage);color:var(--sage);background:rgba(188,205,142,.1)}
+
+.menu-toggle{
+  display:none;width:44px;height:44px;flex:0 0 auto;cursor:pointer;
+  border:1px solid var(--line);border-radius:14px;background:var(--surface-2);
+  place-items:center;transition:border-color .2s,background .25s;
+}
+.menu-toggle:hover{border-color:rgba(188,205,142,.45);background:rgba(188,205,142,.09)}
+/* A fixed 18x12 box so the three bars have somewhere definite to fold into. */
+.menu-bars{position:relative;display:block;width:18px;height:12px}
+.menu-bars i{
+  position:absolute;inset-inline:0;height:2px;border-radius:2px;background:var(--ink);
+  transition:transform .34s var(--ease-out),opacity .18s;
+}
+.menu-bars i:nth-child(1){top:0}
+.menu-bars i:nth-child(2){top:5px}
+.menu-bars i:nth-child(3){top:10px}
+.menu-toggle[aria-expanded=true] .menu-bars i:nth-child(1){transform:translateY(5px) rotate(45deg)}
+.menu-toggle[aria-expanded=true] .menu-bars i:nth-child(2){opacity:0;transform:scaleX(.4)}
+.menu-toggle[aria-expanded=true] .menu-bars i:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
 
 /* ── hero ──────────────────────────────────────────────────────────────────────────────────── */
 .hero{position:relative;isolation:isolate;overflow:hidden;padding-top:clamp(40px,6vw,88px)}
@@ -665,4 +736,226 @@ footer{padding:70px 0 28px;background:#090a08;border-top:1px solid #23271f}
   .device-hero{transform:none!important}
   .signals li{opacity:1}
   .caret{opacity:1}
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   LAUNCH — the app shipped, so the page has an action
+   ═══════════════════════════════════════════════════════════════════════════════════════════════
+
+   One glass recipe, stated once.
+
+   The reason this is a token set rather than a `backdrop-filter` sprinkled wherever a surface
+   looked flat: glass is a material, and a material has to behave the same everywhere or it stops
+   reading as one thing and starts reading as an effect. Every translucent surface below is the same
+   four ingredients — a tinted body, a hairline that catches light at the top edge, a blur behind,
+   and a shadow that sits the piece above the page rather than glueing it down.
+
+   Text on glass never gets softer than --ink or --muted, both of which are measured against the
+   page ground rather than the glass; the glass is dark over a dark page, so the number can only
+   improve from there. Nothing on this page is made less readable to look more like glass.
+
+   `backdrop-filter` is a progressive enhancement and is treated as one: every glass surface states
+   a solid-enough background of its own first, so a browser that ignores the blur still gets a
+   legible panel instead of text floating on the page behind it. */
+:root{
+  --glass:rgba(29,33,26,.62);
+  --glass-strong:rgba(22,26,20,.86);
+  --glass-line:rgba(188,205,142,.16);
+  --glass-shine:rgba(255,255,255,.14);
+  --glass-blur:saturate(150%) blur(22px);
+  --glass-shadow:0 26px 60px -28px rgba(0,0,0,.85);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+.glass-panel{
+  position:relative;
+  border:1px solid var(--glass-line);
+  border-radius:var(--radius);
+  background:var(--glass);
+  box-shadow:var(--glass-shadow);
+}
+@supports (backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px)){
+  .glass-panel{-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+}
+/* The lit top edge. A single hairline of light is what separates a pane of glass from a grey box,
+   and it is drawn rather than borrowed so it survives on a ground of any colour. */
+.glass-panel::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,var(--glass-shine),transparent 42%);
+  opacity:.5;mix-blend-mode:screen;
+}
+
+/* ── the badge, now stating a fact rather than a promise ───────────────────────────────────── */
+.badge-live{
+  border-color:rgba(188,205,142,.34);
+  background:linear-gradient(180deg,rgba(188,205,142,.14),rgba(24,27,23,.86));
+}
+.badge-live .badge-dot{background:var(--sage);box-shadow:0 0 0 0 rgba(188,205,142,.5)}
+
+/* ── the action ────────────────────────────────────────────────────────────────────────────────
+   Apple's own lockup, in Apple's own order: the mark, the small line, then the product name. The
+   white treatment is the one Apple publishes for dark grounds, and on this page it is also the
+   only pure white surface — which is exactly why the eye goes to it first.
+
+   "App Store" stays in Latin in both languages. It is a name, not a phrase to translate. */
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:34px}
+.cta-row.center{justify-content:center}
+
+.store-badge{
+  display:inline-flex;align-items:center;gap:11px;
+  min-height:56px;padding-inline:19px 22px;
+  border-radius:15px;border:1px solid rgba(255,255,255,.9);
+  background:#fff;color:#0c0e0b;
+  box-shadow:0 14px 34px -14px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.9);
+  transition:transform .28s var(--ease-out),box-shadow .28s var(--ease-out);
+  will-change:transform;
+}
+.store-badge__mark{width:23px;height:23px;flex:0 0 auto;margin-block-start:-3px}
+.store-badge__text{display:grid;line-height:1.05;text-align:start}
+.store-badge__text small{font-size:11px;font-weight:600;letter-spacing:.01em;opacity:.78}
+.store-badge__text strong{font-family:Rubik,Assistant,sans-serif;font-size:20px;font-weight:650;letter-spacing:-.025em}
+.store-badge:hover{transform:translateY(-3px);box-shadow:0 22px 46px -16px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.9)}
+.store-badge:active{transform:translateY(-1px) scale(.985)}
+
+/* The second action is glass, so it reads as available without competing with the first. */
+.ghost-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  min-height:56px;padding:0 22px;border-radius:15px;
+  border:1px solid var(--glass-line);background:var(--glass);
+  font-weight:700;color:var(--ink);
+  transition:border-color .25s,background .25s,transform .28s var(--ease-out);
+}
+@supports (backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px)){
+  .ghost-cta{-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+}
+.ghost-cta i{font-style:normal;font-weight:800;color:var(--sage);transition:transform .3s var(--ease-out)}
+.ghost-cta:hover{border-color:rgba(188,205,142,.42);background:var(--glass-strong);transform:translateY(-2px)}
+.ghost-cta:hover i{transform:translateY(4px)}
+.ghost-cta.small{min-height:48px;padding:0 18px;font-size:14.5px;margin-top:22px}
+
+.cta-note{margin-top:16px;font-size:13.5px;color:var(--subtle)}
+.cta-row.center+.cta-note{text-align:center}
+
+.header-cta{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 17px;border-radius:999px;
+  background:var(--sage);color:#131709;font-size:13px;font-weight:800;
+  transition:filter .2s,transform .2s var(--ease-out);
+}
+.header-cta:hover{filter:brightness(1.07);transform:translateY(-1px)}
+
+.finale-lede{max-width:52ch;margin:0 auto 6px;font-size:clamp(16px,1.7vw,19px);line-height:1.65;color:var(--muted)}
+.finale .cta-row{margin-top:30px}
+
+/* ── the explorer ──────────────────────────────────────────────────────────────────────────────
+   Tabs, a phone, and the sentence that belongs to whichever screen is showing. */
+.explore-stage{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+  grid-template-areas:"tabs tabs" "device copy";
+  align-items:center;gap:clamp(24px,4vw,56px);
+  padding:clamp(22px,3.4vw,44px);
+}
+.explore-tabs{
+  grid-area:tabs;display:flex;gap:9px;
+  /* Scrolls rather than wraps: eight pills wrapping to three ragged rows is noise, and a single
+     row that slides is the pattern a phone user already knows. */
+  overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;
+  padding-bottom:4px;margin-bottom:clamp(6px,1.4vw,14px);
+  scroll-snap-type:x proximity;
+}
+.explore-tabs::-webkit-scrollbar{display:none}
+.explore-tab{
+  flex:0 0 auto;scroll-snap-align:start;cursor:pointer;
+  min-height:44px;padding:0 17px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface);
+  font-size:14px;font-weight:700;color:var(--muted);
+  transition:color .2s,border-color .2s,background .25s,transform .25s var(--ease-out);
+}
+.explore-tab:hover{color:var(--ink);border-color:rgba(188,205,142,.4)}
+.explore-tab[aria-selected="true"]{
+  background:var(--sage);border-color:var(--sage);color:#131709;   /* 12.4:1 */
+  transform:translateY(-1px);
+  box-shadow:0 10px 24px -12px rgba(188,205,142,.8);
+}
+
+.explore-device{grid-area:device;position:relative;display:grid;place-items:center;padding-block:6px}
+/* A soft light behind the phone, so the frame sits in a room rather than on a swatch. */
+.explore-glint{
+  position:absolute;z-index:0;inset:8% 0 12%;
+  background:radial-gradient(58% 46% at 50% 42%,rgba(188,205,142,.2),transparent 72%);
+  filter:blur(26px);pointer-events:none;
+}
+.explore-device .device{position:relative;z-index:1}
+/* The outgoing screen, held above the incoming one until the new file has actually decoded. */
+.device-ghost{
+  position:absolute;inset:var(--pad);width:auto;height:auto;
+  opacity:0;pointer-events:none;
+  transition:opacity .42s var(--ease-out);
+}
+.device-ghost.is-on{opacity:1}
+
+.explore-copy{grid-area:copy;min-width:0}
+.explore-panel h3{margin-bottom:10px}
+.explore-panel p{margin:0;font-size:clamp(16px,1.55vw,18.5px);line-height:1.68;color:var(--muted);max-width:46ch}
+/* Each panel fades up as it takes over, which is the only thing that tells a visitor the right-hand
+   side changed at all when they pressed a pill on the left. */
+.explore-panel:not([hidden]){animation:panelIn .42s var(--ease-out) both}
+@keyframes panelIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+
+/* ── the sticky action ─────────────────────────────────────────────────────────────────────── */
+.sticky-cta{
+  position:fixed;z-index:120;inset-inline:0;bottom:calc(14px + env(safe-area-inset-bottom));
+  display:none;justify-content:center;padding-inline:16px;
+  opacity:0;transform:translateY(120%);pointer-events:none;
+  transition:opacity .32s var(--ease-out),transform .42s var(--ease-out);
+}
+.sticky-cta.show{opacity:1;transform:none;pointer-events:auto}
+.sticky-cta .store-badge{box-shadow:0 20px 48px -12px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.9)}
+
+/* ── laptop and tablet ─────────────────────────────────────────────────────────────────────── */
+@media(max-width:1060px){
+  .cta-row{justify-content:center}
+  .explore-stage{
+    grid-template-columns:1fr;
+    grid-template-areas:"tabs" "device" "copy";
+    justify-items:center;text-align:center;
+  }
+  .explore-tabs{width:100%}
+  .explore-panel p{margin-inline:auto}
+  .explore-copy{display:grid;justify-items:center}
+}
+
+/* ── phone ─────────────────────────────────────────────────────────────────────────────────── */
+@media(max-width:720px){
+  /* The header keeps the action and loses the word, so the bar still fits a 320px screen. */
+  .header-cta{padding:0 13px;font-size:12.5px}
+  .cta-row{gap:11px;margin-top:28px}
+  .store-badge{min-height:54px;padding-inline:16px 19px}
+  .store-badge__text strong{font-size:18.5px}
+  .ghost-cta{min-height:54px;padding:0 18px;font-size:15px}
+  .explore-stage{padding:18px 14px 22px;border-radius:24px}
+  /* Bleed the rail to the panel's edge, so it is visibly a strip that slides rather than a row
+     that happens to be cut off. */
+  .explore-tabs{margin-inline:-14px;padding-inline:14px}
+  .sticky-cta{display:flex}
+}
+@media(max-width:380px){
+  /* The download action survives down to the narrowest phone. It was briefly hidden here, which
+     removed the page's primary action on an iPhone SE and every mini — and those are the visitors
+     most likely to have arrived from a phone-shaped ad in the first place. It loses its padding
+     instead, which is a thing the bar can afford. */
+  .header-cta{padding:0 11px;font-size:12px}
+  .store-badge__text strong{font-size:17px}
+}
+
+/* ── reduced motion ────────────────────────────────────────────────────────────────────────────
+   The page-wide rule above already flattens durations. These are the pieces that would otherwise
+   be left mid-gesture: the panel would hold its 9px offset, and the sticky bar would stay pushed
+   off the bottom of the screen with nothing to animate it back. */
+@media(prefers-reduced-motion:reduce){
+  .explore-panel:not([hidden]){animation:none;opacity:1;transform:none}
+  .sticky-cta{transform:none}
+  .sticky-cta:not(.show){opacity:0;pointer-events:none}
+  .store-badge:hover,.ghost-cta:hover,.header-cta:hover,.explore-tab[aria-selected="true"]{transform:none}
 }
