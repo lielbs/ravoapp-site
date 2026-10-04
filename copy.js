@@ -79,10 +79,9 @@ window.RAVO_COPY = {
       today: { he: ['תזכורת', 'לאסוף חבילה מהלוקר · 18:00'], en: ['Reminder', 'Pick up the parcel from the locker · 18:00'] },
       'assistant-sheet': { he: ['העוזר שם לב', 'המשימה להזמין תור לטכנאי עדיין פתוחה'], en: ['The assistant noticed', 'Still open: Book the repair engineer'] },
       shopping: { he: ['רשימת הקניות', 'נועה הוסיפה חלב ועגבניות'], en: ['Shopping list', 'Noa added milk and tomatoes'] },
-      office: [
-        { he: ['העוזר שם לב', 'חשבון שכירות משרד לתשלום בקרוב'], en: ['The assistant noticed', 'Due soon: Office rent'] },
-        { he: ['מרכז שליטה', '4 אנשי צוות פעילים · 0 תקלות דחופות'], en: ['Control centre', '4 active team members · 0 urgent issues'] }
-      ]
+      office: { he: ['העוזר שם לב', 'חשבון שכירות משרד לתשלום בקרוב'], en: ['The assistant noticed', 'Due soon: Office rent'] },
+      'biz-tasks': { he: ['משימה דחופה', 'לאשר הזמנת טונר · 10:30'], en: ['Urgent task', 'Approve the toner order · 10:30'] },
+      'biz-procurement': { he: ['רכש', 'ליאל הוסיף טונר שחור'], en: ['Purchasing', 'Liel added black toner'] }
     },
 
     /* Quick Add. Every example was run through the bundled reader before it went here. */

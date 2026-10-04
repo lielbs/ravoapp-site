@@ -20,7 +20,7 @@
   <meta name="theme-color" content="#0d0f0c">
   <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preload" as="image" href="assets/screens/he/today.webp" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=20261004t">
+  <link rel="stylesheet" href="styles.css?v=20261004u">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"MobileApplication","name":"RAVO","applicationCategory":"ProductivityApplication","operatingSystem":"iOS 15.0 or later","url":"https://ravoapp.app/","installUrl":"https://apps.apple.com/app/id6807432532","downloadUrl":"https://apps.apple.com/app/id6807432532","image":"https://ravoapp.app/assets/social-preview.png","description":"RAVO — אפליקציה חינמית אחת לבית ולעסק: הוספה חכמה, עוזר, משימות, קניות ורכש, יומן, חשבונות ותקלות.","inLanguage":["he","en"],"softwareVersion":"1.0.1","datePublished":"2026-09-17","contentRating":"4+","author":{"@type":"Organization","name":"RAVO"},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS","availability":"https://schema.org/InStock"}}</script>
 </head>
 <body>
@@ -80,11 +80,18 @@
           </ul>
         </div>
         <div class="hero-stage" data-hero>
-          <div class="phone phone--back" aria-hidden="true"><img src="assets/screens/he/office.webp" width="720" height="1560" alt="" data-screen-src="office"></div>
+          <div class="seg hero-seg" role="radiogroup" aria-label="מרחב" data-i18n-aria="trySpace">
+            <button type="button" role="radio" aria-checked="true" data-hero-space="home">RAVO Home</button>
+            <button type="button" role="radio" aria-checked="false" data-hero-space="biz">RAVO Business</button>
+            <i class="seg-pill" aria-hidden="true"></i>
+          </div>
           <div class="phone phone--front" data-hero-phone>
-            <img class="is-on" src="assets/screens/he/today.webp" width="720" height="1560" alt="מסך היום של RAVO" data-screen-src="today" fetchpriority="high">
-            <img src="assets/screens/he/assistant-sheet.webp" width="720" height="1560" alt="" data-screen-src="assistant-sheet" loading="lazy">
-            <img src="assets/screens/he/shopping.webp" width="720" height="1560" alt="" data-screen-src="shopping" loading="lazy">
+            <img class="is-on" src="assets/screens/he/today.webp" width="720" height="1560" alt="מסך היום של RAVO" data-screen-src="today" data-space="home" fetchpriority="high">
+            <img src="assets/screens/he/assistant-sheet.webp" width="720" height="1560" alt="" data-screen-src="assistant-sheet" data-space="home" loading="lazy">
+            <img src="assets/screens/he/shopping.webp" width="720" height="1560" alt="" data-screen-src="shopping" data-space="home" loading="lazy">
+            <img src="assets/screens/he/office.webp" width="720" height="1560" alt="" data-screen-src="office" data-space="biz" loading="lazy">
+            <img src="assets/screens/he/biz-tasks.webp" width="720" height="1560" alt="" data-screen-src="biz-tasks" data-space="biz" loading="lazy">
+            <img src="assets/screens/he/biz-procurement.webp" width="720" height="1560" alt="" data-screen-src="biz-procurement" data-space="biz" loading="lazy">
           </div>
           <ol class="pings" aria-hidden="true" data-pings></ol>
         </div>
@@ -271,7 +278,7 @@
     </div>
     <p class="wrap fineprint">© <span data-year></span> RAVO <span data-i18n="rights">· כל הזכויות שמורות</span></p>
   </footer>
-  <script src="copy.js?v=20261004t" defer></script>
-  <script src="script.js?v=20261004t" type="module"></script>
+  <script src="copy.js?v=20261004u" defer></script>
+  <script src="script.js?v=20261004u" type="module"></script>
 </body>
 </html>

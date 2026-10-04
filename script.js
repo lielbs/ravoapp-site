@@ -115,11 +115,12 @@ function whileVisible(node, start, stop, threshold = 0.2) {
 
 /* ── hero: the phone cycles through real screens, each with the notification it belongs to ── */
 
-const heroScreens = $$('[data-hero-phone] img')
-let heroIndex = 0, heroTimer = 0, officeIndex = 0
+/* One phone, and the visitor picks whose day it shows: the home's or the business's. */
+const heroStage = $('[data-hero]')
+const heroSeg = $('.hero-seg', heroStage)
+let heroSpace = 'home', heroIndex = 0, heroTimer = 0
+const heroScreens = () => $$(`[data-hero-phone] img[data-space="${heroSpace}"]`)
 const pings = $('[data-pings]')
-const backPhone = () => getComputedStyle($('.phone--back')).display !== 'none'
-/* One slot per phone: the front phone's notification sits beside it, the back phone's over it. */
 function showPing(slot, entry, space) {
   const old = $(`li[data-slot="${slot}"]`, pings)
   if (old) { old.classList.add('out'); setTimeout(() => old.remove(), 450) }
@@ -132,23 +133,28 @@ function showPing(slot, entry, space) {
   pings.append(row)
   requestAnimationFrame(() => requestAnimationFrame(() => row.classList.add('in')))
 }
-const frontPing = () => showPing('front', SCENES.hero?.[heroScreens[heroIndex].dataset.screenSrc], 'home')
-const officePings = () => SCENES.hero?.office ?? []
-const backPing = () => { if (backPhone()) showPing('back', officePings()[officeIndex % officePings().length], 'biz') }
-function heroTick() {
-  heroScreens[heroIndex].classList.remove('is-on')
-  heroIndex = (heroIndex + 1) % heroScreens.length
-  heroScreens[heroIndex].classList.add('is-on')
+const frontPing = () => showPing('front', SCENES.hero?.[heroScreens()[heroIndex]?.dataset.screenSrc], heroSpace)
+function heroShow(index) {
+  for (const image of $$('[data-hero-phone] img')) image.classList.remove('is-on')
+  heroIndex = index
+  heroScreens()[heroIndex]?.classList.add('is-on')
   $('li[data-slot="front"]', pings)?.classList.add('out')
   /* The screen changes first and its notification follows, so the two read as one event. */
   setTimeout(frontPing, 420)
-  officeIndex += 1
-  setTimeout(backPing, 1700)
 }
-painters.push(() => { pings.replaceChildren(); frontPing(); backPing() })
-whileVisible($('.hero'), () => {
-  if (!still() && !heroTimer) heroTimer = setInterval(heroTick, 3400)
-}, () => { clearInterval(heroTimer); heroTimer = 0 }, 0.15)
+const heroTick = () => heroShow((heroIndex + 1) % heroScreens().length)
+const heroRun = () => { clearInterval(heroTimer); heroTimer = still() ? 0 : setInterval(heroTick, 3400) }
+function setHeroSpace(space) {
+  if (space === heroSpace) return
+  heroSpace = space
+  heroSeg.dataset.at = space === 'biz' ? '1' : '0'
+  for (const button of $$('[data-hero-space]', heroSeg)) button.setAttribute('aria-checked', String(button.dataset.heroSpace === space))
+  heroShow(0)
+  if (heroTimer) heroRun()
+}
+for (const button of $$('[data-hero-space]', heroSeg)) button.addEventListener('click', () => setHeroSpace(button.dataset.heroSpace))
+painters.push(() => { pings.replaceChildren(); frontPing() })
+whileVisible($('.hero'), () => { if (!heroTimer) heroRun() }, () => { clearInterval(heroTimer); heroTimer = 0 }, 0.15)
 
 /* ── Quick Add: the app's own reader, in the browser ───────────────────────────────────────── */
 

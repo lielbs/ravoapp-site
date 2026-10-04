@@ -112,7 +112,7 @@ em{font-style:normal;color:var(--sage)}
 .store-badge__text strong{font-family:Rubik,Assistant,sans-serif;font-size:20px;font-weight:650;letter-spacing:-.025em}
 .store-badge--big{min-height:62px;padding-inline:20px 26px;border-radius:17px}
 .store-badge--big .store-badge__text strong{font-size:23px}
-.ghost-cta{display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:0 20px;border-radius:15px;border:1px solid rgba(188,205,142,.28);background:rgba(188,205,142,.06);
+.ghost-cta{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;min-height:54px;padding:0 20px;border-radius:15px;border:1px solid rgba(188,205,142,.28);background:rgba(188,205,142,.06);
   font-weight:800;color:var(--ink);transition:border-color .25s,background .25s}
 .ghost-cta i{font-style:normal;color:var(--sage);transition:transform .3s var(--ease)}
 .ghost-cta:hover{border-color:rgba(188,205,142,.55);background:rgba(188,205,142,.1)}
@@ -144,10 +144,10 @@ em{font-style:normal;color:var(--sage)}
 .proof{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-top:22px;font-size:13.5px;color:var(--subtle)}
 .proof li{display:flex;align-items:center;gap:7px}
 .proof li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sage)}
-.hero-stage{position:relative;height:calc(min(250px,62vw) * 2.17 + 40px);display:grid;place-items:center}
+.hero-stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:22px;padding-bottom:24px}
+.hero-seg{width:min(320px,100%)}
+.hero-seg button{font-size:14px}
 .phone--front{--w:min(250px,62vw);z-index:2;animation:float 7s ease-in-out infinite}
-.phone--back{display:none;--w:min(200px,48vw);position:absolute;z-index:1;top:44px;left:calc(50% - min(250px,62vw) * .5 - min(200px,48vw) * .42);transform:rotate(-7deg);opacity:.5}
-[dir=rtl] .phone--back{left:auto;right:calc(50% - min(250px,62vw) * .5 - min(200px,48vw) * .42);transform:rotate(7deg)}
 @keyframes float{50%{transform:translateY(-10px)}}
 
 /* Notifications arriving beside the phone, in the server's own words. */
@@ -159,8 +159,8 @@ em{font-style:normal;color:var(--sage)}
 .pings li.in{opacity:1;transform:none}
 .pings li.out{opacity:0;transform:translateY(-10px) scale(.96)}
 /* The front phone's notification overlaps its upper corner; the Business one sits on the back phone. */
-.pings li[data-slot=front]{top:9%;inset-inline-end:max(0px,calc(50% - min(250px,62vw) * .5 - 34px))}
-.pings li[data-slot=back]{top:66%;inset-inline-start:0}
+/* the notification overlaps the phone's upper corner, under the switch */
+.pings li[data-slot=front]{top:96px;inset-inline-end:max(0px,calc(50% - min(250px,62vw) * .5 - 34px))}
 .pings img{grid-row:span 2;width:30px;height:30px;border-radius:8px}
 .pings b{font-size:13px;line-height:1.25;color:var(--sage)}
 .pings li[data-space=biz] b{color:var(--mint)}
@@ -392,13 +392,8 @@ footer{padding:56px 0 calc(96px + env(safe-area-inset-bottom));background:#090a0
   .hero-copy{text-align:start}
   .hero .lede{margin-inline:0}
   .hero .cta-row,.proof{justify-content:flex-start}
-  .hero-stage{height:680px}
-  .phone--back{display:block}
   .phone--front{--w:290px}
-  .phone--back{--w:236px;top:80px;left:calc(50% - 145px - 100px)}
-  [dir=rtl] .phone--back{left:auto;right:calc(50% - 145px - 100px)}
-  .pings li[data-slot=front]{top:14%;inset-inline-end:calc(50% - 145px - 96px)}
-  .pings li[data-slot=back]{top:74%;inset-inline-start:calc(50% - 145px - 205px)}
+  .pings li[data-slot=front]{top:150px;inset-inline-end:calc(50% - 145px - 110px)}
   .split{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:72px}
   .split--flip .split-copy{order:1}
   .spaces-body{grid-template-columns:minmax(0,1fr) auto;gap:72px;max-width:1000px;margin-inline:auto}
