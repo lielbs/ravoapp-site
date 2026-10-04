@@ -48,8 +48,8 @@ const SCREENS = {
   templates: { he: 'מסך השגרות של RAVO', en: 'The RAVO Routines screen' },
   household: { he: 'מסך בני הבית של RAVO', en: 'The RAVO Household screen' },
   'quick-add': { he: 'מסך ההוספה המהירה של RAVO', en: 'The RAVO Quick Add screen' },
-  office: { he: 'מסך היום במשרד של RAVO Office', en: 'The RAVO Office Today screen' },
-  maintenance: { he: 'מסך התחזוקה של RAVO Office', en: 'The RAVO Office Maintenance screen' },
+  office: { he: 'מסך היום בעסק של RAVO Business', en: 'The RAVO Business Today screen' },
+  maintenance: { he: 'מסך התחזוקה של RAVO Business', en: 'The RAVO Business Maintenance screen' },
   memory: { he: 'מסך החיפוש והזיכרון של RAVO', en: 'The RAVO search and memory screen' }
 }
 
@@ -106,7 +106,7 @@ function applyLanguage(next) {
   langSwitch.setAttribute('aria-label', english ? 'החלפה לעברית' : 'Switch to English')
   document.querySelector('[data-menu-toggle]')?.setAttribute('aria-label', english ? 'Menu' : 'תפריט')
   document.getElementById('site-nav')?.setAttribute('aria-label', english ? 'Main navigation' : 'ניווט ראשי')
-  document.querySelector('.workspace-bridge')?.setAttribute('aria-label', english ? 'One account for Home and Office' : 'חשבון אחד לבית ולמשרד')
+  document.querySelector('.workspace-bridge')?.setAttribute('aria-label', english ? 'One account for RAVO Home and RAVO Business' : 'חשבון אחד ל־RAVO Home ול־RAVO Business')
   document.querySelector('.guide-stack')?.setAttribute('aria-label', english ? 'Three short steps' : 'שלושה צעדים קצרים')
 
   const track = document.querySelector('.rail-track')
