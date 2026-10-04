@@ -19,7 +19,7 @@ window.RAVO_COPY = {
     proof1: 'Free, no ads', proof2: 'For home and business', proof3: 'Hebrew and English',
     howEyebrow: 'How it works',
     howTitle: 'Three steps.<br><em>Nobody forgets.</em>',
-    s1t: 'Write it', s1: '“Buy milk”, “pay council tax by the 15th”, “the AC is leaking” — like a message.',
+    s1t: 'Write it', s1: 'Like a message to a friend: buy milk, pay council tax by the 15th, the AC is leaking.',
     s2t: 'RAVO sorts it', s2: 'Everything goes to its place, with an owner, a date and a reminder.',
     s3t: 'Everyone’s in sync', s3: 'Each person sees what’s theirs and gets notified on time. No more asking the group.',
     quickEyebrow: 'Quick Add · try it now',
@@ -30,7 +30,7 @@ window.RAVO_COPY = {
     assistEyebrow: 'The assistant · new',
     assistTitle: 'What’s urgent right now?<br><em>The assistant already knows.</em>',
     assistLede: 'The assistant surfaces only what really needs handling — a task that stalled, a bill coming due, an urgent issue — and suggests the next step. Tap a suggestion and try it.',
-    as1: 'Up to three suggestions, only when there’s something to do', as2: 'A new date or “done” in one tap', as3: 'Nothing changes without your say-so',
+    as1: 'Up to three suggestions, only when there’s something to do', as2: 'A new date or mark it done, in one tap', as3: 'Nothing changes without your say-so',
     demoHead: 'Worth handling', demoHint: 'Tap a suggestion', demoWhen: 'When should it happen?',
     demoComplete: 'Already done — mark complete', demoLater: 'Not now', demoDone: 'All handled', demoReset: 'Start again',
     demoNote: 'An interactive demo of the assistant in the app',
@@ -72,13 +72,18 @@ window.RAVO_COPY = {
 
   scenes: {
     /* Hero notifications: titles are the server's own, bodies are demo content. */
-    pings: [
-      { space: 'home', he: ['תזכורת', 'להתקשר לרופא · 20:00'], en: ['Reminder', 'Call the doctor · 20:00'] },
-      { space: 'biz', he: ['תקלה חדשה בטיפולך', 'המזגן בחדר הישיבות'], en: ['New issue for you', 'Meeting-room air conditioner'] },
-      { space: 'home', he: ['חשבון מתקרב', 'ארנונה — עד 15/10'], en: ['Bill coming up', 'Council tax — due 15/10'] },
-      { space: 'biz', he: ['משימה חדשה בשבילך', 'לאשר הזמנת טונר'], en: ['A new task for you', 'Approve the toner order'] },
-      { space: 'home', he: ['משימה הושלמה', 'נועה אספה את החבילה'], en: ['Task done', 'Noa collected the parcel'] }
-    ],
+    /* The hero's notifications. Each one is about the screen beside it: the front phone's three
+       screens, in order, and the Business screen on the back phone. Every line is something that
+       screen actually shows, so the notification and the screen tell the same story. */
+    hero: {
+      today: { he: ['תזכורת', 'לאסוף חבילה מהלוקר · 18:00'], en: ['Reminder', 'Pick up the parcel from the locker · 18:00'] },
+      'assistant-sheet': { he: ['העוזר שם לב', 'המשימה להזמין תור לטכנאי עדיין פתוחה'], en: ['The assistant noticed', 'Still open: Book the repair engineer'] },
+      shopping: { he: ['רשימת הקניות', 'נועה הוסיפה חלב ועגבניות'], en: ['Shopping list', 'Noa added milk and tomatoes'] },
+      office: [
+        { he: ['העוזר שם לב', 'חשבון שכירות משרד לתשלום בקרוב'], en: ['The assistant noticed', 'Due soon: Office rent'] },
+        { he: ['מרכז שליטה', '4 אנשי צוות פעילים · 0 תקלות דחופות'], en: ['Control centre', '4 active team members · 0 urgent issues'] }
+      ]
+    },
 
     /* Quick Add. Every example was run through the bundled reader before it went here. */
     examples: {
@@ -91,7 +96,7 @@ window.RAVO_COPY = {
       expense: { he: 'הוצאה', en: 'Expense' }, maintenance: { he: 'תקלה', en: 'Issue' }
     },
     labels: {
-      read: { he: 'RAVO זיהתה', en: 'RAVO read' },
+      read: { he: 'RAVO זיהה', en: 'RAVO read' },
       unsure: { he: 'זה יכול להתאים לכמה מקומות — באפליקציה בוחרים בהקשה:', en: 'It could go a few places — in the app you choose with a tap:' },
       empty: { he: 'כתבו משפט, או בחרו דוגמה.', en: 'Type a sentence, or pick an example.' },
       when: { he: 'מתי', en: 'When' }, time: { he: 'שעה', en: 'Time' }, amount: { he: 'סכום', en: 'Amount' },
@@ -104,9 +109,9 @@ window.RAVO_COPY = {
     /* The assistant demo, in the app's own wording. */
     assistant: {
       items: [
-        { id: 'late', tone: 'danger', icon: 'i-clock', title: { he: '„להזמין תור לטכנאי״ עדיין פתוחה', en: '“Book the repair engineer” is still open' }, hint: { he: 'לקבוע מועד חדש או לסמן שבוצע', en: 'Set a new date or mark it done' } },
-        { id: 'bill', tone: 'warning', icon: 'i-receipt', title: { he: '„ארנונה״ לתשלום בקרוב', en: '“Council tax” is due soon' }, hint: { he: 'לבדוק אם שולם', en: 'Check whether it is paid' } },
-        { id: 'issue', tone: 'mint', icon: 'i-wrench', title: { he: '„המזגן בחדר הישיבות״ דורש טיפול', en: '“Meeting-room AC” needs handling' }, hint: { he: 'לטפל או להעביר לאחראי', en: 'Handle it or hand it to someone' } }
+        { id: 'late', tone: 'danger', icon: 'i-clock', title: { he: 'המשימה להזמין תור לטכנאי עדיין פתוחה', en: 'Still open: Book the repair engineer' }, hint: { he: 'לקבוע מועד חדש או לסמן שבוצע', en: 'Set a new date or mark it done' } },
+        { id: 'bill', tone: 'warning', icon: 'i-receipt', title: { he: 'חשבון ארנונה לתשלום בקרוב', en: 'Due soon: Council tax' }, hint: { he: 'לבדוק אם שולם', en: 'Check whether it is paid' } },
+        { id: 'issue', tone: 'mint', icon: 'i-wrench', title: { he: 'התקלה במזגן בחדר הישיבות דורשת טיפול', en: 'Needs handling: Meeting-room AC' }, hint: { he: 'לטפל או להעביר לאחראי', en: 'Handle it or hand it to someone' } }
       ],
       dates: [{ he: 'היום', en: 'Today' }, { he: 'מחר', en: 'Tomorrow' }, { he: 'בעוד שבוע', en: 'In a week' }],
       scheduled: { he: 'נקבע:', en: 'Moved to' },

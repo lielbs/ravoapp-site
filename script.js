@@ -113,40 +113,39 @@ function whileVisible(node, start, stop, threshold = 0.2) {
   new IntersectionObserver(([entry]) => (entry.isIntersecting ? start() : stop()), { threshold }).observe(node)
 }
 
-/* ── hero: the phone cycles through real screens; notifications arrive beside it ───────────── */
+/* ── hero: the phone cycles through real screens, each with the notification it belongs to ── */
 
 const heroScreens = $$('[data-hero-phone] img')
-let heroIndex = 0, heroTimer = 0
+let heroIndex = 0, heroTimer = 0, officeIndex = 0
 const pings = $('[data-pings]')
-let pingIndex = 0
-const pingSlots = () => innerWidth < 980
-  ? [{ x: '4%', y: '14%' }, { x: '30%', y: '64%' }]
-  : [{ x: '-6%', y: '16%' }, { x: '46%', y: '46%' }, { x: '-2%', y: '74%' }]
-function pushPing() {
-  const list = SCENES.pings ?? []
-  if (!list.length) return
-  const slots = pingSlots()
-  const entry = list[pingIndex % list.length]
+const backPhone = () => getComputedStyle($('.phone--back')).display !== 'none'
+/* One slot per phone: the front phone's notification sits beside it, the back phone's over it. */
+function showPing(slot, entry, space) {
+  const old = $(`li[data-slot="${slot}"]`, pings)
+  if (old) { old.classList.add('out'); setTimeout(() => old.remove(), 450) }
+  if (!entry) return
   const row = el('li')
-  row.dataset.space = entry.space
+  row.dataset.slot = slot; row.dataset.space = space
   const logo = el('img'); logo.src = 'logo.svg'; logo.alt = ''; logo.width = 30; logo.height = 30
   const [title, body] = pick(entry)
   row.append(logo, el('b', '', title), el('span', '', body))
-  const slot = slots[pingIndex % slots.length]
-  row.style.setProperty('--x', slot.x); row.style.setProperty('--y', slot.y)
-  pingIndex += 1
-  const old = $$('li', pings).find(item => item.style.getPropertyValue('--y') === slot.y)
-  if (old) { old.classList.add('out'); setTimeout(() => old.remove(), 500) }
   pings.append(row)
   requestAnimationFrame(() => requestAnimationFrame(() => row.classList.add('in')))
 }
+const frontPing = () => showPing('front', SCENES.hero?.[heroScreens[heroIndex].dataset.screenSrc], 'home')
+const officePings = () => SCENES.hero?.office ?? []
+const backPing = () => { if (backPhone()) showPing('back', officePings()[officeIndex % officePings().length], 'biz') }
 function heroTick() {
   heroScreens[heroIndex].classList.remove('is-on')
   heroIndex = (heroIndex + 1) % heroScreens.length
   heroScreens[heroIndex].classList.add('is-on')
-  pushPing()
+  $('li[data-slot="front"]', pings)?.classList.add('out')
+  /* The screen changes first and its notification follows, so the two read as one event. */
+  setTimeout(frontPing, 420)
+  officeIndex += 1
+  setTimeout(backPing, 1700)
 }
-painters.push(() => { pings.replaceChildren(); pingIndex = 0; pushPing(); if (innerWidth >= 980) pushPing() })
+painters.push(() => { pings.replaceChildren(); frontPing(); backPing() })
 whileVisible($('.hero'), () => {
   if (!still() && !heroTimer) heroTimer = setInterval(heroTick, 3400)
 }, () => { clearInterval(heroTimer); heroTimer = 0 }, 0.15)
