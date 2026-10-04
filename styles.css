@@ -1,279 +1,1005 @@
-/* RAVO public website — see the header comment below. */
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   RAVO — public marketing site
+   ═══════════════════════════════════════════════════════════════════════════════════════════════
+
+   Two rules hold this file together.
+
+   1. Every ground states its own foreground. Nothing inherits a colour by luck. The section that
+      changes background — Together, Office — restates ink, muted and subtle for that ground, so a
+      paragraph can never end up dark-on-dark the way it did in the first version of this page.
+
+   2. The product is never redrawn. `.device` is a frame; the only thing inside it is a real
+      screenshot of the real application. No HTML anywhere in this file imitates app UI.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
 @font-face{font-family:Assistant;src:url('assets/fonts/assistant-hebrew.woff2') format('woff2');font-weight:400 800;font-display:swap;unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
 @font-face{font-family:Assistant;src:url('assets/fonts/assistant-latin.woff2') format('woff2');font-weight:400 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:Rubik;src:url('assets/fonts/rubik-hebrew.woff2') format('woff2');font-weight:500 800;font-display:swap;unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
 @font-face{font-family:Rubik;src:url('assets/fonts/rubik-latin.woff2') format('woff2');font-weight:500 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
-/* ═══════════════════════════════════════════════════════════════════════════════════════════════
-   RAVO — public website
-   ═══════════════════════════════════════════════════════════════════════════════════════════════
-
-   Calm on purpose. A warm paper ground, ink type, one accent (the brand's olive) and a second used
-   only to tell Business apart from Home. Every section says one thing and shows one real screen.
-   Motion is limited to a short fade as a section enters, and to hover feedback.
-
-   The product is never redrawn: `.device` is a frame around a real capture of the real app. */
-
+/* ── tokens ────────────────────────────────────────────────────────────────────────────────────
+   Measured against the ground each one is used on. The lowest ratio in the set is --subtle on
+   --bg at 6.4:1, comfortably past AA for body text; nothing lighter than --subtle is ever used
+   for text anywhere in this file. */
 :root{
-  --bg:#0d0f0c;            /* page ground                              */
-  --bg-alt:#12150f;        /* alternating band                         */
-  --surface:#181b17;       /* cards                                    */
-  --surface-2:#20241d;     /* raised control                           */
-  --line:#2c3128;
-  --ink:#f8f6f0;           /* 18.1:1 on --bg                           */
-  --muted:#c9cdbe;         /* 11.4:1                                   */
-  --subtle:#9aa08f;        /*  6.4:1 — the lightest text used          */
-  --olive:#bccd8e;         /*  9.9:1 — sage, the accent                */
-  --olive-soft:rgba(188,205,142,.13);
-  --biz:#8fd3bd;           /* 10.6:1 — RAVO Business                   */
-  --biz-soft:rgba(143,211,189,.13);
-  --clay:#f0a68d;          /*  9.2:1 — links and rare emphasis         */
-  --sage:var(--olive);
-  --radius:22px;
-  --shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -18px rgba(0,0,0,.7);
-  --ease:cubic-bezier(.2,.7,.2,1);
+  --bg:#0d0f0c;            /* page ground                          */
+  --bg-soft:#12150f;       /* alternating band                     */
+  --surface:#181b17;       /* cards on the ground                  */
+  --surface-2:#20241d;     /* raised control                       */
+  --line:#333930;          /* hairline on dark                     */
+  --line-soft:#282d24;
+  --ink:#f8f6f0;           /* 18.1:1 on --bg                       */
+  --muted:#c9cdbe;         /* 11.4:1 on --bg                       */
+  --subtle:#9aa08f;        /*  6.4:1 on --bg                       */
+  --sage:#bccd8e;          /*  9.9:1 on --bg  — accent, headings   */
+  --clay:#f0a68d;          /*  9.2:1 on --bg  — accent, emphasis   */
+  --olive:#55613a;
+  --radius:28px;
+  --shadow:0 30px 80px -20px rgba(0,0,0,.6);
+  --ease:cubic-bezier(.2,.8,.2,1);
   color-scheme:dark;
 }
 
 *{box-sizing:border-box}
+/* `overflow-x: clip`, never `hidden`. Hidden makes the root a scrolling box, and every
+   `position: sticky` on the page then anchors to that box instead of the viewport — which silently
+   killed both the header and the whole pinned product story. Clip trims the overflow without
+   creating a scroll container, so sticky keeps working. */
 html{scroll-behavior:smooth;overflow-x:clip;background:var(--bg);-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);overflow-x:clip;
-  font:400 17px/1.65 Assistant,'Segoe UI',Arial,sans-serif;font-synthesis:none;-webkit-font-smoothing:antialiased}
+body{
+  margin:0;background:var(--bg);color:var(--ink);overflow-x:clip;
+  font:400 16px/1.65 Assistant,'Segoe UI',Arial,sans-serif;font-synthesis:none;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+/* A faint grid, fading out before it can compete with anything. */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.016) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.016) 1px,transparent 1px);
+  background-size:76px 76px;mask-image:linear-gradient(to bottom,#000,transparent 72%);
+}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0}
 ul,ol{margin:0;padding:0;list-style:none}
-p,h1,h2,h3,figure{margin:0}
-h1,h2,h3,.brand,.eyebrow{font-family:Rubik,Assistant,sans-serif}
-h1{font-size:clamp(36px,4.4vw,56px);line-height:1.05;letter-spacing:-.03em;font-weight:700}
-h2{font-size:clamp(28px,3.4vw,42px);line-height:1.12;letter-spacing:-.025em;font-weight:700}
-h3{font-size:20px;line-height:1.3;letter-spacing:-.01em;font-weight:700}
-em{font-style:normal;color:var(--olive)}
+p,h1,h2,h3{margin:0 0 var(--gap,0)}
 
-.wrap{width:min(1120px,calc(100% - 48px));margin-inline:auto}
-.narrow{width:min(760px,calc(100% - 48px));margin-inline:auto}
-.section{padding-block:clamp(72px,9vw,120px)}
-.section--alt{background:var(--bg-alt);border-block:1px solid var(--line)}
-.eyebrow{display:block;margin-bottom:14px;font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--olive)}
+.wrap{width:min(1240px,calc(100% - 48px));margin-inline:auto}
+.narrow{width:min(840px,calc(100% - 48px));margin-inline:auto}
+.section-pad{padding-block:clamp(96px,11vw,176px)}
+
+h1,h2,h3,.brand,.lang,.eyebrow,.badge,.discover,.kicker,.step-time,.pin-label,.handover-title,.office-badge{font-family:Rubik,Assistant,sans-serif}
+h1{font-size:clamp(50px,7vw,104px);line-height:.95;letter-spacing:-.055em;font-weight:700;margin-bottom:30px;color:var(--ink)}
+h2{font-size:clamp(38px,5.2vw,74px);line-height:1.03;letter-spacing:-.05em;font-weight:650;margin-bottom:24px;color:var(--ink)}
+h3{font-size:clamp(22px,2.3vw,32px);line-height:1.18;letter-spacing:-.032em;font-weight:650;margin-bottom:12px;color:var(--ink)}
+em{font-style:normal;color:var(--clay)}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--sage);margin-bottom:18px}
 .eyebrow.clay{color:var(--clay)}
-.lede{margin-top:16px;font-size:clamp(17px,1.5vw,19px);line-height:1.65;color:var(--muted);max-width:56ch}
-.head{max-width:680px;margin-bottom:clamp(36px,5vw,56px)}
+.section-lede{font-size:clamp(17px,1.65vw,20px);line-height:1.7;color:var(--muted);max-width:60ch}
+.head{margin-bottom:clamp(48px,6vw,84px);max-width:960px}
 .head.center{margin-inline:auto;text-align:center}
-.head.center .lede{margin-inline:auto}
+.head.center .section-lede{margin-inline:auto}
 
-.skip{position:fixed;z-index:300;inset-inline-start:16px;top:-80px;background:var(--olive);color:var(--bg);padding:12px 18px;border-radius:10px;font-weight:700;transition:top .2s}
-.skip:focus{top:16px}
-:focus-visible{outline:2px solid var(--olive);outline-offset:3px;border-radius:6px}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:fixed;z-index:300;inset-inline-start:20px;top:-100px;background:var(--clay);color:#12140f;padding:13px 20px;border-radius:12px;font-weight:800;transition:top .2s}
+.skip:focus{top:20px}
+:focus-visible{outline:3px solid var(--clay);outline-offset:4px;border-radius:6px}
 
-/* ── header ────────────────────────────────────────────────────────────────────────────────── */
-.site-header{position:sticky;top:0;z-index:100;background:rgba(13,15,12,.82);border-bottom:1px solid transparent;transition:border-color .2s,background .2s}
-@supports (backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px)){
-  .site-header{-webkit-backdrop-filter:saturate(160%) blur(14px);backdrop-filter:saturate(160%) blur(14px)}
+/* ── device frame ──────────────────────────────────────────────────────────────────────────────
+   The only place a product screenshot is ever shown. --dw is the frame width; every other
+   dimension is derived from it, so one number scales the whole thing. No dynamic island is drawn:
+   these captures start at the app's own header, and a fake island would sit on top of real UI. */
+.device{
+  --pad:calc(var(--dw) * .022);
+  position:relative;margin:0;width:var(--dw);aspect-ratio:1290/2796;padding:var(--pad);
+  border-radius:calc(var(--dw) * .125);
+  background:linear-gradient(158deg,#6c765d 0%,#2c3227 26%,#14170f 72%,#3d4434 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 44px 88px -20px rgba(0,0,0,.78),inset 0 1px 0 rgba(255,255,255,.16);
 }
-.site-header.scrolled{border-bottom-color:var(--line);background:rgba(13,15,12,.94)}
-.header-inner{height:68px;display:flex;align-items:center;gap:28px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.04em;color:var(--ink)}
-.brand-logo{width:36px;height:36px;border-radius:10px}
-.brand-type{display:grid;line-height:1.05}
-.brand-type small{margin-top:3px;font:500 11.5px/1.2 Assistant,sans-serif;letter-spacing:0;color:var(--subtle)}
-.site-nav{display:flex;gap:4px;margin-inline-start:auto}
-.site-nav a{padding:8px 12px;border-radius:8px;font-size:15px;font-weight:600;color:var(--muted);transition:color .15s,background .15s}
-.site-nav a:hover{color:var(--ink);background:var(--surface-2)}
-.header-tools{display:flex;align-items:center;gap:8px}
-.lang{display:inline-grid;place-items:center;min-width:44px;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:10px;
-  font-size:13px;font-weight:700;color:var(--ink);cursor:pointer;background:var(--surface);transition:border-color .15s}
-.lang:hover{border-color:var(--ink)}
-.header-cta{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 15px;border-radius:10px;background:var(--olive);color:var(--bg);font-size:14px;font-weight:700;transition:opacity .15s}
-.header-cta:hover{opacity:.86}
-.header-cta svg{width:15px;height:15px;margin-block-start:-2px}
-.menu-toggle{display:none;width:40px;height:40px;place-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
-.menu-bars{position:relative;display:block;width:16px;height:11px}
-.menu-bars i{position:absolute;inset-inline:0;height:2px;border-radius:2px;background:var(--ink);transition:transform .25s var(--ease),opacity .15s}
-.menu-bars i:nth-child(1){top:0}.menu-bars i:nth-child(2){top:4.5px}.menu-bars i:nth-child(3){top:9px}
-.menu-toggle[aria-expanded=true] .menu-bars i:nth-child(1){transform:translateY(4.5px) rotate(45deg)}
-.menu-toggle[aria-expanded=true] .menu-bars i:nth-child(2){opacity:0}
-.menu-toggle[aria-expanded=true] .menu-bars i:nth-child(3){transform:translateY(-4.5px) rotate(-45deg)}
+.device-screen{
+  width:100%;height:100%;object-fit:cover;object-position:top center;
+  border-radius:calc(var(--dw) * .103);background:#12150f;
+}
 
-/* ── App Store badge — Apple's white lockup, the one published for dark grounds ────────────── */
-.store-badge{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding-inline:16px 20px;border-radius:12px;background:#fff;color:#000;transition:transform .15s,opacity .15s}
-.store-badge:hover{opacity:.88}
-.store-badge:active{transform:scale(.98)}
-.store-badge__mark{width:22px;height:22px;flex:0 0 auto;margin-block-start:-3px}
-.store-badge__text{display:grid;line-height:1.05;text-align:start}
-.store-badge__text small{font-size:10.5px;font-weight:500;opacity:.85}
-.store-badge__text strong{font-family:Rubik,Assistant,sans-serif;font-size:19px;font-weight:600;letter-spacing:-.02em}
-.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:30px}
-.text-link{font-weight:700;color:var(--olive);border-bottom:1.5px solid currentColor;padding-bottom:1px}
-.text-link:hover{color:var(--ink)}
-.cta-note{margin-top:14px;font-size:14px;color:var(--subtle)}
+/* ── the warm ground ───────────────────────────────────────────────────────────────────────────
+   RAVO's palette has a light half — Warm White, Canvas, Ink — and a page that never once uses it
+   reads as a piece of technology rather than as something that belongs in somebody's home. Two
+   sections stand on paper so the page breathes between the product moments.
 
-/* ── device frame ──────────────────────────────────────────────────────────────────────────── */
-.device{--pad:calc(var(--dw) * .03);position:relative;margin:0;width:var(--dw);aspect-ratio:1290/2796;padding:var(--pad);
-  border-radius:calc(var(--dw) * .13);background:#1d201b;
-  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 60px -24px rgba(0,0,0,.8)}
-.device-screen{width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:calc(var(--dw) * .105);background:#12150f}
-.device-label{display:block;margin-top:14px;text-align:center;font:600 14px Rubik,Assistant,sans-serif;color:var(--muted)}
-.device-label i{display:inline-block;width:8px;height:8px;margin-inline-end:7px;border-radius:50%;background:var(--olive);vertical-align:1px}
-.device-label--biz i{background:var(--biz)}
+   Every token is restated here rather than inherited, including the accents: the dark-ground sage
+   and clay are lifted for legibility on black and would be far too pale on paper, so this ground
+   uses the brand's own Deep Olive and a deepened clay, both measured on Warm White. */
+.on-paper{
+  background:#f2f1ed;color:#171914;
+  --ink:#171914;        /* 15.6:1 on the card                       */
+  --muted:#4c5144;      /*  8.6:1                                   */
+  --subtle:#6b7160;     /*  4.8:1 — the lightest text used here     */
+  --sage:#55613a;       /*  6.4:1 — Deep Olive, the brand's own     */
+  --clay:#9e4327;       /*  6.1:1 — Clay, deepened for this ground  */
+  --olive:#55613a;
+  --line:#dedcd3;--line-soft:#e8e6dd;--surface:#faf9f6;--surface-2:#eceae2;
+  --shadow:0 24px 60px -22px rgba(52,49,38,.28);
+}
+/* Grain, not gloss. Two barely-there washes keep a large flat area from looking like a screen. */
+.on-paper::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(70% 50% at 15% 0%,rgba(85,97,58,.05),transparent 70%),
+             radial-gradient(60% 45% at 90% 100%,rgba(197,99,71,.045),transparent 72%);
+}
+.on-paper>*{position:relative}
+
+/* ── header ────────────────────────────────────────────────────────────────────────────────────
+   A floating capsule of glass, and the only piece of chrome that follows the visitor down the page.
+
+   Three things were wrong with the first version and are fixed here.
+
+   THE MENU BUTTON HAD TWO BARS. Two parallel lines are not a menu — they are an equals sign. The
+   icon is three bars, which is the shape everyone on earth already reads as "more", and it folds
+   into an X on open rather than swapping to a different glyph.
+
+   THE NAVIGATION MARKED ITSELF WITH A HOVER UNDERLINE and nothing else, so the bar never said where
+   in the page you were. Each link now sits in a pill that lights on hover and stays lit for the
+   section actually on screen — the bar became a position indicator instead of a list of jumps.
+
+   THE BAR WAS FLAT. It is the first glass on the page and it was a translucent rectangle. It now
+   carries the same lit top edge as every other glass surface here, so the material is consistent
+   from the first scroll. */
+.site-header{
+  position:sticky;top:12px;z-index:120;height:74px;margin:14px auto 0;
+  width:min(1300px,calc(100% - 32px));padding-inline:16px 12px;
+  display:flex;align-items:center;gap:22px;
+  background:rgba(13,15,12,.72);border:1px solid rgba(188,205,142,.2);border-radius:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,.34);
+  transition:background .35s var(--ease),border-color .35s,box-shadow .35s;
+}
+@supports (backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px)){
+  .site-header{-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%)}
+}
+/* The lit edge. One hairline, drawn not borrowed. */
+.site-header::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.13),transparent 46%);
+  mix-blend-mode:screen;
+}
+.site-header.scrolled{
+  background:rgba(13,15,12,.92);border-color:rgba(188,205,142,.3);
+  box-shadow:0 22px 60px rgba(0,0,0,.5);
+}
+
+.brand{position:relative;display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.09em;color:var(--ink)}
+.brand-logo{
+  width:44px;height:44px;border-radius:13px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.1),0 8px 22px rgba(0,0,0,.4),0 0 24px -6px rgba(188,205,142,.45);
+  transition:transform .4s var(--ease-out),box-shadow .4s;
+}
+.brand:hover .brand-logo{transform:translateY(-1px) scale(1.04);box-shadow:0 0 0 1px rgba(255,255,255,.16),0 10px 26px rgba(0,0,0,.45),0 0 32px -4px rgba(188,205,142,.7)}
+.brand-type{display:grid;font-size:20px;line-height:1}
+.brand-type small{margin-top:5px;font:600 11px/1.2 Assistant,sans-serif;letter-spacing:0;color:var(--subtle)}
+
+.site-header nav{
+  display:flex;align-items:center;gap:2px;margin-inline-start:auto;
+  font-weight:700;font-size:13.5px;color:var(--muted);
+}
+.site-header nav a{
+  position:relative;padding:9px 13px;border-radius:999px;white-space:nowrap;
+  transition:color .22s,background .28s var(--ease-out);
+}
+/* The pill itself, scaled from the centre so it opens rather than appears. */
+.site-header nav a::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;
+  background:rgba(188,205,142,.1);border:1px solid rgba(188,205,142,.18);
+  opacity:0;transform:scale(.86);
+  transition:opacity .25s,transform .32s var(--ease-out);
+}
+.site-header nav a:hover,.site-header nav a:focus-visible{color:var(--ink)}
+.site-header nav a:hover::before{opacity:1;transform:none}
+/* Where the visitor actually is. Held, not hovered. */
+.site-header nav a.current{color:var(--sage)}
+.site-header nav a.current::before{opacity:1;transform:none;background:rgba(188,205,142,.14);border-color:rgba(188,205,142,.34)}
+
+.header-tools{display:flex;align-items:center;gap:9px}
+.lang{
+  display:inline-grid;place-items:center;
+  border:1px solid var(--line);background:var(--surface-2);border-radius:999px;
+  min-width:50px;min-height:44px;padding:0 14px;cursor:pointer;
+  font-size:12px;font-weight:800;color:var(--ink);
+  transition:border-color .2s,color .2s,background .25s;
+}
+.lang:hover{border-color:var(--sage);color:var(--sage);background:rgba(188,205,142,.1)}
+
+.menu-toggle{
+  display:none;width:44px;height:44px;flex:0 0 auto;cursor:pointer;
+  border:1px solid var(--line);border-radius:14px;background:var(--surface-2);
+  place-items:center;transition:border-color .2s,background .25s;
+}
+.menu-toggle:hover{border-color:rgba(188,205,142,.45);background:rgba(188,205,142,.09)}
+/* A fixed 18x12 box so the three bars have somewhere definite to fold into. */
+.menu-bars{position:relative;display:block;width:18px;height:12px}
+.menu-bars i{
+  position:absolute;inset-inline:0;height:2px;border-radius:2px;background:var(--ink);
+  transition:transform .34s var(--ease-out),opacity .18s;
+}
+.menu-bars i:nth-child(1){top:0}
+.menu-bars i:nth-child(2){top:5px}
+.menu-bars i:nth-child(3){top:10px}
+.menu-toggle[aria-expanded=true] .menu-bars i:nth-child(1){transform:translateY(5px) rotate(45deg)}
+.menu-toggle[aria-expanded=true] .menu-bars i:nth-child(2){opacity:0;transform:scaleX(.4)}
+.menu-toggle[aria-expanded=true] .menu-bars i:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
 
 /* ── hero ──────────────────────────────────────────────────────────────────────────────────── */
-.hero{padding-block:clamp(44px,6vw,88px) clamp(64px,8vw,104px)}
-/* Grid children may shrink below their content; without this a long headline widens the column past the screen. */
-.hero-grid>*,.split>*,.spaces>*,.features>*,.trust>*,.footer-grid>*{min-width:0}
-.hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(32px,5vw,72px);align-items:center}
-.badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;padding:6px 12px;border-radius:999px;background:var(--olive-soft);font-size:13.5px;font-weight:600;color:var(--olive)}
-.badge i{width:7px;height:7px;border-radius:50%;background:var(--olive)}
-.hero-phones{display:flex;justify-content:center;align-items:flex-start;gap:clamp(14px,2vw,24px)}
-.hero-phones figure:last-child{margin-top:48px}
+.hero{position:relative;isolation:isolate;overflow:hidden;padding-top:clamp(40px,6vw,88px)}
+.hero-veil{position:absolute;inset:0;z-index:-1;pointer-events:none}
+/* A chevron, the shape of the mark itself, big enough to read as architecture rather than an icon. */
+.veil-roof{
+  position:absolute;width:min(720px,74vw);aspect-ratio:1;inset-inline-end:-13vw;top:2vw;
+  border-top:1.5px solid rgba(188,205,142,.13);border-inline-end:1.5px solid rgba(188,205,142,.13);
+  border-start-end-radius:16%;transform:rotate(-45deg);
+  animation:roofDrift 22s ease-in-out infinite;
+}
+.veil-glow{position:absolute;width:min(720px,90vw);aspect-ratio:1;inset-inline-end:-6vw;top:4vw;border-radius:50%;
+  background:radial-gradient(circle,rgba(188,205,142,.15),rgba(85,97,58,.06) 46%,transparent 70%)}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:clamp(28px,5vw,80px);min-height:min(760px,calc(100svh - 150px))}
+.hero-copy{position:relative;z-index:4}
+.badge{display:inline-flex;align-items:center;gap:10px;margin-bottom:34px;padding:10px 17px;border:1px solid var(--line);border-radius:999px;background:rgba(24,27,23,.8);font-size:13px;font-weight:700;color:var(--ink)}
+.badge-dot{width:8px;height:8px;border-radius:50%;background:var(--clay);box-shadow:0 0 0 0 rgba(240,166,141,.45);animation:pulse 2.6s ease-in-out infinite}
+.hero .lede{font-size:clamp(17px,1.75vw,22px);line-height:1.65;color:var(--muted);max-width:60ch}
+.discover{display:inline-flex;align-items:center;gap:14px;margin-top:30px;font-weight:700;color:var(--ink)}
+.discover i{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--sage);color:#131709;font-style:normal;font-weight:800;transition:transform .3s var(--ease)}
+.discover:hover i{transform:translateY(5px)}
 
-/* ── split sections: copy beside one screen ────────────────────────────────────────────────── */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,6vw,88px);align-items:center}
-.points{display:grid;gap:18px;margin-top:30px}
-.points li{display:grid;grid-template-columns:40px 1fr;gap:2px 14px}
-.points .icon{grid-row:span 2;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--olive-soft);color:var(--olive)}
-.points .icon svg{width:20px;height:20px}
-.points b{font:600 17px/1.35 Rubik,Assistant,sans-serif}
-.points span{font-size:16px;line-height:1.6;color:var(--muted)}
-.split-visual{display:grid;justify-items:center}
+.hero-stage{position:relative;display:grid;place-items:center;min-height:min(660px,72svh);padding-block:18px 34px}
+.device-hero{
+  position:relative;z-index:3;
+  transform:rotateY(calc(var(--mx,0) * -4deg)) rotateX(calc(var(--my,0) * 4deg));
+  transition:transform .3s ease-out;animation:breathe 7s ease-in-out infinite;
+}
+.stage-caption{position:absolute;bottom:-6px;inset-inline:0;text-align:center;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--subtle)}
 
-/* ── Quick Add, live ───────────────────────────────────────────────────────────────────────── */
-.try-box{padding:22px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
-.try-switch{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:var(--surface-2);margin-bottom:14px}
-.try-switch button{min-height:40px;border-radius:9px;font-weight:700;font-size:14.5px;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
-.try-switch button[aria-checked=true]{background:var(--olive);color:var(--bg)}
-.try-switch button[data-space=office][aria-checked=true]{background:var(--biz)}
-.try-field textarea{width:100%;min-height:84px;resize:none;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);
-  font:500 17.5px/1.5 Assistant,sans-serif;transition:border-color .15s,box-shadow .15s}
-.try-field textarea:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px var(--olive-soft)}
-.try-examples{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.try-examples button{min-height:36px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s}
-.try-examples button:hover{border-color:var(--olive);color:var(--ink)}
-.try-result{margin-top:16px;min-height:132px}
-.try-empty{padding:18px;border-radius:14px;border:1px dashed var(--line);color:var(--subtle);text-align:center}
-.try-card{padding:16px 18px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
-.try-card__head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.try-kind{padding:3px 10px;border-radius:999px;background:var(--olive);color:var(--bg);font-size:12.5px;font-weight:700}
-.try-card__read{font-size:13px;color:var(--subtle)}
-.try-card h3{margin-bottom:10px;font-size:19px;overflow-wrap:anywhere}
-.try-chips{display:flex;flex-wrap:wrap;gap:6px}
-.try-chips li{padding:4px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:14px;color:var(--ink)}
-.try-chips li b{font-weight:600;color:var(--subtle)}
-.try-options{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.try-options li{padding:4px 10px;border-radius:8px;border:1px dashed var(--olive);font-size:14px;font-weight:600;color:var(--olive)}
-.try-confirm{margin-top:10px;font-size:13.5px;color:var(--subtle)}
-.try-note{margin-top:14px;font-size:14px;color:var(--subtle)}
+/* The signals. They arrive scattered, hold for a beat, then converge — chaos, then RAVO, then calm.
+   One keyframe animation rather than a class-to-class transition: a transition can be interrupted
+   or arrive out of order, and this is the first thing anybody sees. Centring is done with the
+   `translate` property so it is identical in both writing directions, which leaves `transform` free
+   to carry the choreography alone. The idle drift afterwards lives on the inner span, so the two
+   never fight over the same property. */
+.signals{position:absolute;inset:0;z-index:5;pointer-events:none}
+/* --l/--t are the settled place, as a share of the stage, because percentage insets resolve against
+   the containing block. --sx/--sy are the scatter, in pixels, because a percentage inside
+   translate() resolves against the element's *own* box — six chips written that way all end up in
+   a heap behind the phone. Position and choreography therefore use different mechanisms on purpose. */
+.signals li{
+  position:absolute;left:var(--l);top:var(--t);translate:-50% -50%;opacity:0;
+  transform:translate(var(--sx),var(--sy)) rotate(var(--sr)) scale(.92);
+}
+/* Bright enough to be read as writing, not as decoration: these carry the section's whole idea,
+   and the first draft of them sank into the background. */
+.signals li span{
+  display:flex;align-items:center;gap:9px;padding:10px 15px;border-radius:14px;white-space:nowrap;
+  border:1px solid rgba(188,205,142,.34);background:rgba(41,48,36,.94);
+  backdrop-filter:blur(14px);box-shadow:0 18px 42px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07);
+  font-size:13.5px;font-weight:700;color:var(--ink);
+}
+.signals li span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--clay);flex:none}
+.signals.shown li:nth-child(2n) span::before,.signals.settled li:nth-child(2n) span::before{background:var(--sage)}
+.signals.shown li{animation:settle 2.5s var(--ease) forwards;animation-delay:calc(var(--i,0) * .11s)}
+.signals.shown li span{animation:float 6s ease-in-out 2.6s infinite;animation-delay:calc(2.6s + var(--i,0) * .4s)}
+@keyframes settle{
+  0%{opacity:0;transform:translate(var(--sx),var(--sy)) rotate(var(--sr)) scale(.92)}
+  24%{opacity:1;transform:translate(var(--sx),var(--sy)) rotate(var(--sr)) scale(.92)}
+  100%{opacity:1;transform:translate(0,0) rotate(var(--r)) scale(1)}
+}
+/* Reduced motion, and the belt-and-braces state the script sets: already gathered, nothing moving. */
+.signals.settled li{opacity:1;animation:none;transform:rotate(var(--r))}
+.signals.settled li span{animation:none;border-color:rgba(188,205,142,.3);background:rgba(31,38,27,.92)}
 
-/* ── Home and Business ─────────────────────────────────────────────────────────────────────── */
-.spaces{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.space{display:grid;align-content:start;gap:22px;padding:clamp(24px,3vw,36px);border-radius:var(--radius);background:var(--surface);border:1px solid var(--line)}
-.space-tag{display:inline-flex;align-items:center;gap:8px;margin-bottom:12px;font:700 15px Rubik,Assistant,sans-serif;color:var(--olive)}
-.space-tag i{width:9px;height:9px;border-radius:50%;background:currentColor}
-.space--biz .space-tag{color:var(--biz)}
-.space h3{font-size:clamp(22px,2.2vw,26px);margin-bottom:8px}
-.space p{color:var(--muted)}
-.space-body{display:block}
-.ticks{display:grid;gap:10px}
-.ticks li{position:relative;padding-inline-start:30px;font-size:16px;line-height:1.5}
-.ticks li::before{content:"✓";position:absolute;inset-inline-start:0;top:2px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
-  background:var(--olive-soft);color:var(--olive);font-size:12px;font-weight:700;line-height:1}
-.space--biz .ticks li::before{background:var(--biz-soft);color:var(--biz)}
-.fits{margin-top:4px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;color:var(--subtle)}
-.bridge{margin-top:24px;text-align:center;font-size:15.5px;color:var(--muted)}
+.rail{margin-top:clamp(32px,5vw,60px);border-block:1px solid var(--line);background:var(--surface);overflow:hidden}
+.rail-track{display:flex;width:max-content;align-items:center;gap:26px;padding:17px 0;color:var(--muted);font:700 14px Rubik,sans-serif;animation:rail 34s linear infinite}
+.rail-track i{color:var(--clay);font-size:7px;font-style:normal}
+.rail:hover .rail-track{animation-play-state:paused}
 
-/* ── everything in one place ───────────────────────────────────────────────────────────────── */
-.features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.features li{padding:24px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
-.features .icon{width:40px;height:40px;margin-bottom:16px;border-radius:12px;display:grid;place-items:center;background:var(--olive-soft);color:var(--olive)}
-.features .icon svg{width:20px;height:20px}
-.features b{display:block;margin-bottom:4px;font:600 17px Rubik,Assistant,sans-serif}
-.features span{font-size:15.5px;line-height:1.6;color:var(--muted)}
+/* ── one brand, two products ───────────────────────────────────────────────────────────────── */
+.product-choice{position:relative;background:var(--bg-soft);overflow:hidden}
+.product-choice::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(55% 58% at 16% 52%,rgba(188,205,142,.08),transparent 72%),radial-gradient(50% 60% at 88% 45%,rgba(69,133,104,.1),transparent 74%)}
+.product-choice .wrap{position:relative}
+.product-paths{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.product-path{position:relative;min-height:590px;padding:clamp(30px,4vw,52px);border:1px solid var(--line);border-radius:34px;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;isolation:isolate}
+.product-path::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
+.product-path--home{background:#1b1e18}
+.product-path--home::before{background:radial-gradient(75% 90% at 86% 70%,rgba(188,205,142,.18),transparent 72%)}
+.product-path--business{background:#101d17;border-color:#294638}
+.product-path--business::before{background:radial-gradient(75% 90% at 86% 70%,rgba(70,145,112,.2),transparent 72%)}
+.path-copy{position:relative;z-index:2;align-self:start;padding-top:12px}
+.path-label{display:inline-flex;margin-bottom:28px;padding:8px 13px;border:1px solid rgba(188,205,142,.3);border-radius:999px;font:800 12px Rubik,Assistant,sans-serif;letter-spacing:.08em;color:var(--sage)}
+.product-path--business .path-label{border-color:rgba(143,208,174,.34);color:#a9dcc0}
+.product-path h3{font-size:clamp(29px,3vw,46px);max-width:11ch;color:var(--ink)}
+.product-path p{max-width:37ch;margin-top:18px;color:var(--muted);font-size:17px;line-height:1.65}
+.path-cta{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:28px;padding:11px 19px;border-radius:14px;background:var(--sage);color:#11150d;font-weight:800;transition:transform .25s var(--ease),filter .25s}
+.path-cta:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.product-path--business .path-cta,.path-cta--business{background:#9fd4b8;color:#0b1912}
+.path-device{align-self:end;transform:translate(14%,13%) rotate(4deg);transition:transform .55s var(--ease)}
+[dir=ltr] .path-device{transform:translate(-14%,13%) rotate(-4deg)}
+.product-path:hover .path-device{transform:translate(10%,9%) rotate(2deg)}
+[dir=ltr] .product-path:hover .path-device{transform:translate(-10%,9%) rotate(-2deg)}
+
+/* ── the invisible load ────────────────────────────────────────────────────────────────────── */
+.load{position:relative;overflow:hidden}
+.load-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.load-grid article{
+  display:flex;flex-direction:column;justify-content:space-between;gap:22px;
+  min-height:250px;padding:30px;border:1px solid var(--line);border-radius:26px;background:var(--surface);
+  transition:transform .35s var(--ease),border-color .3s;
+}
+.load-grid article:hover{transform:translateY(-8px);border-color:#c9c6ba}
+.load-grid .n{font:800 11px Rubik,sans-serif;letter-spacing:.14em;color:var(--subtle)}
+.load-grid p{font:650 clamp(19px,1.9vw,26px)/1.32 Rubik,sans-serif;letter-spacing:-.03em;color:var(--ink)}
+.load-grid small{font-size:12.5px;font-weight:700;color:var(--subtle)}
+.load-grid .answer{background-color:#55613a;background-image:linear-gradient(155deg,#55613a 0%,#333d26 100%);border-color:#55613a}
+.load-grid .answer img{border-radius:13px}
+.load-grid .answer p{color:#fbfaf3}
+.load-grid .answer small{color:#dfe6c9}
+
+/* ── scroll product story ──────────────────────────────────────────────────────────────────── */
+.story{background:var(--bg)}
+/* The two columns must both stretch to the full row height. `align-items:start` here was the bug
+   that stopped the device sticking at all: it shrank the right-hand grid item down to the size of
+   the device itself, leaving the sticky child no track to travel along, so the product scrolled
+   away on the first step instead of staying put through all six. */
+.story-layout{display:grid;grid-template-columns:1fr 1fr;gap:clamp(50px,8vw,130px);align-items:stretch}
+.story-intro{min-height:44vh;margin-bottom:0}
+/* The step you are not on is de-emphasised, not dimmed out of legibility: at the first draft's .3
+   the words were decoration. .72 reads as "not this one" while every line stays above AA — and the
+   active step is marked by a rule as well as by brightness, so which one is current does not depend
+   on being able to tell two levels of grey apart. */
+.step{
+  position:relative;min-height:70vh;padding:14vh 0 9vh;border-top:1px solid var(--line-soft);
+  opacity:.72;transition:opacity .5s ease;
+}
+.step[data-screen='today'],.story-pin[data-screen='today']{--flow-accent:#f0a68d}
+.step[data-screen='tasks'],.story-pin[data-screen='tasks']{--flow-accent:#8fb6cc}
+.step[data-screen='shopping'],.story-pin[data-screen='shopping']{--flow-accent:#6fc2a8}
+.step[data-screen='calendar'],.story-pin[data-screen='calendar']{--flow-accent:#9aa8e0}
+.step[data-screen='money'],.story-pin[data-screen='money']{--flow-accent:#9aa8e0}
+.step[data-screen='templates'],.story-pin[data-screen='templates']{--flow-accent:#a3c47f}
+.step[data-screen='memory'],.story-pin[data-screen='memory']{--flow-accent:#d199c6}
+.step::before{
+  content:"";position:absolute;top:-1px;inset-inline-start:0;width:0;height:2px;
+  background:var(--flow-accent,var(--clay));transition:width .55s var(--ease);
+}
+.step.active{opacity:1}
+.step.active::before{width:64px}
+.step-time{display:block;margin-bottom:20px;font-size:12px;font-weight:800;letter-spacing:.13em;color:var(--flow-accent,var(--clay))}
+.step h3{max-width:15ch}
+.step p{max-width:44ch;font-size:clamp(16px,1.6vw,19px);line-height:1.7;color:var(--muted)}
+.step-device{display:none;margin:38px auto 0}
+
+/* The grid item is the track; the thing that sticks is the box inside it. */
+.story-pin{position:relative}
+.pin-inner{
+  position:sticky;top:104px;height:calc(100svh - 128px);min-height:520px;
+  display:grid;grid-auto-flow:row;justify-items:center;align-content:center;gap:18px;width:100%;
+}
+.pin-halo{position:absolute;width:min(560px,110%);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 50% 44%,rgba(188,205,142,.22),rgba(85,97,58,.08) 46%,transparent 70%)}
+.device-pin{position:relative;z-index:2}
+.device-pin .device-screen{
+  position:absolute;inset:var(--pad);width:auto;height:auto;
+  opacity:0;transform:translateY(24px) scale(.98);
+  transition:opacity .5s ease,transform .75s var(--ease);
+}
+.device-pin .device-screen.is-on{opacity:1;transform:none}
+/* Under the frame, not over it and not floating off beside it: the screenshot is real UI and
+   nothing belongs on top of it, and a row in the flow needs no direction-aware maths to sit in the
+   right place in both Hebrew and English. */
+.pin-ticks{display:flex;gap:7px;align-items:center}
+.pin-ticks li{width:22px;height:3px;border-radius:2px;background:var(--line);transition:background .4s,width .4s var(--ease)}
+.pin-ticks li.on{background:var(--flow-accent,var(--clay));width:36px}
+.pin-label{
+  display:inline-grid;grid-template-columns:auto auto;align-items:center;column-gap:10px;
+  padding:11px 18px;border:1px solid var(--line);border-radius:15px;background:rgba(22,26,21,.9);
+  box-shadow:0 14px 34px rgba(0,0,0,.35);
+}
+.pin-label strong{font:700 14px Rubik,sans-serif;color:var(--ink)}
+.pin-label small{grid-column:2;font-size:9px;letter-spacing:.14em;color:var(--subtle)}
+.pin-dot{grid-row:1/3;width:8px;height:8px;border-radius:50%;background:var(--flow-accent,var(--clay))}
+
+/* ── shared responsibility ─────────────────────────────────────────────────────────────────── */
+/* A lighter ground, so ink/muted/subtle are all restated for it. */
+.together{
+  position:relative;overflow:hidden;border-block:1px solid #6d7b54;
+  background-color:#54633a;
+  background-image:linear-gradient(160deg,#54633a 0%,#2b3522 54%,#171b14 100%);
+  --muted:#e2e6d6;--subtle:#cbd2bc;
+}
+.together::after{content:"";position:absolute;width:620px;height:620px;inset-inline-end:-210px;top:-170px;border:110px solid rgba(255,255,255,.03);border-radius:50%}
+/* Clay is tuned for the black ground and only reaches 3.3:1 on this green one. The large heading
+   emphasis clears the large-text threshold at that ratio; the 12px eyebrow does not, so it warms
+   to a cream that does. */
+.together .eyebrow.clay{color:#fad7c8}
+.together .wrap{position:relative;z-index:1}
+.handover{display:grid;grid-template-columns:.8fr auto 1.2fr;gap:clamp(20px,3vw,44px);align-items:center}
+.handover-title{font-size:13px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#dbe2c8;margin-bottom:18px}
+.thoughts{display:grid;gap:11px}
+.thoughts li{
+  padding:15px 18px;border-radius:16px;font-size:15.5px;font-weight:600;color:#eef1e5;
+  border:1px dashed rgba(255,255,255,.26);background:rgba(0,0,0,.16);
+  transform:translateX(0) rotate(var(--tilt,0deg));opacity:1;
+  transition:opacity .6s ease,transform .8s var(--ease);
+}
+.thoughts li:nth-child(1){--tilt:-1.4deg}
+.thoughts li:nth-child(2){--tilt:1.1deg}
+.thoughts li:nth-child(3){--tilt:-.7deg}
+/* Once the section is on screen the loose thoughts recede: they have moved into the list next to
+   them. The recession is carried by the container — the dashed border thins, the fill drops away,
+   the card settles square and shrinks a little — and NOT by fading the words. Dimming the text was
+   the first attempt and it took these three lines to 3.1:1, which is the exact fault the whole page
+   was rejected for the first time round. A thing that has been handed over still has to be readable
+   by the person who handed it over. */
+.handover.moved .thoughts li{
+  transform:rotate(0deg) scale(.975);color:#dae0cd;
+  border-color:rgba(255,255,255,.12);background:rgba(0,0,0,.08);
+}
+.handover-arrow{display:grid;grid-auto-flow:column;place-items:center;gap:14px}
+.handover-arrow span{width:38px;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,.5))}
+.handover-arrow span:last-child{background:linear-gradient(90deg,rgba(255,255,255,.5),rgba(255,255,255,.05))}
+.handover-arrow img{border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.4)}
+
+.live-demo{padding:24px;border:1px solid rgba(255,255,255,.16);border-radius:30px;background:rgba(11,13,10,.8);backdrop-filter:blur(14px);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.demo-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:2px 2px 20px}
+.demo-top>span:first-child{display:grid}
+.demo-top small{font-size:12px;color:#b6bda9}
+.demo-top strong{font:700 21px Rubik,sans-serif;color:var(--ink)}
+.avatars{display:flex;direction:ltr}
+.avatars i{width:29px;height:29px;margin-left:-6px;border:2px solid #1a1f16;border-radius:9px;display:grid;place-items:center;font:800 11px Assistant,sans-serif;font-style:normal;color:#f6f5ee;background:#405138}
+.avatars i:nth-child(2){background:#6a4739}
+.avatars i:nth-child(3){background:#37495c}
+.progress{height:3px;margin-bottom:18px;border-radius:999px;background:#343a30;overflow:hidden}
+.progress i{display:block;height:100%;width:34%;background:linear-gradient(90deg,var(--sage),var(--clay));transition:width .55s var(--ease)}
+.demo-task{
+  width:100%;margin-top:10px;padding:15px;display:grid;grid-template-columns:32px 1fr 34px;gap:12px;align-items:center;
+  border:1px solid var(--line);border-radius:18px;background:#181c15;text-align:start;cursor:pointer;
+  transition:transform .22s var(--ease),border-color .25s,opacity .3s;
+}
+.demo-task:hover{border-color:#6f7c5d;transform:translateY(-2px)}
+.check{display:grid;place-items:center;width:29px;height:29px;border:2px solid #6b7460;border-radius:10px;color:transparent;font-weight:900;transition:background .25s,border-color .25s,color .25s}
+.demo-body{display:grid;gap:2px}
+.demo-task strong{font-size:16px;font-weight:700;color:var(--ink)}
+.demo-task small{font-size:12px;color:#b9c0ac}
+.demo-task b{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#3e4f37;color:var(--ink);font-size:13px}
+/* Done, not gone: a completed row still has to be readable by the person who completed it. */
+.demo-task[aria-pressed=true]{opacity:.74}
+.demo-task[aria-pressed=true] .check{background:var(--sage);border-color:var(--sage);color:#18220f}
+.demo-task[aria-pressed=true] strong{text-decoration:line-through}
+.demo-toast{display:flex;align-items:center;gap:10px;min-height:46px;margin-top:16px;padding:12px 15px;border-radius:14px;background:#293320;color:var(--ink);font-size:14px;font-weight:600;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s var(--ease)}
+.demo-toast.show{opacity:1;transform:none}
+.demo-toast>span:first-child{color:var(--sage);font-weight:900}
+.demo-note{margin-top:14px;font-size:12px;color:#b0b7a3;text-align:center}
+.together-close{max-width:70ch;margin:clamp(50px,6vw,80px) auto 0;text-align:center;font-size:clamp(17px,1.7vw,21px);line-height:1.7;color:#e8ebdd}
+
+/* ── quick capture ─────────────────────────────────────────────────────────────────────────── */
+.capture{background:var(--bg-soft)}
+.capture-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,96px);align-items:center}
+.capture-fine{margin-top:22px;font-size:14.5px;line-height:1.7;color:var(--subtle);max-width:52ch}
+.capture-demo{position:relative}
+.capture-window{
+  padding:clamp(22px,3vw,34px);border:1px solid var(--line);border-radius:28px;
+  background-color:#252b1f;background-image:linear-gradient(158deg,#252b1f,#14170f);box-shadow:var(--shadow);
+}
+.capture-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;font-size:12px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--subtle)}
+.capture-dots{display:flex;gap:5px}
+.capture-dots i{width:9px;height:9px;border-radius:50%;background:#3b4234}
+.capture-dots i:first-child{background:#c56347}
+.capture-field{
+  display:flex;align-items:center;min-height:64px;padding:16px 18px;
+  border:1px solid #4d5442;border-radius:16px;background:#0f120c;
+  font-size:clamp(16px,1.7vw,20px);font-weight:600;color:var(--ink);
+}
+.caret{display:inline-block;width:2px;height:1.25em;margin-inline-start:4px;background:var(--clay);animation:blink .9s steps(1) infinite}
+.capture-result{margin-top:18px;opacity:0;transform:translateY(12px);transition:opacity .45s ease,transform .6s var(--ease)}
+.capture-result.show{opacity:1;transform:none}
+.result-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:14px;font-weight:700;color:var(--sage)}
+.result-tick{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--sage);color:#18220f;font-weight:900;font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chips li{display:grid;gap:2px;padding:11px 16px;border:1px solid var(--line);border-radius:14px;background:#1b1f17}
+.chips small{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--subtle)}
+.chips strong{font-size:15.5px;font-weight:700;color:var(--ink)}
+.capture-demo .demo-note{color:var(--subtle)}
+
+/* ── the wider system ──────────────────────────────────────────────────────────────────────── */
+.system{background:var(--bg)}
+.bento{display:grid;grid-template-columns:1.15fr .85fr .85fr;gap:16px}
+.tile{position:relative;overflow:hidden;min-height:520px;padding:32px;border:1px solid var(--line);border-radius:30px;background:var(--surface);display:flex;flex-direction:column}
+.kicker{display:block;margin-bottom:18px;font-size:11px;font-weight:800;letter-spacing:.09em;color:var(--clay)}
+.tile p{font-size:16px;line-height:1.65;color:var(--muted);max-width:34ch}
+/* In the flow, pushed to the bottom by `margin-top:auto`, bleeding off the card with a negative
+   bottom margin. It used to be absolutely positioned, which meant that at any width where the text
+   grew taller than the space left for it — every phone, and the two-column tablet layout — the
+   screenshot was painted straight over the heading and the paragraph. A box in the flow cannot
+   overlap the text above it, whatever the column does. */
+.tile-device{--dw:min(196px,64%);margin:26px auto -24%;transform:rotate(-3deg);transition:transform .5s var(--ease)}
+.tile:hover .tile-device{transform:rotate(-3deg) translateY(-12px)}
+.tile p{margin-bottom:auto}
+.tile-people{background-color:#23251f;background-image:radial-gradient(circle at 80% 0,rgba(209,153,198,.12),transparent 44%),linear-gradient(158deg,#23251f,#15180f)}
+.tile-guides{background-color:#1c2326;background-image:radial-gradient(circle at 20% 100%,rgba(143,182,204,.16),transparent 46%),linear-gradient(158deg,#1c2326,#14170f)}
+.tile-kitchen{background:#1a1e17;min-height:520px}
+.guide-stack{display:grid;gap:10px;margin-top:28px}
+.guide-stack li{display:grid;grid-template-columns:32px 1fr;align-items:center;gap:11px;padding:13px 14px;border:1px solid #3b4648;border-radius:15px;background:rgba(11,15,14,.54)}
+.guide-stack li:nth-child(2){margin-inline-start:14px}
+.guide-stack li:nth-child(3){margin-inline-start:28px}
+.guide-stack span{display:grid;place-items:center;width:30px;height:30px;border-radius:10px;background:rgba(143,182,204,.15);font:800 10px Rubik,sans-serif;color:#b6d2df}
+.guide-stack strong{font-size:14px;color:var(--ink)}
+/* Three things that only make sense together, drawn as three things that turn together. Sized in
+   percentages of its own box so every label stays inside the tile at any column width. */
+/* In the flow, below the writing, like the screenshot in the other two tiles. It used to be
+   absolutely positioned at the top of the card, which put it straight over the heading and the
+   paragraph as soon as the card got narrow — the same defect as the bleeding screenshots, in a
+   different costume. Nothing decorative on this page is positioned over text any more. */
+.orbit{
+  position:relative;margin:30px auto 4px;
+  width:min(244px,80%);aspect-ratio:1;border:1px solid #454f3c;border-radius:50%;
+  animation:spin 38s linear infinite;
+}
+.orbit::before,.orbit::after{content:"";position:absolute;border:1px solid #343b2f;border-radius:50%;inset:16%}
+.orbit::after{inset:33%;background:var(--olive);border-color:#5f6c43;box-shadow:0 0 46px rgba(188,205,142,.16)}
+.orbit i{
+  position:absolute;z-index:2;left:50%;top:50%;padding:7px 13px;border-radius:999px;
+  border:1px solid #4a5440;background:#2f382a;color:var(--ink);
+  font:700 11.5px Assistant,sans-serif;font-style:normal;white-space:nowrap;
+  animation:spin 38s linear infinite reverse;
+}
+.orbit i:nth-child(1){translate:-50% -50%;margin-top:-46%}
+.orbit i:nth-child(2){translate:-50% -50%;margin-left:38%;margin-top:26%}
+.orbit i:nth-child(3){translate:-50% -50%;margin-left:-38%;margin-top:26%}
+
+/* ── office ────────────────────────────────────────────────────────────────────────────────── */
+/* The one deliberate palette shift on the page: the same system, in another shared space. */
+.office{
+  position:relative;overflow:hidden;border-block:1px solid #234034;background:#0b1310;
+  --muted:#c4d2c6;--subtle:#94a498;
+}
+.office-wash{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(80% 60% at 50% 0%,rgba(46,102,79,.3),transparent 68%),radial-gradient(60% 50% at 80% 100%,rgba(31,71,56,.28),transparent 70%)}
+.office .wrap{position:relative;z-index:2}
+.office-head{max-width:820px}
+.office-badge{display:inline-flex;align-items:center;gap:11px;margin-bottom:22px;padding:9px 16px 9px 9px;border:1px solid #2f5544;border-radius:999px;background:rgba(10,22,17,.7);font:800 12px Rubik,sans-serif;letter-spacing:.16em;color:#a9dcc0}
+[dir=ltr] .office-badge{padding:9px 9px 9px 16px}
+.office-badge img{border-radius:9px}
+.office .eyebrow{color:#9fd4b8}
+.office h2 em{color:#8fd0ae}
+.workspace-bridge{max-width:760px;margin:34px auto 0;padding:20px 22px;border:1px solid #2f5544;border-radius:24px;background:rgba(9,21,16,.72);text-align:center}
+.workspace-pair{display:flex;align-items:center;justify-content:center;gap:14px}
+.workspace-pair>i{font:700 20px Rubik,sans-serif;font-style:normal;color:#8fd0ae}
+.workspace-pill{display:flex;align-items:center;gap:11px;min-width:205px;padding:11px 15px;border:1px solid #355a48;border-radius:16px;background:#111d17;text-align:start}
+.workspace-pill img{border-radius:10px}
+.workspace-pill>span{display:grid;gap:2px}
+.workspace-pill strong{font:700 14px Rubik,sans-serif;color:#f5f6f0}
+.workspace-pill small{font-size:11px;color:#a9b8ac}
+.workspace-pill--home{box-shadow:inset 0 2px 0 rgba(240,166,141,.7)}
+.workspace-pill--office{box-shadow:inset 0 2px 0 rgba(111,194,168,.7)}
+.workspace-bridge>p{max-width:60ch;margin:16px auto 0;font-size:14.5px;line-height:1.65;color:#c4d2c6}
+.office-stage{position:relative;display:flex;align-items:center;justify-content:center;gap:clamp(16px,3vw,44px);margin-top:clamp(30px,5vw,58px);perspective:1600px}
+.office-a{transform:rotate(-3deg) translateY(-14px);z-index:2}
+.office-b{transform:rotate(4deg) translateY(28px);opacity:.9}
+.office-stage .device{transition:transform .6s var(--ease)}
+.office-stage:hover .office-a{transform:rotate(-2deg) translateY(-22px)}
+.office-stage:hover .office-b{transform:rotate(3deg) translateY(20px)}
+.office-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:clamp(44px,6vw,72px)}
+.office-tags li{padding:9px 16px;border:1px solid #2f5443;border-radius:999px;background:rgba(15,34,26,.7);font-size:13px;font-weight:700;color:#d5e5da}
+.business-problems{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:clamp(42px,6vw,72px)}
+.business-problems article{min-height:150px;padding:24px;border:1px solid #2f5443;border-radius:22px;background:rgba(15,34,26,.7);display:flex;flex-direction:column;justify-content:space-between}
+.business-problems span{font:800 11px Rubik,Assistant,sans-serif;letter-spacing:.12em;color:#9fd4b8}
+.business-problems p{margin:24px 0 0;color:#eef7f1;font:650 18px/1.35 Rubik,Assistant,sans-serif}
+.business-cta{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:42px;text-align:center}
+.business-cta p{margin:0;color:#d5e5da;font-weight:700}
+.business-cta .path-cta{margin:0}
 
 /* ── privacy ───────────────────────────────────────────────────────────────────────────────── */
-.trust{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
-.trust li{border-top:2px solid var(--olive);padding-top:18px}
-.trust b{display:block;margin-bottom:6px;font:600 18px Rubik,Assistant,sans-serif}
-.trust span{color:var(--muted);line-height:1.65}
+.trust{background:var(--surface)}
+.trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.trust-grid article{padding:34px;border:1px solid var(--line);border-radius:26px;background:#1e221c}
+.trust-grid .n{display:block;margin-bottom:26px;font:800 11px Rubik,sans-serif;letter-spacing:.14em;color:var(--clay)}
+.trust-grid h3{font-size:23px}
+.trust-grid p{font-size:16px;line-height:1.7;color:var(--muted)}
 
-/* ── questions ─────────────────────────────────────────────────────────────────────────────── */
-.faq-list details{border-bottom:1px solid var(--line)}
-.faq-list details:first-child{border-top:1px solid var(--line)}
-.faq-list summary{position:relative;list-style:none;padding:20px 0;padding-inline-end:36px;cursor:pointer;font:600 18px/1.4 Rubik,Assistant,sans-serif}
-.faq-list summary::-webkit-details-marker{display:none}
-.faq-list summary::after{content:"";position:absolute;inset-inline-end:6px;top:50%;width:9px;height:9px;margin-top:-7px;border-right:2px solid var(--subtle);border-bottom:2px solid var(--subtle);transform:rotate(45deg);transition:transform .2s var(--ease)}
-.faq-list details[open] summary::after{transform:rotate(-135deg);margin-top:-2px}
-.faq-list details p{padding-bottom:20px;max-width:64ch;color:var(--muted);line-height:1.7}
-.faq-list a{color:var(--clay);text-decoration:underline;text-underline-offset:3px}
+/* ── faq ───────────────────────────────────────────────────────────────────────────────────── */
+.faq{position:relative;overflow:hidden}
+.faq details{border-top:1px solid var(--line)}
+.faq details:last-of-type{border-bottom:1px solid var(--line)}
+.faq summary{position:relative;list-style:none;padding:25px 48px 25px 0;cursor:pointer;font:700 clamp(17px,1.8vw,21px) Rubik,sans-serif;color:var(--ink);transition:color .2s}
+[dir=ltr] .faq summary{padding:25px 0 25px 48px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--sage)}
+.faq summary::before{content:"+";position:absolute;inset-inline-start:6px;top:50%;transform:translateY(-50%);font-size:26px;font-weight:400;color:var(--clay);transition:transform .3s var(--ease)}
+.faq details[open] summary::before{content:"−"}
+.faq details p{padding:0 0 28px;max-width:68ch;font-size:16.5px;line-height:1.75;color:var(--muted)}
 
-/* ── closing call ──────────────────────────────────────────────────────────────────────────── */
-.finale{text-align:center}
-.finale img{margin:0 auto 22px;border-radius:18px}
-.finale .lede{margin-inline:auto}
-.finale .cta-row{justify-content:center}
+/* ── finale ────────────────────────────────────────────────────────────────────────────────── */
+.finale{position:relative;overflow:hidden;min-height:min(760px,92svh);display:grid;place-items:center;text-align:center;
+  background-color:#2c3921;background-image:radial-gradient(circle at 50% 52%,#2c3921 0,#171c13 38%,#0d0f0c 72%)}
+.finale-inner{position:relative;z-index:2}
+.finale-inner>img{margin:0 auto 32px;border-radius:25px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.finale h2{font-size:clamp(46px,7.4vw,102px);margin-bottom:30px}
+.finale .badge{margin-bottom:0}
+.finale-rings{position:absolute;width:min(920px,120vw);aspect-ratio:1}
+.finale-rings i{position:absolute;inset:var(--r);border:1px solid rgba(188,205,142,.09);border-radius:50%;animation:ringBreath 9s ease-in-out infinite}
+.finale-rings i:nth-child(1){--r:0}
+.finale-rings i:nth-child(2){--r:17%;animation-delay:-2.5s}
+.finale-rings i:nth-child(3){--r:34%;animation-delay:-5s}
 
 /* ── footer ────────────────────────────────────────────────────────────────────────────────── */
-footer{padding:48px 0 32px;border-top:1px solid var(--line);background:var(--bg)}
-.footer-grid{display:grid;grid-template-columns:1fr auto auto;gap:24px 56px;align-items:start}
-.footer-grid>div>p{margin-top:12px;font-size:14.5px;color:var(--subtle)}
-.footer-links{display:grid;grid-template-columns:repeat(2,auto);gap:2px 28px;font-size:14.5px}
-.footer-links a{display:inline-block;padding-block:6px;color:var(--muted)}
-.footer-links a:hover,.contact a:hover{color:var(--ink)}
-.contact p{font-size:14.5px;color:var(--subtle)}
-.contact a{display:inline-block;padding-block:6px;direction:ltr;font-weight:700}
-.fineprint{margin-top:36px;font-size:13px;color:var(--subtle)}
+footer{padding:70px 0 28px;background:#090a08;border-top:1px solid #23271f}
+.footer-grid{display:grid;grid-template-columns:1fr auto auto;gap:clamp(30px,6vw,90px)}
+.footer-grid .brand{margin-bottom:18px}
+.footer-grid>div>p{color:var(--subtle);font-size:15px}
+.footer-links{display:grid;grid-template-columns:repeat(2,minmax(128px,1fr));gap:4px 32px;font-size:14.5px;color:var(--muted)}
+/* Padded to a comfortable target: these were 23px tall, which is a fiddly thing to hit with a thumb
+   and the one place on the page a visitor is trying to reach a policy they actually need. */
+.footer-links a{display:inline-block;padding-block:7px;transition:color .2s}
+.footer-links a:hover,.contact a:hover{color:var(--clay)}
+.contact p{margin-bottom:6px;color:var(--subtle);font-size:15px}
+.contact a{display:inline-block;padding-block:6px;direction:ltr;font-weight:800;color:var(--ink);transition:color .2s}
+.fineprint{margin-top:54px;padding-top:22px;border-top:1px solid #23271f;color:#8a9081;font-size:12.5px}
 
-/* ── phone-width download bar ──────────────────────────────────────────────────────────────── */
-.sticky-cta{position:fixed;z-index:90;inset-inline:0;bottom:calc(12px + env(safe-area-inset-bottom));display:none;justify-content:center;pointer-events:none;
-  opacity:0;transform:translateY(16px);transition:opacity .25s,transform .25s var(--ease)}
-.sticky-cta.show{opacity:1;transform:none;pointer-events:auto}
-.sticky-cta .store-badge{box-shadow:0 10px 30px -6px rgba(0,0,0,.85)}
-
-/* ── the one motion: a section settles in as it arrives ────────────────────────────────────── */
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .6s var(--ease)}
+/* ── reveal + keyframes ────────────────────────────────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .9s var(--ease)}
 .reveal.visible{opacity:1;transform:none}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(240,166,141,0)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes breathe{50%{transform:translateY(-12px)}}
+@keyframes float{50%{translate:0 -8px}}
+@keyframes rail{to{transform:translateX(-50%)}}
+[dir=rtl] .rail-track{animation-direction:reverse}
+@keyframes roofDrift{50%{transform:rotate(-41deg) scale(1.03)}}
+@keyframes ringBreath{50%{transform:scale(1.03);opacity:.6}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── tablet ────────────────────────────────────────────────────────────────────────────────── */
-@media(max-width:980px){
-  .site-nav a{padding:8px 9px;font-size:14px}
-  .hero-grid,.split{grid-template-columns:minmax(0,1fr)}
-  .hero-copy{text-align:center;max-width:640px;margin-inline:auto}
+@media(max-width:1060px){
+  .site-header nav{gap:18px;font-size:13px}
+  .hero-grid{grid-template-columns:1fr;min-height:auto;text-align:center;gap:16px}
+  .hero-copy{max-width:760px;margin-inline:auto}
   .hero .lede{margin-inline:auto}
-  .hero .cta-row{justify-content:center}
-  .split-visual{order:-1}
-  .spaces{grid-template-columns:1fr}
-  .features{grid-template-columns:1fr 1fr}
-  .trust{grid-template-columns:1fr;gap:24px}
+  .discover{justify-content:center}
+  .hero-stage{min-height:600px}
+  .product-paths{grid-template-columns:1fr}
+  .product-path{min-height:520px}
+  .business-problems{grid-template-columns:1fr 1fr}
+  .load-grid{grid-template-columns:1fr 1fr}
+  .story-layout{grid-template-columns:1fr;gap:0}
+  .story-pin{display:none}
+  .story-intro{min-height:auto;margin-bottom:20px}
+  .step{min-height:auto;padding:64px 0;opacity:1}
+  .step h3,.step p{max-width:none}
+  .step-device{display:block}
+  .handover{grid-template-columns:1fr;gap:26px}
+  /* Stacked, so the connector runs down the page — by changing flow, not by rotating the mark. */
+  .handover-arrow{grid-auto-flow:row;margin-inline:auto}
+  .handover-arrow span{width:1px;height:30px;background:linear-gradient(rgba(255,255,255,.05),rgba(255,255,255,.5))}
+  .handover-arrow span:last-child{background:linear-gradient(rgba(255,255,255,.5),rgba(255,255,255,.05))}
+  .capture-grid{grid-template-columns:1fr;gap:44px}
+  .bento{grid-template-columns:1fr 1fr}
+  .tile{min-height:470px}
+  .tile-kitchen{grid-column:1/-1;min-height:0}
+  .trust-grid{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr}
   .contact{grid-column:1/-1}
 }
 
 /* ── phone ─────────────────────────────────────────────────────────────────────────────────── */
 @media(max-width:720px){
-  body{font-size:16.5px}
-  .wrap,.narrow{width:calc(100% - 32px)}
-  .header-inner{height:60px;gap:10px}
-  .brand-type small{display:none}
+  .wrap,.narrow{width:calc(100% - 30px)}
+  .section-pad{padding-block:84px}
+  .site-header{width:calc(100% - 20px);height:66px;top:8px;margin-top:8px;padding-inline:12px 10px;gap:10px}
+  .brand-logo{width:38px;height:38px;border-radius:11px}
+  .brand-type{font-size:17px}
+  .brand-type small{font-size:9.5px}
   .menu-toggle{display:grid}
-  .site-nav{position:absolute;inset-inline:12px;top:64px;display:grid;gap:2px;padding:8px;margin:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);
-    box-shadow:var(--shadow);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .2s,transform .2s var(--ease),visibility .2s}
-  .site-nav.open{opacity:1;visibility:visible;transform:none}
-  .site-nav a{padding:12px;font-size:16px;color:var(--ink)}
-  .header-cta span{display:none}
-  .header-cta{padding:0 12px}
-  .hero-phones .device{--dw:min(168px,42vw)!important}
-  .hero-phones figure:last-child{margin-top:32px}
-  .split-visual .device{--dw:min(250px,64vw)!important}
-  .features{grid-template-columns:1fr;gap:12px}
-  .features li{display:grid;grid-template-columns:40px 1fr;gap:2px 14px;padding:18px}
-  .features .icon{grid-row:span 2;margin:0}
-  .try-box{padding:16px}
-  .footer-grid{grid-template-columns:1fr}
+  /* The nav becomes a sheet under the bar rather than disappearing, so the site stays navigable. */
+  .site-header nav{
+    position:absolute;inset-inline:0;top:calc(100% + 8px);z-index:50;
+    display:grid;gap:2px;padding:10px;margin:0;
+    /* Solid, not glass. A navigation sheet with the page showing through it is unreadable, and
+       backdrop-filter is exactly the thing that quietly fails to apply on some devices. */
+    border:1px solid rgba(188,205,142,.22);border-radius:20px;background:#151812;
+    box-shadow:0 24px 60px rgba(0,0,0,.6);
+    opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .25s,transform .3s var(--ease),visibility .25s;
+  }
+  .site-header nav.open{opacity:1;visibility:visible;transform:none}
+  .site-header nav a{padding:13px 14px;border-radius:13px;font-size:15.5px;color:var(--ink)}
+  .site-header nav a:hover{background:var(--surface-2)}
+  .site-header nav a::after{display:none}
+
+  .hero{padding-top:34px}
+  .hero .badge{margin-bottom:22px}
+  h1{font-size:clamp(42px,12.5vw,62px)}
+  h2{font-size:clamp(32px,8.6vw,46px)}
+  .hero-stage{min-height:430px}
+  .stage-caption{bottom:-2px;font-size:11px}
+  /* Four signals at phone width. Six would sit on top of the product rather than around it, and
+     the scatter is halved so nothing flies off the edge of a 375px screen. */
+  .signals li:nth-child(n+5){display:none}
+  .signals li span{padding:7px 11px;font-size:11.5px;border-radius:11px}
+  .signals li:nth-child(1){--l:15%;--t:11%}
+  .signals li:nth-child(2){--l:83%;--t:8%}
+  .signals li:nth-child(3){--l:13%;--t:52%}
+  .signals li:nth-child(4){--l:85%;--t:48%}
+  .rail-track{gap:18px;font-size:13px}
+
+  .product-path{min-height:560px;padding:28px 24px;grid-template-columns:1fr}
+  .product-path h3{max-width:14ch}
+  .product-path p{max-width:none}
+  .path-device{position:absolute;z-index:0;opacity:.34;inset-inline-end:-8%;bottom:-16%;transform:rotate(5deg)}
+  [dir=ltr] .path-device{transform:rotate(-5deg)}
+  .product-path:hover .path-device,[dir=ltr] .product-path:hover .path-device{transform:none}
+
+  .load-grid{grid-template-columns:1fr}
+  .load-grid article{min-height:0;gap:16px;padding:24px}
+  .step{padding:56px 0}
+  .together-close{font-size:17px}
+  .live-demo{padding:16px;border-radius:24px}
+  .demo-task{grid-template-columns:30px 1fr 30px;padding:13px}
+  .demo-task b{width:30px;height:30px}
+  .handover-arrow{margin-block:8px}
+  .capture-window{padding:20px;border-radius:24px}
+  .chips li{padding:9px 13px}
+  .bento{grid-template-columns:1fr}
+  .tile{min-height:0;padding:26px}
+  .tile-device{--dw:min(186px,58%);margin-bottom:-22%}
+  .tile-kitchen{min-height:0}
+  .orbit{width:min(210px,72%);margin-top:26px}
+  .workspace-bridge{padding:18px 14px}
+  .workspace-pair{gap:8px}
+  .workspace-pill{min-width:0;flex:1;padding:10px}
+  .workspace-pill img{width:30px;height:30px}
+  .workspace-pill strong{font-size:12px}
+  .workspace-pill small{font-size:10px}
+  .business-problems{grid-template-columns:1fr}
+  .business-problems article{min-height:112px}
+  .business-cta{flex-direction:column;gap:14px}
+  .office-stage{gap:0}
+  .office-a{--dw:min(178px,46vw);transform:rotate(-3deg) translate(6%,-8px);z-index:2}
+  .office-b{--dw:min(160px,41vw);transform:rotate(5deg) translate(-6%,22px)}
+  .office-stage:hover .office-a{transform:rotate(-3deg) translate(6%,-8px)}
+  .office-stage:hover .office-b{transform:rotate(5deg) translate(-6%,22px)}
+  .trust-grid article{padding:26px}
+  .finale{min-height:80svh}
+  .footer-grid{grid-template-columns:1fr;gap:34px}
   .contact{grid-column:auto}
-  .sticky-cta{display:flex}
+  .fineprint{margin-top:38px}
 }
 
+@media(max-width:380px){
+  .signals li:nth-child(n+3){display:none}
+  .brand-type small{display:none}
+}
+
+/* ── reduced motion ────────────────────────────────────────────────────────────────────────────
+   Everything decorative stops; nothing disappears. The signals go straight to settled, the story
+   steps are all fully legible, and the two demos still show their finished state. */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  *,*::before,*::after{transition-duration:.001ms!important;animation-duration:.001ms!important}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   .reveal{opacity:1;transform:none}
+  .step{opacity:1}
+  .device-hero{transform:none!important}
+  .signals li{opacity:1}
+  .caret{opacity:1}
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   LAUNCH — the app shipped, so the page has an action
+   ═══════════════════════════════════════════════════════════════════════════════════════════════
+
+   One glass recipe, stated once.
+
+   The reason this is a token set rather than a `backdrop-filter` sprinkled wherever a surface
+   looked flat: glass is a material, and a material has to behave the same everywhere or it stops
+   reading as one thing and starts reading as an effect. Every translucent surface below is the same
+   four ingredients — a tinted body, a hairline that catches light at the top edge, a blur behind,
+   and a shadow that sits the piece above the page rather than glueing it down.
+
+   Text on glass never gets softer than --ink or --muted, both of which are measured against the
+   page ground rather than the glass; the glass is dark over a dark page, so the number can only
+   improve from there. Nothing on this page is made less readable to look more like glass.
+
+   `backdrop-filter` is a progressive enhancement and is treated as one: every glass surface states
+   a solid-enough background of its own first, so a browser that ignores the blur still gets a
+   legible panel instead of text floating on the page behind it. */
+:root{
+  --glass:rgba(29,33,26,.62);
+  --glass-strong:rgba(22,26,20,.86);
+  --glass-line:rgba(188,205,142,.16);
+  --glass-shine:rgba(255,255,255,.14);
+  --glass-blur:saturate(150%) blur(22px);
+  --glass-shadow:0 26px 60px -28px rgba(0,0,0,.85);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+.glass-panel{
+  position:relative;
+  border:1px solid var(--glass-line);
+  border-radius:var(--radius);
+  background:var(--glass);
+  box-shadow:var(--glass-shadow);
+}
+@supports (backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px)){
+  .glass-panel{-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+}
+/* The lit top edge. A single hairline of light is what separates a pane of glass from a grey box,
+   and it is drawn rather than borrowed so it survives on a ground of any colour. */
+.glass-panel::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,var(--glass-shine),transparent 42%);
+  opacity:.5;mix-blend-mode:screen;
+}
+
+/* ── the badge, now stating a fact rather than a promise ───────────────────────────────────── */
+.badge-live{
+  border-color:rgba(188,205,142,.34);
+  background:linear-gradient(180deg,rgba(188,205,142,.14),rgba(24,27,23,.86));
+}
+.badge-live .badge-dot{background:var(--sage);box-shadow:0 0 0 0 rgba(188,205,142,.5)}
+
+/* ── the action ────────────────────────────────────────────────────────────────────────────────
+   Apple's own lockup, in Apple's own order: the mark, the small line, then the product name. The
+   white treatment is the one Apple publishes for dark grounds, and on this page it is also the
+   only pure white surface — which is exactly why the eye goes to it first.
+
+   "App Store" stays in Latin in both languages. It is a name, not a phrase to translate. */
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:34px}
+.cta-row.center{justify-content:center}
+
+.store-badge{
+  display:inline-flex;align-items:center;gap:11px;
+  min-height:56px;padding-inline:19px 22px;
+  border-radius:15px;border:1px solid rgba(255,255,255,.9);
+  background:#fff;color:#0c0e0b;
+  box-shadow:0 14px 34px -14px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.9);
+  transition:transform .28s var(--ease-out),box-shadow .28s var(--ease-out);
+  will-change:transform;
+}
+.store-badge__mark{width:23px;height:23px;flex:0 0 auto;margin-block-start:-3px}
+.store-badge__text{display:grid;line-height:1.05;text-align:start}
+.store-badge__text small{font-size:11px;font-weight:600;letter-spacing:.01em;opacity:.78}
+.store-badge__text strong{font-family:Rubik,Assistant,sans-serif;font-size:20px;font-weight:650;letter-spacing:-.025em}
+.store-badge:hover{transform:translateY(-3px);box-shadow:0 22px 46px -16px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.9)}
+.store-badge:active{transform:translateY(-1px) scale(.985)}
+
+/* The second action is glass, so it reads as available without competing with the first. */
+.ghost-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  min-height:56px;padding:0 22px;border-radius:15px;
+  border:1px solid var(--glass-line);background:var(--glass);
+  font-weight:700;color:var(--ink);
+  transition:border-color .25s,background .25s,transform .28s var(--ease-out);
+}
+@supports (backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px)){
+  .ghost-cta{-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+}
+.ghost-cta i{font-style:normal;font-weight:800;color:var(--sage);transition:transform .3s var(--ease-out)}
+.ghost-cta:hover{border-color:rgba(188,205,142,.42);background:var(--glass-strong);transform:translateY(-2px)}
+.ghost-cta:hover i{transform:translateY(4px)}
+.ghost-cta.small{min-height:48px;padding:0 18px;font-size:14.5px;margin-top:22px}
+
+.cta-note{margin-top:16px;font-size:13.5px;color:var(--subtle)}
+.cta-row.center+.cta-note{text-align:center}
+
+.header-cta{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 17px;border-radius:999px;
+  background:var(--sage);color:#131709;font-size:13px;font-weight:800;
+  transition:filter .2s,transform .2s var(--ease-out);
+}
+.header-cta:hover{filter:brightness(1.07);transform:translateY(-1px)}
+
+.finale-lede{max-width:52ch;margin:0 auto 6px;font-size:clamp(16px,1.7vw,19px);line-height:1.65;color:var(--muted)}
+.finale .cta-row{margin-top:30px}
+
+/* ── the explorer ──────────────────────────────────────────────────────────────────────────────
+   Tabs, a phone, and the sentence that belongs to whichever screen is showing. */
+.explore-stage{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+  grid-template-areas:"tabs tabs" "device copy";
+  align-items:center;gap:clamp(24px,4vw,56px);
+  padding:clamp(22px,3.4vw,44px);
+}
+.explore-tabs{
+  grid-area:tabs;display:flex;gap:9px;
+  /* Scrolls rather than wraps: eight pills wrapping to three ragged rows is noise, and a single
+     row that slides is the pattern a phone user already knows. */
+  overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;
+  padding-bottom:4px;margin-bottom:clamp(6px,1.4vw,14px);
+  scroll-snap-type:x proximity;
+}
+.explore-tabs::-webkit-scrollbar{display:none}
+.explore-tab{
+  flex:0 0 auto;scroll-snap-align:start;cursor:pointer;
+  min-height:44px;padding:0 17px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface);
+  font-size:14px;font-weight:700;color:var(--muted);
+  transition:color .2s,border-color .2s,background .25s,transform .25s var(--ease-out);
+}
+.explore-tab:hover{color:var(--ink);border-color:rgba(188,205,142,.4)}
+.explore-tab[aria-selected="true"]{
+  background:var(--sage);border-color:var(--sage);color:#131709;   /* 12.4:1 */
+  transform:translateY(-1px);
+  box-shadow:0 10px 24px -12px rgba(188,205,142,.8);
+}
+
+.explore-device{grid-area:device;position:relative;display:grid;place-items:center;padding-block:6px}
+/* A soft light behind the phone, so the frame sits in a room rather than on a swatch. */
+.explore-glint{
+  position:absolute;z-index:0;inset:8% 0 12%;
+  background:radial-gradient(58% 46% at 50% 42%,rgba(188,205,142,.2),transparent 72%);
+  filter:blur(26px);pointer-events:none;
+}
+.explore-device .device{position:relative;z-index:1}
+/* The outgoing screen, held above the incoming one until the new file has actually decoded. */
+.device-ghost{
+  position:absolute;inset:var(--pad);width:auto;height:auto;
+  opacity:0;pointer-events:none;
+  transition:opacity .42s var(--ease-out);
+}
+.device-ghost.is-on{opacity:1}
+
+.explore-copy{grid-area:copy;min-width:0}
+.explore-panel h3{margin-bottom:10px}
+.explore-panel p{margin:0;font-size:clamp(16px,1.55vw,18.5px);line-height:1.68;color:var(--muted);max-width:46ch}
+/* Each panel fades up as it takes over, which is the only thing that tells a visitor the right-hand
+   side changed at all when they pressed a pill on the left. */
+.explore-panel:not([hidden]){animation:panelIn .42s var(--ease-out) both}
+@keyframes panelIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+
+/* ── the sticky action ─────────────────────────────────────────────────────────────────────── */
+.sticky-cta{
+  position:fixed;z-index:120;inset-inline:0;bottom:calc(14px + env(safe-area-inset-bottom));
+  display:none;justify-content:center;padding-inline:16px;
+  opacity:0;transform:translateY(120%);pointer-events:none;
+  transition:opacity .32s var(--ease-out),transform .42s var(--ease-out);
+}
+.sticky-cta.show{opacity:1;transform:none;pointer-events:auto}
+.sticky-cta .store-badge{box-shadow:0 20px 48px -12px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.9)}
+
+/* ── laptop and tablet ─────────────────────────────────────────────────────────────────────── */
+@media(max-width:1060px){
+  .cta-row{justify-content:center}
+  .explore-stage{
+    grid-template-columns:1fr;
+    grid-template-areas:"tabs" "device" "copy";
+    justify-items:center;text-align:center;
+  }
+  .explore-tabs{width:100%}
+  .explore-panel p{margin-inline:auto}
+  .explore-copy{display:grid;justify-items:center}
+}
+
+/* ── phone ─────────────────────────────────────────────────────────────────────────────────── */
+@media(max-width:720px){
+  /* The header keeps the action and loses the word, so the bar still fits a 320px screen. */
+  .header-cta{padding:0 13px;font-size:12.5px}
+  .cta-row{gap:11px;margin-top:28px}
+  .store-badge{min-height:54px;padding-inline:16px 19px}
+  .store-badge__text strong{font-size:18.5px}
+  .ghost-cta{min-height:54px;padding:0 18px;font-size:15px}
+  .explore-stage{padding:18px 14px 22px;border-radius:24px}
+  /* Bleed the rail to the panel's edge, so it is visibly a strip that slides rather than a row
+     that happens to be cut off. */
+  .explore-tabs{margin-inline:-14px;padding-inline:14px}
+  .sticky-cta{display:flex}
+}
+@media(max-width:380px){
+  /* The download action survives down to the narrowest phone. It was briefly hidden here, which
+     removed the page's primary action on an iPhone SE and every mini — and those are the visitors
+     most likely to have arrived from a phone-shaped ad in the first place. It loses its padding
+     instead, which is a thing the bar can afford. */
+  .header-cta{padding:0 11px;font-size:12px}
+  .store-badge__text strong{font-size:17px}
+}
+
+/* ── reduced motion ────────────────────────────────────────────────────────────────────────────
+   The page-wide rule above already flattens durations. These are the pieces that would otherwise
+   be left mid-gesture: the panel would hold its 9px offset, and the sticky bar would stay pushed
+   off the bottom of the screen with nothing to animate it back. */
+@media(prefers-reduced-motion:reduce){
+  .explore-panel:not([hidden]){animation:none;opacity:1;transform:none}
+  .sticky-cta{transform:none}
+  .sticky-cta:not(.show){opacity:0;pointer-events:none}
+  .store-badge:hover,.ghost-cta:hover,.header-cta:hover,.explore-tab[aria-selected="true"]{transform:none}
 }

@@ -1,22 +1,14 @@
 /*
- * RAVO — public website.
+ * RAVO — public marketing site.
  *
- * Deliberately small: the language switch, the phone menu, the Quick Add box and a short fade as
- * sections arrive. Nothing moves by itself. No framework and no network calls — the Quick Add box
- * runs the app's own reader in the browser, and nothing typed into it leaves the device.
+ * No framework, no build step, no network calls. Everything on this page is local to the tab: the
+ * two demos compute nothing on a server, store nothing, and send nothing. The site ships no database
+ * client and no auth route at all — it is a page about the product, not the product.
  */
 
 const root = document.documentElement
-const COPY = window.RAVO_COPY ?? { en: {}, scenes: {} }
-const SCENES = COPY.scenes
-const $ = (selector, scope = document) => scope.querySelector(selector)
-const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)]
-const el = (tag, className, text) => {
-  const node = document.createElement(tag)
-  if (className) node.className = className
-  if (text !== undefined) node.textContent = text
-  return node
-}
+const reduced = matchMedia('(prefers-reduced-motion: reduce)')
+let motionOff = reduced.matches
 
 /* ── retire the former app deployment ──────────────────────────────────────────────────────────
    ravoapp.app once served the installable pilot PWA. A visitor who installed it still has that
@@ -36,147 +28,417 @@ async function retirePreviousSiteWorker() {
   const url = new URL(location.href)
   if (url.searchParams.delete('ravo-site')) history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
 }
-void retirePreviousSiteWorker().catch(() => {})
+void retirePreviousSiteWorker()
 
 /* ── language ──────────────────────────────────────────────────────────────────────────────── */
 
-const LANGUAGE_KEY = 'ravo-marketing-language'
-let language = (() => { try { return localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'he' } catch { return 'he' } })()
-/* The Hebrew lives in the page itself; read it once so switching back restores it exactly. */
-const hebrew = {}, hebrewAria = {}
-for (const node of $$('[data-i18n]')) hebrew[node.dataset.i18n] = node.innerHTML
-for (const node of $$('[data-i18n-aria]')) hebrewAria[node.dataset.i18nAria] = node.getAttribute('aria-label')
-const pick = value => value?.[language] ?? value?.he ?? ''
+const RAIL = {
+  he: ['משימות', 'קניות', 'יומן', 'מטבח', 'חשבונות', 'שגרות', 'ספקים', 'תחזוקה'],
+  en: ['Tasks', 'Shopping', 'Calendar', 'Kitchen', 'Bills', 'Routines', 'Vendors', 'Maintenance']
+}
+
+/* Screen names carry their own alt text, so switching language switches what a screen reader is
+   told as well as which screenshot is shown. */
+const SCREENS = {
+  today: { he: 'מסך היום של RAVO', en: 'The RAVO Today screen' },
+  tasks: { he: 'מסך המשימות של RAVO', en: 'The RAVO Tasks screen' },
+  shopping: { he: 'מסך הקניות של RAVO', en: 'The RAVO Shopping screen' },
+  calendar: { he: 'מסך היומן של RAVO', en: 'The RAVO Calendar screen' },
+  money: { he: 'מסך החשבונות של RAVO', en: 'The RAVO Bills screen' },
+  templates: { he: 'מסך השגרות של RAVO', en: 'The RAVO Routines screen' },
+  household: { he: 'מסך בני הבית של RAVO', en: 'The RAVO Household screen' },
+  'quick-add': { he: 'מסך ההוספה המהירה של RAVO', en: 'The RAVO Quick Add screen' },
+  office: { he: 'מסך היום בעסק של RAVO Business', en: 'The RAVO Business Today screen' },
+  maintenance: { he: 'מסך התחזוקה של RAVO Business', en: 'The RAVO Business Maintenance screen' },
+  memory: { he: 'מסך החיפוש והזיכרון של RAVO', en: 'The RAVO search and memory screen' }
+}
+
+const PIN_LABEL = {
+  today: { he: 'היום', en: 'Today' }, tasks: { he: 'משימות', en: 'Tasks' },
+  shopping: { he: 'קניות', en: 'Shopping' }, calendar: { he: 'יומן', en: 'Calendar' },
+  money: { he: 'חשבונות', en: 'Bills' }, templates: { he: 'שגרות', en: 'Routines' },
+  memory: { he: 'חיפוש וזיכרון', en: 'Search and memory' }
+}
+
+/*
+ * The Quick Capture demo, written against what the real reader actually does.
+ *
+ * A Hebrew line is understood end to end: the destination is chosen, and the date, time and subject
+ * come out of the sentence. An English line is not — the date and time are read, and the person
+ * picks where it goes. Saying anything warmer than that in English would be selling a feature that
+ * does not exist, so the English panel asks the question instead of answering it.
+ */
+const CAPTURE = {
+  he: {
+    text: 'מחר ב־18:00 לקנות חלב',
+    head: 'נקלט לרשימת הקניות',
+    chips: [['מתי', 'מחר'], ['שעה', '18:00'], ['לאן', 'קניות']]
+  },
+  en: {
+    text: 'Buy milk 8/9 at 18:00',
+    head: 'Date and time picked up',
+    chips: [['When', '8 Sep'], ['Time', '18:00'], ['Where', 'You choose']]
+  }
+}
+
+const langSwitch = document.querySelector('[data-lang-switch]')
+let language = localStorage.getItem('ravo-marketing-language') === 'en' ? 'en' : 'he'
 
 function applyLanguage(next) {
   language = next
   const english = next === 'en'
   root.lang = english ? 'en' : 'he'
   root.dir = english ? 'ltr' : 'rtl'
-  for (const node of $$('[data-i18n]')) {
-    const value = english ? COPY.en[node.dataset.i18n] : hebrew[node.dataset.i18n]
-    if (value !== undefined) node.innerHTML = value
+
+  for (const element of document.querySelectorAll('[data-he][data-en]')) {
+    const value = element.dataset[english ? 'en' : 'he']
+    if (value.includes('<')) element.innerHTML = value
+    else element.textContent = value
   }
-  for (const node of $$('[data-i18n-aria]')) {
-    const value = english ? COPY.en[node.dataset.i18nAria] : hebrewAria[node.dataset.i18nAria]
-    if (value) node.setAttribute('aria-label', value)
-  }
-  for (const image of $$('[data-screen-src]')) {
+
+  for (const image of document.querySelectorAll('[data-screen-src]')) {
     const name = image.dataset.screenSrc
     image.src = `assets/screens/${next}/${name}.webp`
-    if (SCENES.screens?.[name]) image.alt = SCENES.screens[name][next]
+    image.alt = SCREENS[name][next]
   }
-  const toggle = $('[data-lang-switch]')
-  toggle.textContent = english ? 'עברית' : 'EN'
-  toggle.setAttribute('aria-label', english ? 'החלפה לעברית' : 'Switch to English')
-  $('[data-menu-toggle]').setAttribute('aria-label', english ? 'Menu' : 'תפריט')
-  paintExamples()
-  renderReading()
-  try { localStorage.setItem(LANGUAGE_KEY, next) } catch { /* private mode: the choice lasts this visit */ }
+
+  langSwitch.textContent = english ? 'עברית' : 'EN'
+  langSwitch.setAttribute('aria-label', english ? 'החלפה לעברית' : 'Switch to English')
+  document.querySelector('[data-menu-toggle]')?.setAttribute('aria-label', english ? 'Menu' : 'תפריט')
+  document.getElementById('site-nav')?.setAttribute('aria-label', english ? 'Main navigation' : 'ניווט ראשי')
+  document.querySelector('.workspace-bridge')?.setAttribute('aria-label', english ? 'One account for RAVO Home and RAVO Business' : 'חשבון אחד ל־RAVO Home ול־RAVO Business')
+  document.querySelector('.guide-stack')?.setAttribute('aria-label', english ? 'Three short steps' : 'שלושה צעדים קצרים')
+
+  const track = document.querySelector('.rail-track')
+  const items = RAIL[next]
+  // Twice through, so the marquee can loop on a -50% translate without a visible seam.
+  track.innerHTML = [...items, ...items].map(item => `<span>${item}</span><i>●</i>`).join('')
+
+  paintPinLabel(currentScreen)
+  startTyping()
+  localStorage.setItem('ravo-marketing-language', next)
 }
-$('[data-lang-switch]').addEventListener('click', () => applyLanguage(language === 'he' ? 'en' : 'he'))
 
-/* ── header, phone menu, reveal, download bar ──────────────────────────────────────────────── */
+langSwitch.addEventListener('click', () => applyLanguage(language === 'he' ? 'en' : 'he'))
 
-const header = $('.site-header')
-const onScroll = () => header.classList.toggle('scrolled', scrollY > 8)
-addEventListener('scroll', onScroll, { passive: true })
-onScroll()
+/* ── mobile navigation ─────────────────────────────────────────────────────────────────────── */
 
-const menuToggle = $('[data-menu-toggle]')
-const nav = $('#site-nav')
-const setMenu = open => { nav.classList.toggle('open', open); menuToggle.setAttribute('aria-expanded', String(open)) }
-menuToggle.addEventListener('click', () => setMenu(!nav.classList.contains('open')))
+const menuToggle = document.querySelector('[data-menu-toggle]')
+const nav = document.getElementById('site-nav')
+const setMenu = open => {
+  nav.classList.toggle('open', open)
+  menuToggle.setAttribute('aria-expanded', String(open))
+}
+menuToggle.addEventListener('click', () => setMenu(menuToggle.getAttribute('aria-expanded') !== 'true'))
 nav.addEventListener('click', event => { if (event.target.closest('a')) setMenu(false) })
 document.addEventListener('keydown', event => { if (event.key === 'Escape') setMenu(false) })
+document.addEventListener('click', event => {
+  if (!event.target.closest('.site-header')) setMenu(false)
+})
 
-const revealWatch = new IntersectionObserver(entries => {
-  for (const entry of entries) if (entry.isIntersecting) { entry.target.classList.add('visible'); revealWatch.unobserve(entry.target) }
-}, { rootMargin: '0px 0px -6% 0px' })
-$$('.reveal').forEach(node => revealWatch.observe(node))
+/* ── header state + year ───────────────────────────────────────────────────────────────────── */
 
-/* On a phone the download button follows once the hero's own has scrolled away, and steps aside
-   at the closing section, which has its own. */
-const sticky = $('[data-sticky-cta]')
-let heroGone = false, finaleHere = false
-const paintSticky = () => sticky.classList.toggle('show', heroGone && !finaleHere)
-new IntersectionObserver(([entry]) => { heroGone = !entry.isIntersecting; paintSticky() }).observe($('.hero .cta-row'))
-new IntersectionObserver(([entry]) => { finaleHere = entry.isIntersecting; paintSticky() }).observe($('.finale'))
+const header = document.querySelector('.site-header')
+addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 40), { passive: true })
+document.querySelector('[data-year]').textContent = new Date().getFullYear()
 
-$('[data-year]').textContent = String(new Date().getFullYear())
+/* ── reveal on scroll ──────────────────────────────────────────────────────────────────────── */
 
-/* ── Quick Add: the app's own reader, in the browser ───────────────────────────────────────── */
-
-const tryBox = $('[data-try]')
-const tryInput = $('[data-try-input]')
-const tryResult = $('[data-try-result]')
-const tryExamples = $('[data-try-examples]')
-let trySpace = 'home'
-let reader = null
-const labels = () => SCENES.labels ?? {}
-const formatDay = iso => new Intl.DateTimeFormat(language === 'en' ? 'en-GB' : 'he-IL', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${iso}T12:00:00`))
-function chip(list, label, value) {
-  const item = el('li')
-  item.append(el('b', '', `${label} `), document.createTextNode(value))
-  list.append(item)
+const reveals = document.querySelectorAll('.reveal')
+if (motionOff) reveals.forEach(element => element.classList.add('visible'))
+else {
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue
+      entry.target.classList.add('visible')
+      observer.unobserve(entry.target)
+    }
+  }, { threshold: .1, rootMargin: '0px 0px -8% 0px' })
+  reveals.forEach(element => observer.observe(element))
 }
-function renderReading() {
-  const text = tryInput.value.trim()
-  tryResult.replaceChildren()
-  if (!text) { tryResult.append(el('p', 'try-empty', pick(labels().empty))); return }
-  if (!reader) return
-  const reading = reader.parseCapture(text, trySpace)
-  const kinds = SCENES.kinds ?? {}
-  const sure = reading.kind !== 'unknown' && reading.confidence >= (reader.CONFIRM_THRESHOLD ?? 0.7)
-  const card = el('div', 'try-card')
-  const head = el('div', 'try-card__head')
-  if (sure) head.append(el('span', 'try-kind', pick(kinds[reading.kind])))
-  head.append(el('span', 'try-card__read', pick(labels().read)))
-  card.append(head, el('h3', '', reading.fields.title || text))
-  const facts = el('ul', 'try-chips')
-  const f = reading.fields
-  const L = labels()
-  if (f.date) chip(facts, pick(L.when), formatDay(f.date))
-  if (f.time) chip(facts, pick(L.time), f.endTime ? `${f.time}–${f.endTime}` : f.time)
-  if (f.amount) chip(facts, pick(L.amount), `₪${f.amount.toLocaleString(language === 'en' ? 'en-GB' : 'he-IL')}`)
-  if (f.items?.length > 1) chip(facts, `${pick(L.items)}:`, f.items.join(' · '))
-  if (f.quantity) chip(facts, pick(L.qty), String(f.quantity))
-  if (f.assigneeText) chip(facts, pick(L.owner), f.assigneeText)
-  if (f.recurrence && L.repeat?.[f.recurrence]) chip(facts, pick(L.repeats), pick(L.repeat[f.recurrence]))
-  if (f.urgent) chip(facts, '', pick(L.urgent))
-  if (facts.children.length) card.append(facts)
-  if (sure) card.append(el('p', 'try-confirm', pick(L.confirm)))
+
+/* ── hero: chaos, then calm ────────────────────────────────────────────────────────────────────
+   The scattered household signals appear where they are carried — loose, unaligned, all at once —
+   and then settle into an arc beneath the product. It is the page's argument, made before the
+   first paragraph is read. With reduced motion they simply start settled. */
+
+const signals = document.querySelector('[data-signals]')
+if (signals) {
+  ;[...signals.children].forEach((item, index) => item.style.setProperty('--i', index))
+  // `shown` runs the whole choreography from one keyframe animation; `settled` is the finished
+  // state on its own, for a visitor who asked not to be moved.
+  if (motionOff) signals.classList.add('settled')
+  else setTimeout(() => signals.classList.add('shown'), 240)
+}
+
+const stage = document.querySelector('[data-tilt]')
+if (stage) addEventListener('pointermove', event => {
+  if (motionOff) return
+  stage.style.setProperty('--mx', ((event.clientX / innerWidth) - .5).toFixed(3))
+  stage.style.setProperty('--my', ((event.clientY / innerHeight) - .5).toFixed(3))
+}, { passive: true })
+
+/* ── the scroll-driven product story ───────────────────────────────────────────────────────────
+   The device stays pinned while the writing moves past it; each step swaps the screen behind the
+   same frame. Below the tablet breakpoint the pin is not rendered at all and each step carries its
+   own device, so the sequence still reads as a sequence on a phone. */
+
+const steps = document.querySelectorAll('.step')
+const pinScreens = document.querySelectorAll('[data-pin]')
+const ticks = document.querySelectorAll('.pin-ticks li')
+const pinLabel = document.querySelector('[data-pin-label]')
+const storyPin = document.querySelector('.story-pin')
+let currentScreen = 'today'
+
+function paintPinLabel(name) {
+  if (pinLabel) pinLabel.textContent = (PIN_LABEL[name] ?? PIN_LABEL.today)[language]
+}
+
+function showScreen(name, index) {
+  currentScreen = name
+  if (storyPin) storyPin.dataset.screen = name
+  steps.forEach((step, position) => step.classList.toggle('active', position === index))
+  pinScreens.forEach(screen => screen.classList.toggle('is-on', screen.dataset.pin === name))
+  ticks.forEach((tick, position) => tick.classList.toggle('on', position === index))
+  paintPinLabel(name)
+}
+
+if (steps.length) {
+  showScreen(steps[0].dataset.screen, 0)
+  const stepObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue
+      showScreen(entry.target.dataset.screen, [...steps].indexOf(entry.target))
+    }
+  }, { threshold: .3, rootMargin: '-22% 0px -40% 0px' })
+  steps.forEach(step => stepObserver.observe(step))
+}
+
+/* ── shared responsibility ─────────────────────────────────────────────────────────────────── */
+
+const handover = document.querySelector('[data-handover]')
+if (handover) {
+  if (motionOff) handover.classList.add('moved')
   else {
-    card.append(el('p', 'try-confirm', pick(L.unsure)))
-    const options = el('ul', 'try-options')
-    const choices = [...new Set([reading.kind, ...reading.alternatives].filter(kind => kind && kind !== 'unknown'))]
-    const fallback = trySpace === 'office' ? ['task', 'procurement', 'maintenance'] : ['task', 'shopping', 'calendar_event']
-    for (const kind of choices.length ? choices : fallback) options.append(el('li', '', pick(kinds[kind])))
-    card.append(options)
-  }
-  tryResult.append(card)
-}
-function paintExamples() {
-  tryExamples.replaceChildren()
-  tryExamples.setAttribute('aria-label', pick(labels().examples))
-  for (const example of SCENES.examples?.[trySpace] ?? []) {
-    const button = el('button', '', example)
-    button.type = 'button'
-    button.addEventListener('click', () => { tryInput.value = example; renderReading() })
-    tryExamples.append(button)
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue
+        setTimeout(() => handover.classList.add('moved'), 700)
+        observer.disconnect()
+      }
+    }, { threshold: .4 })
+    observer.observe(handover)
   }
 }
-function setSpace(space) {
-  trySpace = space
-  for (const button of $$('[data-space]', tryBox)) button.setAttribute('aria-checked', String(button.dataset.space === space))
-  tryInput.placeholder = SCENES.examples?.[space]?.[0] ?? ''
-  tryInput.value = SCENES.examples?.[space]?.[0] ?? ''
-  paintExamples()
-  renderReading()
-}
-for (const button of $$('[data-space]', tryBox)) button.addEventListener('click', () => setSpace(button.dataset.space))
-tryInput.addEventListener('input', renderReading)
-setSpace('home')
-import('./assets/capture.js').then(module => { reader = module; renderReading() }).catch(() => {})
 
-if (language === 'en') applyLanguage('en')
+const tasks = document.querySelectorAll('.demo-task')
+const progress = document.querySelector('.progress i')
+const toast = document.querySelector('.demo-toast')
+let toastTimer
+
+function paintProgress() {
+  const done = [...tasks].filter(task => task.getAttribute('aria-pressed') === 'true').length
+  if (progress) progress.style.width = `${Math.max(8, Math.round(done / tasks.length * 100))}%`
+}
+for (const task of tasks) task.addEventListener('click', () => {
+  const next = task.getAttribute('aria-pressed') !== 'true'
+  task.setAttribute('aria-pressed', String(next))
+  paintProgress()
+  if (!next || !toast) return
+  toast.classList.add('show')
+  clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2400)
+})
+paintProgress()
+
+/* ── quick capture ─────────────────────────────────────────────────────────────────────────── */
+
+const field = document.querySelector('[data-capture-text]')
+const result = document.querySelector('[data-capture-result]')
+let typingTimer
+
+function paintResult(script) {
+  result.querySelector('.result-head span:last-child').textContent = script.head
+  result.querySelector('.chips').innerHTML = script.chips
+    .map(([label, value]) => `<li><small>${label}</small><strong>${value}</strong></li>`).join('')
+}
+
+function startTyping() {
+  if (!field) return
+  clearTimeout(typingTimer)
+  const script = CAPTURE[language]
+  paintResult(script)
+  result.setAttribute('aria-hidden', 'true')
+  result.classList.remove('show')
+
+  if (motionOff) {
+    field.textContent = script.text
+    result.setAttribute('aria-hidden', 'false')
+    result.classList.add('show')
+    return
+  }
+
+  let index = 0
+  const tick = () => {
+    field.textContent = script.text.slice(0, index++)
+    if (index <= script.text.length) { typingTimer = setTimeout(tick, 62); return }
+    // A beat while it is read, then the panel resolves — the same order the product does it in.
+    typingTimer = setTimeout(() => {
+      result.setAttribute('aria-hidden', 'false')
+      result.classList.add('show')
+      typingTimer = setTimeout(startTyping, 4200)
+    }, 380)
+  }
+  tick()
+}
+
+/* A visitor who turns reduced motion on mid-visit gets the settled state, not a frozen half-state. */
+reduced.addEventListener('change', event => {
+  motionOff = event.matches
+  if (!motionOff) return
+  signals?.classList.add('settled')
+  handover?.classList.add('moved')
+  reveals.forEach(element => element.classList.add('visible'))
+  startTyping()
+})
+
+/* ── the explorer ──────────────────────────────────────────────────────────────────────────────
+   Press a part of RAVO and the phone goes there.
+
+   The frame holds one live <img>. Changing `src` on it alone would blink white for a frame while
+   the next file decodes, so the outgoing screen is copied into a ghost layer above it, the live
+   image is repointed, and the ghost is faded out once the new one has actually decoded. The result
+   is a cross-dissolve that never shows an empty frame, from two elements rather than eight.
+
+   It is a real tablist: arrow keys move between screens, Home and End jump to the ends, and only
+   the selected tab is in the tab order — which is what a screen reader user expects from something
+   that announces itself as tabs. */
+
+const exploreTabs = [...document.querySelectorAll('[data-explore]')]
+const exploreScreen = document.querySelector('[data-explore-screen]')
+const exploreGhost = document.querySelector('[data-explore-ghost]')
+const explorePanels = [...document.querySelectorAll('[data-explore-panel]')]
+let exploreCurrent = exploreTabs[0]?.dataset.explore ?? 'today'
+
+function showExplore(name, { focus = false } = {}) {
+  if (!exploreScreen || name === exploreCurrent) return
+  const previous = exploreScreen.src
+
+  exploreTabs.forEach(tab => {
+    const on = tab.dataset.explore === name
+    tab.setAttribute('aria-selected', String(on))
+    tab.tabIndex = on ? 0 : -1
+    if (on && focus) tab.focus()
+  })
+  explorePanels.forEach(panel => { panel.hidden = panel.dataset.explorePanel !== name })
+
+  exploreCurrent = name
+  // Kept in sync so the language switch reloads *this* screen rather than the one it opened on.
+  exploreScreen.dataset.screenSrc = name
+  exploreScreen.alt = SCREENS[name][language]
+
+  if (motionOff || !exploreGhost) { exploreScreen.src = `assets/screens/${language}/${name}.webp`; return }
+
+  exploreGhost.src = previous
+  exploreGhost.classList.add('is-on')
+  exploreScreen.src = `assets/screens/${language}/${name}.webp`
+  const clear = () => exploreGhost.classList.remove('is-on')
+  if (exploreScreen.decode) exploreScreen.decode().then(clear, clear)
+  else exploreScreen.addEventListener('load', clear, { once: true })
+}
+
+exploreTabs.forEach(tab => {
+  tab.addEventListener('click', () => showExplore(tab.dataset.explore))
+})
+
+document.querySelector('[data-explore-tabs]')?.addEventListener('keydown', event => {
+  const keys = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 1, ArrowUp: -1 }
+  const index = exploreTabs.findIndex(tab => tab.dataset.explore === exploreCurrent)
+  let next = null
+  if (event.key in keys) {
+    // In a right-to-left tablist the right arrow has to walk backwards, or the highlight moves
+    // away from the finger rather than with it.
+    const rtl = root.dir === 'rtl' && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')
+    next = (index + (rtl ? -keys[event.key] : keys[event.key]) + exploreTabs.length) % exploreTabs.length
+  } else if (event.key === 'Home') next = 0
+  else if (event.key === 'End') next = exploreTabs.length - 1
+  if (next === null) return
+  event.preventDefault()
+  showExplore(exploreTabs[next].dataset.explore, { focus: true })
+})
+
+/* The other screens are fetched once the page is idle, so the first press is instant without
+   costing anything on the critical path. Skipped on a metered or slow connection, where eight
+   speculative images are a real cost to someone who may never press a tab. */
+function prefetchScreens() {
+  const link = navigator.connection
+  if (link?.saveData || /2g/.test(link?.effectiveType ?? '')) return
+  for (const tab of exploreTabs) {
+    const image = new Image()
+    image.src = `assets/screens/${language}/${tab.dataset.explore}.webp`
+  }
+}
+if (exploreTabs.length) {
+  const idle = window.requestIdleCallback ?? (callback => setTimeout(callback, 1800))
+  idle(prefetchScreens)
+}
+
+/* ── the sticky action ─────────────────────────────────────────────────────────────────────────
+   On a phone the hero's badge scrolls away and there is nothing to press for the next several
+   screens. This brings it back once the hero is gone, and gets out of the way again at the closing
+   frame, which has a badge of its own — two identical actions stacked on top of each other is how
+   a page starts nagging. */
+const stickyCta = document.querySelector('[data-sticky-cta]')
+const heroSection = document.querySelector('.hero')
+const finaleSection = document.querySelector('.finale')
+if (stickyCta && heroSection) {
+  let heroGone = false
+  let atFinale = false
+  const paint = () => {
+    const show = heroGone && !atFinale
+    stickyCta.classList.toggle('show', show)
+    stickyCta.setAttribute('aria-hidden', String(!show))
+  }
+  new IntersectionObserver(([entry]) => { heroGone = !entry.isIntersecting; paint() },
+    { rootMargin: '-120px 0px 0px 0px' }).observe(heroSection)
+  if (finaleSection) {
+    new IntersectionObserver(([entry]) => { atFinale = entry.isIntersecting; paint() },
+      { rootMargin: '0px 0px -25% 0px' }).observe(finaleSection)
+  }
+}
+
+
+/* ── where you are in the page ─────────────────────────────────────────────────────────────────
+   The bar used to be a list of places you could go and said nothing about where you were. Each
+   link now lights while its own section is the one on screen.
+
+   The section nearest the top of the viewport wins rather than the first one to intersect: with
+   sections this tall, two are in view most of the time, and "first to fire" makes the highlight
+   jump backwards as you scroll down. */
+const navLinks = [...document.querySelectorAll('.site-header nav a[href^="#"]')]
+const navTargets = navLinks
+  .map(link => ({ link, section: document.querySelector(link.getAttribute('href')) }))
+  .filter(item => item.section)
+
+if (navTargets.length) {
+  let ticking = false
+  const paintCurrent = () => {
+    ticking = false
+    const line = innerHeight * 0.32
+    let winner = null
+    for (const item of navTargets) {
+      const box = item.section.getBoundingClientRect()
+      if (box.top <= line && box.bottom > line) winner = item
+    }
+    for (const item of navTargets) item.link.classList.toggle('current', item === winner)
+  }
+  addEventListener('scroll', () => {
+    if (ticking) return
+    ticking = true
+    requestAnimationFrame(paintCurrent)
+  }, { passive: true })
+  paintCurrent()
+}
+
+
+applyLanguage(language)

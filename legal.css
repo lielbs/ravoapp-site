@@ -18,7 +18,7 @@ body{background:var(--bg);color:var(--ink)}
   width:min(860px,calc(100% - 34px));margin:26px auto 96px;
   padding:clamp(26px,5.5vw,64px);
   border:1px solid var(--line);border-radius:30px;background:var(--surface);
-  box-shadow:var(--shadow);
+  box-shadow:0 26px 70px rgba(0,0,0,.35);
 }
 .legal-back{display:inline-flex;align-items:center;gap:7px;margin-bottom:26px;font-size:14px;font-weight:800;color:var(--sage)}
 .legal-back:hover{color:var(--ink)}
@@ -38,8 +38,8 @@ body{background:var(--bg);color:var(--ink)}
 /* The opening paragraph, set apart because it is the part most people actually read. */
 .legal-note{
   margin-bottom:8px;padding:20px 24px;border-radius:18px;
-  background:var(--olive-soft);border-inline-start:4px solid var(--olive);
-  color:var(--ink)!important;font-size:17px!important;
+  background:#232b1c;border-inline-start:4px solid var(--sage);
+  color:#eef1e4!important;font-size:17px!important;
 }
 
 .legal-footer{
