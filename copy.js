@@ -60,13 +60,13 @@ window.RAVO_COPY = {
     q7: 'Which devices does it run on?',
     a7: 'RAVO is currently available for iPhone, in Hebrew and English. An Android version is on the way.',
     q8: 'Where is the information stored?',
-    a8: 'With our infrastructure provider Supabase, on servers in Seoul, South Korea, and every connection is encrypted. Only the space’s members can see it, each according to their role. The full detail is in the <a href="privacy/">privacy policy</a>.',
+    a8: 'With our infrastructure provider Supabase, on servers in Seoul, South Korea, and connections and storage are encrypted (not end-to-end). In the app, only the space’s members can see it, each according to their role; the operator and infrastructure providers have limited technical access, for operation and security only. The full detail is in the <a href="privacy/">privacy policy</a>.',
     finaleTitle: 'Less load.<br><em>More clarity.</em>',
     finaleLede: 'Download RAVO, open a home or a business, and bring in whoever you need. It takes a minute.',
     finaleNote: 'RAVO is currently free · for iPhone',
     footerLine: 'Order, ownership and coordination — at home and at work.',
     legalNav: 'Legal information',
-    fSupport: 'Support', fPrivacy: 'Privacy', fTerms: 'Terms', fAccess: 'Accessibility', fPayments: 'Payments & cancellation',
+    fSupport: 'Support', fPrivacy: 'Privacy', fTerms: 'Terms', fAccess: 'Accessibility',
     footerAsk: 'Have a question?', rights: '· All rights reserved'
   },
 
