@@ -1,0 +1,16 @@
+{
+  "version": "2026-10-06.1",
+  "note": "Quick Add and assistant rules, read by the app from https://ravoapp.app/rules/v1.json (src/domain/rulesPack.ts). Additions and bounded thresholds only; raise version on every change. capture.signals: {kind: [{words: [...], weight: 0.25-1}]} with kinds task, shopping, bill, calendar_event, procurement, expense, maintenance. capture.topics: {topic: [words]}. capture.products: [words]. assistant: billDueWithinDays 1-14, surfaceOnToday 40-100, attention 50-100, maxOnToday 1-5, hiddenKinds from overdue, unassigned, duplicate, conflict, maintenance, bill.",
+  "capture": {
+    "signals": {},
+    "topics": {},
+    "products": []
+  },
+  "assistant": {
+    "billDueWithinDays": 3,
+    "surfaceOnToday": 65,
+    "attention": 80,
+    "maxOnToday": 3,
+    "hiddenKinds": []
+  }
+}
