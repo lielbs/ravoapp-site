@@ -3,10 +3,12 @@
  *
  * No framework and no network calls. The Quick Add box runs the app's own reader in the browser
  * and nothing typed into it leaves the device. Motion is driven by class changes so the CSS owns
- * the timing, and everything respects prefers-reduced-motion.
+ * the timing; the only per-frame work is the hero's parallax, which runs while the hero is on
+ * screen and never under prefers-reduced-motion.
  */
 
 const root = document.documentElement
+root.classList.add('js')
 const COPY = window.RAVO_COPY ?? { en: {}, scenes: {} }
 const SCENES = COPY.scenes ?? {}
 const reduced = matchMedia('(prefers-reduced-motion: reduce)')
@@ -18,14 +20,6 @@ const el = (tag, className, text) => {
   if (className) node.className = className
   if (text !== undefined) node.textContent = text
   return node
-}
-const icon = name => {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-  svg.setAttribute('aria-hidden', 'true')
-  const use = document.createElementNS('http://www.w3.org/2000/svg', 'use')
-  use.setAttribute('href', `#${name}`)
-  svg.append(use)
-  return svg
 }
 
 /* ── retire the former app deployment ──────────────────────────────────────────────────────────
@@ -52,11 +46,22 @@ void retirePreviousSiteWorker().catch(() => {})
 
 const LANGUAGE_KEY = 'ravo-marketing-language'
 let language = (() => { try { return localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'he' } catch { return 'he' } })()
-const hebrew = {}, hebrewAria = {}
+const hebrew = {}, hebrewAria = {}, hebrewAlt = {}
 for (const node of $$('[data-i18n]')) hebrew[node.dataset.i18n] = node.innerHTML
 for (const node of $$('[data-i18n-aria]')) hebrewAria[node.dataset.i18nAria] = node.getAttribute('aria-label')
+for (const node of $$('[data-i18n-alt]')) hebrewAlt[node.dataset.i18nAlt] = node.getAttribute('alt')
 const pick = value => value?.[language] ?? value?.he ?? ''
 const painters = []
+
+/* A screenshot is a <picture>: the dark capture for a dark page, the light one otherwise, and both
+   in the reader's language — an English sentence beside a Hebrew screen promises something the
+   picture does not show. */
+function paintShot(picture, shot = picture.dataset.shot) {
+  picture.dataset.shot = shot
+  const source = $('source', picture), image = $('img', picture)
+  if (source) source.srcset = `assets/screens/${language}/${shot}.webp`
+  if (image) image.src = `assets/screens/${language}/light/${shot}.webp`
+}
 
 function applyLanguage(next) {
   language = next
@@ -71,7 +76,11 @@ function applyLanguage(next) {
     const value = english ? COPY.en?.[node.dataset.i18nAria] : hebrewAria[node.dataset.i18nAria]
     if (value) node.setAttribute('aria-label', value)
   }
-  for (const image of $$('[data-screen-src]')) image.src = `assets/screens/${next}/${image.dataset.screenSrc}.webp`
+  for (const node of $$('[data-i18n-alt]')) {
+    const value = english ? COPY.en?.[node.dataset.i18nAlt] : hebrewAlt[node.dataset.i18nAlt]
+    if (value) node.setAttribute('alt', value)
+  }
+  for (const picture of $$('picture[data-shot]')) paintShot(picture)
   const toggle = $('[data-lang-switch]')
   toggle.textContent = english ? 'עברית' : 'EN'
   toggle.setAttribute('aria-label', english ? 'החלפה לעברית' : 'Switch to English')
@@ -81,12 +90,7 @@ function applyLanguage(next) {
 }
 $('[data-lang-switch]').addEventListener('click', () => applyLanguage(language === 'he' ? 'en' : 'he'))
 
-/* ── chrome: header, menu, reveal, download bar ────────────────────────────────────────────── */
-
-const header = $('[data-header]')
-const onScroll = () => header.classList.toggle('scrolled', scrollY > 10)
-addEventListener('scroll', onScroll, { passive: true })
-onScroll()
+/* ── chrome: menu, reveal, download bar ────────────────────────────────────────────────────── */
 
 const menuToggle = $('[data-menu-toggle]')
 const nav = $('#site-nav')
@@ -109,52 +113,85 @@ new IntersectionObserver(([entry]) => { finaleHere = entry.isIntersecting; paint
 
 $('[data-year]').textContent = String(new Date().getFullYear())
 
-function whileVisible(node, start, stop, threshold = 0.2) {
-  new IntersectionObserver(([entry]) => (entry.isIntersecting ? start() : stop()), { threshold }).observe(node)
+/* ── the hero: the sky at the visitor's own hour ───────────────────────────────────────────── */
+
+/* The app's own dayparts (src/components/art/DaySky.tsx), so the site and Today agree on what
+   time of day it is. */
+const daypartOf = hour => hour >= 5 && hour < 10 ? 'dawn' : hour >= 10 && hour < 17 ? 'day' : hour >= 17 && hour < 20 ? 'dusk' : 'night'
+const arcOf = (date, part) => {
+  const h = date.getHours() + date.getMinutes() / 60
+  const span = { dawn: [5, 10], day: [10, 17], dusk: [17, 20], night: [20, 29] }[part]
+  const at = part === 'night' && h < 5 ? h + 24 : h
+  return Math.min(1, Math.max(0, (at - span[0]) / (span[1] - span[0])))
+}
+const hero = $('[data-hero]')
+const sceneSvg = $('[data-scene-svg]')
+const body = $('[data-body]')
+const narrow = matchMedia('(max-width: 860px)')
+const forcedPart = new URLSearchParams(location.search).get('sky')
+function paintSky() {
+  const now = new Date()
+  const part = ['dawn', 'day', 'dusk', 'night'].includes(forcedPart) ? forcedPart : daypartOf(now.getHours())
+  hero.dataset.part = part
+  /* The sun or moon crosses the open sky beside the words, rising and setting with the hour. */
+  const arc = arcOf(now, part)
+  let x = 380 + arc * 520, y = 250 - Math.sin(arc * Math.PI) * 110
+  if (root.dir === 'ltr') x = 1440 - x
+  /* On a phone the picture is cropped (the viewBox below) and the sun sits low beside the phone,
+     clear of the headline and the buttons. */
+  if (narrow.matches) { x = 440; y = 560 - Math.sin(arc * Math.PI) * 50 }
+  body.setAttribute('transform', `translate(${x.toFixed(0)} ${y.toFixed(0)})`)
+  sceneSvg.setAttribute('viewBox', narrow.matches ? '370 -300 494 1100' : '0 0 1440 800')
+}
+paintSky()
+painters.push(paintSky)
+narrow.addEventListener('change', paintSky)
+setInterval(paintSky, 10 * 60 * 1000)
+requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('is-in')))
+
+/* Depth: the layers of the scene move at different speeds as the page scrolls past the hero. */
+const layers = $$('.parallax', hero)
+let heroOn = true, ticking = false
+new IntersectionObserver(([entry]) => { heroOn = entry.isIntersecting }).observe(hero)
+function parallax() {
+  ticking = false
+  if (!heroOn || still()) return
+  const y = scrollY
+  for (const layer of layers) layer.style.transform = `translate3d(0, ${(y * Number(layer.dataset.depth)).toFixed(1)}px, 0)`
+}
+addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(parallax) } }, { passive: true })
+
+/* The phone turns a little towards the pointer — on a mouse only, and never under reduced motion. */
+const tilt = $('[data-tilt]')
+if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  hero.addEventListener('pointermove', event => {
+    if (still()) return
+    const box = hero.getBoundingClientRect()
+    const dx = (event.clientX - box.left) / box.width - .5, dy = (event.clientY - box.top) / box.height - .5
+    tilt.style.transform = `perspective(1400px) rotateY(${(dx * 8).toFixed(2)}deg) rotateX(${(-dy * 6).toFixed(2)}deg)`
+  })
+  hero.addEventListener('pointerleave', () => { tilt.style.transform = '' })
 }
 
-/* ── hero: the phone cycles through real screens, each with the notification it belongs to ── */
+/* ── the story: one phone, four chapters ───────────────────────────────────────────────────── */
 
-/* One phone, and the visitor picks whose day it shows: the home's or the business's. */
-const heroStage = $('[data-hero]')
-const heroSeg = $('.hero-seg', heroStage)
-let heroSpace = 'home', heroIndex = 0, heroTimer = 0
-const heroScreens = () => $$(`[data-hero-phone] img[data-space="${heroSpace}"]`)
-const pings = $('[data-pings]')
-function showPing(slot, entry, space) {
-  const old = $(`li[data-slot="${slot}"]`, pings)
-  if (old) { old.classList.add('out'); setTimeout(() => old.remove(), 450) }
-  if (!entry) return
-  const row = el('li')
-  row.dataset.slot = slot; row.dataset.space = space
-  const logo = el('img'); logo.src = 'logo.svg'; logo.alt = ''; logo.width = 30; logo.height = 30
-  const [title, body] = pick(entry)
-  row.append(logo, el('b', '', title), el('span', '', body))
-  pings.append(row)
-  requestAnimationFrame(() => requestAnimationFrame(() => row.classList.add('in')))
+const story = $('[data-story]')
+const stage = $('.story__stage', story)
+const chapters = $$('.chapter', story)
+const setChapter = chapter => {
+  const id = chapter.dataset.chapter
+  for (const picture of $$('.phone--story picture', story)) picture.classList.toggle('is-on', picture.dataset.for === id)
+  stage.style.setProperty('--stage-tone', getComputedStyle(chapter).getPropertyValue('--tone'))
 }
-const frontPing = () => showPing('front', SCENES.hero?.[heroScreens()[heroIndex]?.dataset.screenSrc], heroSpace)
-function heroShow(index) {
-  for (const image of $$('[data-hero-phone] img')) image.classList.remove('is-on')
-  heroIndex = index
-  heroScreens()[heroIndex]?.classList.add('is-on')
-  $('li[data-slot="front"]', pings)?.classList.add('out')
-  /* The screen changes first and its notification follows, so the two read as one event. */
-  setTimeout(frontPing, 420)
-}
-const heroTick = () => heroShow((heroIndex + 1) % heroScreens().length)
-const heroRun = () => { clearInterval(heroTimer); heroTimer = still() ? 0 : setInterval(heroTick, 3400) }
-function setHeroSpace(space) {
-  if (space === heroSpace) return
-  heroSpace = space
-  heroSeg.dataset.at = space === 'biz' ? '1' : '0'
-  for (const button of $$('[data-hero-space]', heroSeg)) button.setAttribute('aria-checked', String(button.dataset.heroSpace === space))
-  heroShow(0)
-  if (heroTimer) heroRun()
-}
-for (const button of $$('[data-hero-space]', heroSeg)) button.addEventListener('click', () => setHeroSpace(button.dataset.heroSpace))
-painters.push(() => { pings.replaceChildren(); frontPing() })
-whileVisible($('.hero'), () => { if (!heroTimer) heroRun() }, () => { clearInterval(heroTimer); heroTimer = 0 }, 0.15)
+/* The chapter crossing the middle of the screen is the one the phone shows. */
+const current = new IntersectionObserver(entries => {
+  for (const entry of entries) if (entry.isIntersecting) setChapter(entry.target)
+}, { rootMargin: '-45% 0px -45% 0px' })
+/* Each chapter's small demonstration plays once, when the chapter is properly in view. */
+const arrive = new IntersectionObserver(entries => {
+  for (const entry of entries) if (entry.isIntersecting) { entry.target.classList.add('is-in'); arrive.unobserve(entry.target) }
+}, { threshold: 0.3 })
+for (const chapter of chapters) { current.observe(chapter); arrive.observe(chapter) }
 
 /* ── Quick Add: the app's own reader, in the browser ───────────────────────────────────────── */
 
@@ -180,7 +217,7 @@ function renderReading() {
   const card = el('div', 'try-card')
   const head = el('div', 'try-card__head')
   if (sure) { const kind = el('span', 'try-kind', pick(kinds[reading.kind])); kind.dataset.kind = reading.kind; head.append(kind) }
-  head.append(el('span', 'try-card__read', pick(L.read)))
+  head.append(el('span', '', pick(L.read)))
   card.append(head, el('h3', '', reading.fields.title || text))
   const facts = el('ul', 'try-chips')
   const add = (label, value) => {
@@ -231,140 +268,38 @@ painters.push(() => { paintExamples(); renderReading() })
 setTrySpace('home')
 import('./assets/capture.js').then(module => { reader = module; renderReading() }).catch(() => {})
 
-/* ── the assistant, interactive ────────────────────────────────────────────────────────────── */
+/* ── roles: Home or Business ───────────────────────────────────────────────────────────────── */
 
-const assist = $('[data-assist]')
-const assistScreen = $('.demo-screen', assist)
-const assistList = $('[data-assist-list]')
-const assistSheet = $('[data-assist-sheet]')
-const assistToast = $('[data-assist-toast]')
-const assistDone = $('[data-assist-done]')
-let assistOpen = null, toastTimer = 0
-let assistLeft = []
-const TONES = { danger: ['#ef8f86', 'rgba(239,143,134,.15)'], warning: ['#e8c174', 'rgba(232,193,116,.15)'], mint: ['#8fd3bd', 'rgba(143,211,189,.15)'] }
-function toast(text) {
-  assistToast.textContent = text
-  assistToast.classList.add('show')
-  clearTimeout(toastTimer)
-  toastTimer = setTimeout(() => assistToast.classList.remove('show'), 1900)
-}
-function closeSheet() {
-  assistSheet.classList.remove('open')
-  assistSheet.setAttribute('aria-hidden', 'true')
-  assistScreen.classList.remove('dim')
-  assistOpen = null
-}
-function resolve(id, message) {
-  closeSheet()
-  const row = $(`[data-id="${id}"]`, assistList)
-  assistLeft = assistLeft.filter(item => item !== id)
-  if (row) { row.classList.add('leaving'); setTimeout(() => row.remove(), 520) }
-  toast(message)
-  if (!assistLeft.length) setTimeout(() => { assistDone.hidden = false }, 650)
-}
-function openSheet(item) {
-  assistOpen = item
-  $('[data-assist-title]').textContent = pick(item.title)
-  const chips = $('[data-assist-chips]')
-  chips.replaceChildren()
-  for (const choice of SCENES.assistant?.dates ?? []) {
-    const button = el('button', '', pick(choice))
-    button.type = 'button'
-    button.addEventListener('click', () => resolve(item.id, `✓ ${pick(SCENES.assistant.scheduled)} ${pick(choice)}`))
-    chips.append(button)
-  }
-  assistScreen.classList.add('dim')
-  assistSheet.classList.add('open')
-  assistSheet.setAttribute('aria-hidden', 'false')
-  $('button', chips)?.focus({ preventScroll: true })
-}
-function paintAssistant() {
-  closeSheet()
-  assistList.replaceChildren()
-  assistDone.hidden = true
-  const items = SCENES.assistant?.items ?? []
-  assistLeft = items.map(item => item.id)
-  items.forEach((item, index) => {
-    const row = el('button', 'demo-row')
-    row.type = 'button'
-    row.dataset.id = item.id
-    const [tone, soft] = TONES[item.tone] ?? TONES.warning
-    row.style.setProperty('--tone', tone); row.style.setProperty('--tone-soft', soft)
-    const ico = el('span', 'ico'); ico.append(icon(item.icon))
-    row.append(ico, el('b', '', pick(item.title)), el('small', '', pick(item.hint)), icon('i-chev'))
-    if (index === 0 && !still()) row.classList.add('hint')
-    row.addEventListener('click', () => openSheet(item))
-    assistList.append(row)
-  })
-}
-$('[data-assist-complete]').addEventListener('click', () => assistOpen && resolve(assistOpen.id, `✓ ${pick(SCENES.assistant.completed)}`))
-$('[data-assist-later]').addEventListener('click', () => assistOpen && resolve(assistOpen.id, pick(SCENES.assistant.later)))
-$('[data-assist-reset]').addEventListener('click', paintAssistant)
-assistScreen.addEventListener('click', event => { if (assistOpen && !event.target.closest('[data-assist-sheet]') && !event.target.closest('.demo-row')) closeSheet() })
-painters.push(paintAssistant)
-
-/* ── Home or Business ──────────────────────────────────────────────────────────────────────── */
-
-const spaces = $('[data-spaces]')
-const spacesSeg = $('.seg', spaces)
-const spacesCopy = $('[data-spaces-copy]')
-const spacesScreen = $('[data-spaces-screen]')
-let spacesTab = 'home'
-function fillSpaces() {
-  const data = SCENES.spaces?.[spacesTab]
+const roles = $('[data-roles]')
+const rolesSeg = $('.seg', roles)
+const rolesShot = $('[data-roles-shot]', roles)
+let rolesTab = 'home'
+function fillRoles() {
+  const data = SCENES.roles?.[rolesTab]
   if (!data) return
-  spacesCopy.replaceChildren()
-  spacesCopy.append(el('span', 'tag', spacesTab === 'home' ? 'RAVO Home' : 'RAVO Business'), el('h3', '', pick(data.title)), el('p', '', pick(data.lede)))
-  const list = el('ul')
-  for (const line of pick(data.features)) list.append(el('li', '', line))
-  spacesCopy.append(list)
-  spacesScreen.src = `assets/screens/${language}/${data.screen}.webp`
-  spacesScreen.alt = pick(data.alt)
-}
-function setSpacesTab(tab, animate = true) {
-  spacesTab = tab
-  spaces.dataset.at = tab === 'biz' ? '1' : '0'
-  spacesSeg.dataset.at = spaces.dataset.at
-  for (const button of $$('[data-tab]', spaces)) button.setAttribute('aria-selected', String(button.dataset.tab === tab))
-  if (!animate || still()) { fillSpaces(); return }
-  spacesCopy.classList.add('swap'); spacesScreen.classList.add('swap')
-  setTimeout(() => {
-    fillSpaces()
-    const show = () => { spacesCopy.classList.remove('swap'); spacesScreen.classList.remove('swap') }
-    if (spacesScreen.complete) requestAnimationFrame(show)
-    else { spacesScreen.addEventListener('load', show, { once: true }); spacesScreen.addEventListener('error', show, { once: true }) }
-  }, 260)
-}
-for (const button of $$('[data-tab]', spaces)) button.addEventListener('click', () => setSpacesTab(button.dataset.tab))
-painters.push(() => setSpacesTab(spacesTab, false))
-
-/* ── tour: real screens, swipeable ─────────────────────────────────────────────────────────── */
-
-const tourTrack = $('[data-tour-track]')
-function paintTour() {
-  tourTrack.replaceChildren()
-  for (const item of SCENES.tour ?? []) {
-    const card = el('li', 'tour-card')
-    card.dataset.space = item.space
-    const phone = el('div', 'phone')
-    const image = el('img')
-    image.src = `assets/screens/${language}/${item.screen}.webp`; image.alt = pick(item.title); image.loading = 'lazy'; image.width = 720; image.height = 1560
-    phone.append(image)
-    const text = el('div')
-    text.append(el('span', 'space', item.space === 'biz' ? 'RAVO Business' : 'RAVO Home'), el('b', '', pick(item.title)), el('p', '', pick(item.line)))
-    card.append(phone, text)
-    tourTrack.append(card)
+  $('[data-roles-title]', roles).textContent = pick(data.title)
+  $('[data-roles-lede]', roles).textContent = pick(data.lede)
+  const list = $('[data-roles-list]', roles)
+  list.replaceChildren()
+  for (const role of data.roles) {
+    const item = el('li')
+    const icon = el('i', '', role.icon); icon.style.setProperty('--c', role.colour); icon.setAttribute('aria-hidden', 'true')
+    item.append(icon, el('b', '', pick(role.name)), el('span', '', pick(role.can)))
+    list.append(item)
   }
+  paintShot(rolesShot, data.screen)
+  $('img', rolesShot).alt = pick(data.alt)
 }
-const tourStep = direction => {
-  const card = $('.tour-card', tourTrack)
-  if (!card) return
-  const distance = (card.getBoundingClientRect().width + 16) * direction * (language === 'he' ? -1 : 1)
-  tourTrack.scrollBy({ left: distance, behavior: still() ? 'auto' : 'smooth' })
+function setRolesTab(tab, animate = true) {
+  rolesTab = tab
+  rolesSeg.dataset.at = tab === 'biz' ? '1' : '0'
+  for (const button of $$('[data-tab]', roles)) button.setAttribute('aria-selected', String(button.dataset.tab === tab))
+  if (!animate || still()) { fillRoles(); return }
+  roles.classList.add('is-swapping')
+  setTimeout(() => { fillRoles(); requestAnimationFrame(() => roles.classList.remove('is-swapping')) }, 260)
 }
-$('[data-tour-prev]').addEventListener('click', () => tourStep(-1))
-$('[data-tour-next]').addEventListener('click', () => tourStep(1))
-painters.push(paintTour)
+for (const button of $$('[data-tab]', roles)) button.addEventListener('click', () => setRolesTab(button.dataset.tab))
+painters.push(() => setRolesTab(rolesTab, false))
 
 /* ── start ─────────────────────────────────────────────────────────────────────────────────── */
 
