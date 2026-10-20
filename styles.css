@@ -551,3 +551,11 @@ a,button,[role='tab'],[role='radio']{-webkit-tap-highlight-color:transparent}
 @media (prefers-reduced-motion:reduce){::view-transition-old(*),::view-transition-new(*){animation:none}}
 /* On a phone the hero device is half hidden by the next section, so its button sits mid-screen. */
 @media (max-width:860px){.phone__try{inset-block-end:auto;inset-block-start:46%;padding:11px 18px;font-size:14.5px}}
+
+/* ── the site's house, as the app draws it in 1.0.4 ────────────────────────────────────────────── */
+.house .trim{fill:var(--sky-trim,#FFF8EC)}.house .sill{fill:var(--sky-sill,#CDBFA8)}.house .stone{fill:var(--sky-stone,#A89A85)}
+.house .trunk-fill{fill:var(--sky-trunk,#5B4A36)}.house .branch{stroke:var(--sky-trunk,#5B4A36)}.house .leaf-deep{fill:var(--sky-leaf-deep,#4A6330)}
+.house .lamp{fill:#5A5952}.house .sign-board{fill:var(--sky-sign-wood,#7A5A3C);stroke:var(--sky-sign-edge,#A07A52);stroke-width:1}
+.house .sign-text{fill:var(--sky-sign-ink,#F6EBD9);font-family:var(--display,inherit)}
+:is(.hero,.finale):is([data-part='dusk'],[data-part='night']) .house .lamp{fill:#FFE7B0}
+:is(.hero,.finale)[data-part='night'] .house{--sky-wall:#8A8072;--sky-trim:#B8AE9C;--sky-sill:#8E826F;--sky-stone:#6F6556;--sky-leaf-deep:#2E3D1E;--sky-sign-wood:#4E3A27;--sky-sign-edge:#6E553A;--sky-sign-ink:#E9DCC6;--sky-roof-fill:#7E3E2E;--sky-chimney:#5E3326}
