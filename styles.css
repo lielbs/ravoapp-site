@@ -465,3 +465,32 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 .looks__item:hover{transform:translateY(-4px)}
 .looks__item img{display:block;inline-size:100%;block-size:auto}
 @media (max-width:860px){.looks{grid-template-columns:1fr;gap:14px;margin-block-start:36px}}
+
+/* ── the phone, as an iPhone ─────────────────────────────────────────────────────────────────────
+   The frames used to be a dark green slab with a pill on it, and the app's own top bar ran straight
+   under the pill. Now: a titanium edge, an even black bezel, corners in the iPhone's proportions,
+   side buttons, and a real status bar above the app — time on the left, signal, Wi-Fi and battery on
+   the right, the Dynamic Island between them — so the screen sits where it does on a phone. */
+:root{--sb-ink:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 430 54'%3E%3Ctext x='54' y='35' font-family='-apple-system,SF Pro Text,Segoe UI,Helvetica,Arial' font-size='17' font-weight='600' fill='%23111'%3E9:41%3C/text%3E%3Cg fill='%23111'%3E%3Crect x='326' y='27' width='3.4' height='5' rx='1'/%3E%3Crect x='331' y='24.5' width='3.4' height='7.5' rx='1'/%3E%3Crect x='336' y='22' width='3.4' height='10' rx='1'/%3E%3Crect x='341' y='19.5' width='3.4' height='12.5' rx='1'/%3E%3Cpath d='M357 23.6a9 9 0 0 1 12.6 0l1.4-1.5a11 11 0 0 0-15.4 0zM359.6 26.4a5.3 5.3 0 0 1 7.4 0l1.4-1.5a7.4 7.4 0 0 0-10.2 0zM363.3 30.5l2.1-2.1a2.9 2.9 0 0 0-4.2 0z'/%3E%3Crect x='378.5' y='19.5' width='24' height='12' rx='3.6' fill='none' stroke='%23111' stroke-opacity='.4' stroke-width='1'/%3E%3Crect x='380.5' y='21.5' width='17' height='8' rx='2'/%3E%3Crect x='403.6' y='23.5' width='1.6' height='4' rx='.8' fill-opacity='.45'/%3E%3C/g%3E%3C/svg%3E");
+  --sb-ink-dark:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 430 54'%3E%3Ctext x='54' y='35' font-family='-apple-system,SF Pro Text,Segoe UI,Helvetica,Arial' font-size='17' font-weight='600' fill='%23fff'%3E9:41%3C/text%3E%3Cg fill='%23fff'%3E%3Crect x='326' y='27' width='3.4' height='5' rx='1'/%3E%3Crect x='331' y='24.5' width='3.4' height='7.5' rx='1'/%3E%3Crect x='336' y='22' width='3.4' height='10' rx='1'/%3E%3Crect x='341' y='19.5' width='3.4' height='12.5' rx='1'/%3E%3Cpath d='M357 23.6a9 9 0 0 1 12.6 0l1.4-1.5a11 11 0 0 0-15.4 0zM359.6 26.4a5.3 5.3 0 0 1 7.4 0l1.4-1.5a7.4 7.4 0 0 0-10.2 0zM363.3 30.5l2.1-2.1a2.9 2.9 0 0 0-4.2 0z'/%3E%3Crect x='378.5' y='19.5' width='24' height='12' rx='3.6' fill='none' stroke='%23fff' stroke-opacity='.45' stroke-width='1'/%3E%3Crect x='380.5' y='21.5' width='17' height='8' rx='2'/%3E%3Crect x='403.6' y='23.5' width='1.6' height='4' rx='.8' fill-opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
+  --sb-bg:#F4EFE6;--phone-edge:linear-gradient(145deg,#C9CCC6,#8E928A 30%,#5B5F57 55%,#A3A79F 80%,#6E726A)}
+@media (prefers-color-scheme:dark){:root{--sb-ink:var(--sb-ink-dark);--sb-bg:#11130F}}
+
+.phone{isolation:isolate;border-radius:13.4%/6.2%;border:2.4px solid transparent;background:linear-gradient(#0A0B09,#0A0B09) padding-box,var(--phone-edge) border-box;box-shadow:0 40px 80px -30px rgba(20,22,16,.55),0 18px 40px -24px rgba(20,22,16,.5)}
+/* The buttons: action and volume on the left edge, power on the right. */
+.phone::before{content:'';position:absolute;z-index:-1;inset-block:17.5% 58%;inset-inline:-1.6%;border-radius:2px;
+  background:linear-gradient(#8E928A 0 9%,transparent 9% 22%,#8E928A 22% 52%,transparent 52% 62%,#8E928A 62% 92%,transparent 92%) left/1.4% 100% no-repeat,
+             linear-gradient(#8E928A,#8E928A) right 0 top 8%/1.4% 46% no-repeat}
+.phone::after{inset-block-start:2.75%;inline-size:30%;block-size:3.75%;background:#000;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+.phone picture{inset:0;margin:3.4%;border-radius:11.2%/5.2%;display:flex;flex-direction:column;background:var(--sb-bg)}
+.phone picture::before{content:'';flex:none;padding-block-start:12.4%;background:var(--sb-ink) center/100% 100% no-repeat,var(--sb-bg)}
+.phone picture img{flex:1;min-block-size:0;block-size:auto}
+
+@media (max-width:860px){
+  .chapter__phone{display:flex;flex-direction:column;padding:3.4%;border-radius:13.4%/6.2%;
+    border:2px solid transparent;background:linear-gradient(#0A0B09,#0A0B09) padding-box,var(--phone-edge) border-box;
+    box-shadow:0 30px 60px -26px rgba(20,22,16,.55);overflow:hidden;isolation:isolate}
+  .chapter__phone::before{content:'';flex:none;padding-block-start:12.4%;border-radius:22px 22px 0 0;background:var(--sb-ink) center/100% 100% no-repeat,var(--sb-bg)}
+  .chapter__phone::after{content:'';position:absolute;inset-block-start:3.1%;inset-inline:0;margin-inline:auto;inline-size:30%;block-size:3.75%;border-radius:999px;background:#000}
+  .chapter__phone img{flex:1;min-block-size:0;block-size:auto;border-radius:0 0 22px 22px}
+}
