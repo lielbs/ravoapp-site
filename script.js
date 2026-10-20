@@ -63,6 +63,25 @@ function paintShot(picture, shot = picture.dataset.shot) {
   if (image) image.src = `assets/screens/${language}/light/${shot}.webp`
 }
 
+/*
+ * The house builder: the app's own sky, playable. About 70 KB, so it is only fetched once the
+ * section is close to the screen; until then (and without scripts) the three photographs stand in.
+ */
+const builder = $('[data-house-builder]')
+if (builder && 'IntersectionObserver' in window) {
+  const load = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return
+    load.disconnect()
+    const style = document.createElement('link')
+    style.rel = 'stylesheet'; style.href = 'assets/builder/house-builder.css'
+    document.head.appendChild(style)
+    const code = document.createElement('script')
+    code.src = 'assets/builder/house-builder.js'; code.defer = true
+    document.body.appendChild(code)
+  }, { rootMargin: '600px 0px' })
+  load.observe(builder)
+}
+
 function applyLanguage(next) {
   language = next
   /* The house pictures carry a name on their sign, so they follow the language like the screens. */

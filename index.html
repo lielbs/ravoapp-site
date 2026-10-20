@@ -24,7 +24,7 @@
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/rubik-hebrew.woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=20261014a">
+  <link rel="stylesheet" href="styles.css?v=20261020a">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"MobileApplication","name":"RAVO","applicationCategory":"ProductivityApplication","operatingSystem":"iOS 15.0 or later","url":"https://ravoapp.app/","installUrl":"https://apps.apple.com/app/id6807432532","downloadUrl":"https://apps.apple.com/app/id6807432532","image":"https://ravoapp.app/assets/social-preview.png","description":"RAVO מרכז משימות, קניות, יומן וחשבונות במקום אחד שכל בני הבית רואים, כל אחד לפי התפקיד שלו — לבית ולעסק.","inLanguage":["he","en"],"datePublished":"2026-09-17","contentRating":"4+","author":{"@type":"Organization","name":"RAVO"},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS","availability":"https://schema.org/InStock"}}</script>
 </head>
 <body>
@@ -272,11 +272,15 @@
           <h2 id="look-title" data-i18n="lookTitle">הבית שלכם, עם השם שלכם.</h2>
           <p class="lede" data-i18n="lookLede">בוחרים צבע, בית או בניין, מה גדל בחצר ומי יושב ליד הדלת — והשם שלכם על השלט. בערב נדלק האור בחלונות.</p>
         </div>
+        <!-- The playable picture loads here when the section comes into view; the three photographs
+             below are what shows until then, and without scripts. -->
+        <div class="house-builder" data-house-builder>
         <ul class="looks">
           <li class="looks__item reveal" style="--i:0"><img data-house="house" src="assets/house/he/house.webp" width="1110" height="690" alt="בית עם גג אדום, עץ וחתול ליד הדלת, ושלט עם שם המשפחה" data-i18n-alt="altLookHouse" loading="lazy"></li>
           <li class="looks__item reveal" style="--i:1"><img data-house="flats" src="assets/house/he/flats.webp" width="1110" height="690" alt="בניין עם מרפסות ודוד שמש, דקל וכלב, בשעת שקיעה" data-i18n-alt="altLookFlats" loading="lazy"></li>
           <li class="looks__item reveal" style="--i:2"><img data-house="business" src="assets/house/he/business.webp" width="1110" height="690" alt="רחוב משרדים בלילה, עם שלט מואר על הגג בשם העסק" data-i18n-alt="altLookBusiness" loading="lazy"></li>
         </ul>
+        </div>
       </div>
     </section>
 
@@ -415,7 +419,7 @@
     </div>
     <p class="wrap footer__fine">© <span data-year></span> RAVO <span data-i18n="rights">· כל הזכויות שמורות</span></p>
   </footer>
-  <script src="copy.js?v=20261014a" defer></script>
-  <script src="script.js?v=20261014a" type="module"></script>
+  <script src="copy.js?v=20261020a" defer></script>
+  <script src="script.js?v=20261020a" type="module"></script>
 </body>
 </html>
