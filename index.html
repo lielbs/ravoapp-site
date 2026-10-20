@@ -24,7 +24,7 @@
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/rubik-hebrew.woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=20261020f">
+  <link rel="stylesheet" href="styles.css?v=20261020h">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"MobileApplication","name":"RAVO","applicationCategory":"ProductivityApplication","operatingSystem":"iOS 15.0 or later","url":"https://ravoapp.app/","installUrl":"https://apps.apple.com/app/id6807432532","downloadUrl":"https://apps.apple.com/app/id6807432532","image":"https://ravoapp.app/assets/social-preview.png","description":"RAVO מרכז משימות, קניות, יומן וחשבונות במקום אחד שכל בני הבית רואים, כל אחד לפי התפקיד שלו — לבית ולעסק.","inLanguage":["he","en"],"datePublished":"2026-09-17","contentRating":"4+","author":{"@type":"Organization","name":"RAVO"},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS","availability":"https://schema.org/InStock"}}</script>
 </head>
 <body>
@@ -158,11 +158,10 @@
           <div class="phone phone--hero" data-tilt>
             <picture data-shot="today"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/today.webp"><img src="assets/screens/he/light/today.webp" width="720" height="1560" alt="מסך היום של RAVO: המשימות של כל אחד בבית, הקניות, האירועים והחשבונות" data-i18n-alt="altToday" fetchpriority="high"></picture>
             <!-- The real app, demo household, loaded only on this tap; nothing a visitor does leaves the browser. -->
-            <button type="button" class="phone__try" data-try-app><span data-i18n="tryApp">נסו את האפליקציה</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <button type="button" class="phone__try" data-try-app><span class="phone__cue"><b data-i18n="tryApp">לחצו ונסו את האפליקציה</b><small data-i18n="tryAppSub">דמו חי · בלי הורדה ובלי הרשמה</small></span><svg class="phone__hand" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11.24V7.5C9 6.12 10.12 5 11.5 5S14 6.12 14 7.5v3.74c1.21-.81 2-2.18 2-3.74C16 5.01 13.99 3 11.5 3S7 5.01 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63-4.54-2.26c-.17-.07-.35-.11-.54-.11H13v-6c0-.83-.67-1.5-1.5-1.5S10 6.67 10 7.5v10.74l-3.43-.72c-.08-.01-.15-.03-.24-.03-.31 0-.59.13-.79.33l-.79.8 4.94 4.94c.27.27.65.44 1.06.44h6.79c.75 0 1.33-.55 1.44-1.28l.75-5.27c.01-.07.02-.14.02-.2 0-.62-.38-1.16-.91-1.38z"/></svg></button>
             <div class="phone__app" data-app-screen hidden></div>
+            <button type="button" class="phone__close" data-close-app hidden aria-label="סגירת הדמו" data-i18n-aria="closeApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
           </div>
-          <div class="ping ping--a" aria-hidden="true"><img src="logo.svg" width="26" height="26" alt=""><span><b data-i18n="pingAt">רשימת הקניות</b><small data-i18n="pingA">נועה הוסיפה חלב ולחם</small></span></div>
-          <div class="ping ping--b" aria-hidden="true"><img src="logo.svg" width="26" height="26" alt=""><span><b data-i18n="pingBt">תזכורת</b><small data-i18n="pingB">חוג ג׳ודו של דניאל · 16:30</small></span></div>
         </div>
       </div>
     </section>
@@ -455,7 +454,7 @@
     </div>
     <p class="wrap footer__fine">© <span data-year></span> RAVO <span data-i18n="rights">· כל הזכויות שמורות</span></p>
   </footer>
-  <script src="copy.js?v=20261020f" defer></script>
-  <script src="script.js?v=20261020f" type="module"></script>
+  <script src="copy.js?v=20261020h" defer></script>
+  <script src="script.js?v=20261020h" type="module"></script>
 </body>
 </html>

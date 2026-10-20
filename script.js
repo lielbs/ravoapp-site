@@ -199,7 +199,8 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
  * browser only) at an iPhone's width and scales it into the screen, so every tap inside is the app's
  * own. The language follows the page; the phone stops tilting so it can be used.
  */
-const tryApp = $('[data-try-app]'), appScreen = $('[data-app-screen]')
+const tryApp = $('[data-try-app]'), appScreen = $('[data-app-screen]'), closeApp = $('[data-close-app]')
+const device = tilt?.closest('.hero__device')
 if (tryApp && appScreen) tryApp.addEventListener('click', () => {
   try {
     localStorage.setItem('ravo-language', language)
@@ -216,6 +217,8 @@ if (tryApp && appScreen) tryApp.addEventListener('click', () => {
   appScreen.hidden = false
   tilt.style.transform = ''
   tilt.classList.add('is-live')
+  device?.classList.add('is-live')
+  if (closeApp) closeApp.hidden = false
   /* The app is laid out at 430 points wide, like the phone it is drawn for, and shrunk to fit. */
   const fit = () => {
     const box = holder.getBoundingClientRect(), scale = box.width / 430
@@ -225,6 +228,15 @@ if (tryApp && appScreen) tryApp.addEventListener('click', () => {
   }
   fit()
   new ResizeObserver(fit).observe(holder)
+})
+/* Closing puts the screenshot and the floating notes back; the demo's own data stays in this browser. */
+if (closeApp && appScreen) closeApp.addEventListener('click', () => {
+  appScreen.replaceChildren()
+  appScreen.hidden = true
+  closeApp.hidden = true
+  tilt.classList.remove('is-live')
+  device?.classList.remove('is-live')
+  tryApp?.focus({ preventScroll: true })
 })
 
 /* ── the story: one phone, four chapters ───────────────────────────────────────────────────── */
