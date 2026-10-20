@@ -65,6 +65,8 @@ function paintShot(picture, shot = picture.dataset.shot) {
 
 function applyLanguage(next) {
   language = next
+  /* The house pictures carry a name on their sign, so they follow the language like the screens. */
+  for (const image of $$('[data-house]')) image.src = `assets/house/${next}/${image.dataset.house}.webp`
   const english = next === 'en'
   root.lang = english ? 'en' : 'he'
   root.dir = english ? 'ltr' : 'rtl'

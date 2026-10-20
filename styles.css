@@ -459,3 +459,9 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 
 /* ── shared by the 404 page ─────────────────────────────────────────────────────────────────── */
 .eyebrow.clay{color:var(--clay)}
+/* Your home: three looks of the house over Today, as photographs of the app's own picture. */
+.looks{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:56px 0 0;padding:0;list-style:none}
+.looks__item{overflow:hidden;border-radius:var(--r-xl);background:var(--surface);box-shadow:var(--e2);transition:transform 500ms var(--spring-bounce)}
+.looks__item:hover{transform:translateY(-4px)}
+.looks__item img{display:block;inline-size:100%;block-size:auto}
+@media (max-width:860px){.looks{grid-template-columns:1fr;gap:14px;margin-block-start:36px}}
