@@ -17,6 +17,7 @@ window.RAVO_COPY = {
     heroLede: 'RAVO keeps everything that holds a home together — tasks, shopping, the calendar and the bills — in one place everyone sees. Everyone knows what’s theirs, and nobody has to ask the group again.',
     downloadOn: 'Download on the',
     heroMore: 'How it works',
+    tryApp: 'Try the app',
     altToday: 'RAVO’s Today screen: what each person at home has on, the shopping, today’s events and the bills',
     pingAt: 'Shopping list', pingA: 'Noa added milk and bread',
     pingBt: 'Reminder', pingB: 'Daniel’s judo · 16:30',

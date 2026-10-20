@@ -186,13 +186,43 @@ addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimat
 const tilt = $('[data-tilt]')
 if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
   hero.addEventListener('pointermove', event => {
-    if (still()) return
+    if (still() || tilt.classList.contains('is-live')) return
     const box = hero.getBoundingClientRect()
     const dx = (event.clientX - box.left) / box.width - .5, dy = (event.clientY - box.top) / box.height - .5
     tilt.style.transform = `perspective(1400px) rotateY(${(dx * 8).toFixed(2)}deg) rotateX(${(-dy * 6).toFixed(2)}deg)`
   })
   hero.addEventListener('pointerleave', () => { tilt.style.transform = '' })
 }
+
+/*
+ * The real app in the hero phone. One tap loads RAVO's own demo (the Barak household, kept in this
+ * browser only) at an iPhone's width and scales it into the screen, so every tap inside is the app's
+ * own. The language follows the page; the phone stops tilting so it can be used.
+ */
+const tryApp = $('[data-try-app]'), appScreen = $('[data-app-screen]')
+if (tryApp && appScreen) tryApp.addEventListener('click', () => {
+  try { localStorage.setItem('ravo-language', language) } catch { /* the app falls back to the device language */ }
+  const holder = document.createElement('div')
+  holder.className = 'phone__frame'
+  const frame = document.createElement('iframe')
+  frame.src = 'demo/?embed#/today'
+  frame.title = language === 'en' ? 'RAVO, the demo household' : 'RAVO, בית ההדגמה'
+  frame.setAttribute('loading', 'eager')
+  holder.appendChild(frame)
+  appScreen.appendChild(holder)
+  appScreen.hidden = false
+  tilt.style.transform = ''
+  tilt.classList.add('is-live')
+  /* The app is laid out at 430 points wide, like the phone it is drawn for, and shrunk to fit. */
+  const fit = () => {
+    const box = holder.getBoundingClientRect(), scale = box.width / 430
+    frame.style.width = '430px'
+    frame.style.height = `${box.height / scale}px`
+    frame.style.transform = `scale(${scale})`
+  }
+  fit()
+  new ResizeObserver(fit).observe(holder)
+})
 
 /* ── the story: one phone, four chapters ───────────────────────────────────────────────────── */
 
