@@ -201,7 +201,10 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
  */
 const tryApp = $('[data-try-app]'), appScreen = $('[data-app-screen]')
 if (tryApp && appScreen) tryApp.addEventListener('click', () => {
-  try { localStorage.setItem('ravo-language', language) } catch { /* the app falls back to the device language */ }
+  try {
+    localStorage.setItem('ravo-language', language)
+    sessionStorage.setItem('ravo-demo-workspace', mode === 'biz' ? 'office' : 'home')
+  } catch { /* the app falls back to the device language and the home demo */ }
   const holder = document.createElement('div')
   holder.className = 'phone__frame'
   const frame = document.createElement('iframe')
@@ -305,7 +308,11 @@ function paintExamples() {
     tryExamples.append(button)
   }
 }
-function setTrySpace(space) {
+function setTrySpace(space, animate = false) {
+  if (animate && space !== trySpace && !still() && document.startViewTransition) {
+    document.startViewTransition(() => setTrySpace(space))
+    return
+  }
   trySpace = space
   trySeg.dataset.at = space === 'office' ? '1' : '0'
   for (const button of $$('[data-space]', tryBox)) button.setAttribute('aria-checked', String(button.dataset.space === space))
@@ -313,7 +320,7 @@ function setTrySpace(space) {
   paintExamples()
   renderReading()
 }
-for (const button of $$('[data-space]', tryBox)) button.addEventListener('click', () => setTrySpace(button.dataset.space))
+for (const button of $$('[data-space]', tryBox)) button.addEventListener('click', () => setTrySpace(button.dataset.space, true))
 tryInput.addEventListener('input', renderReading)
 painters.push(() => { paintExamples(); renderReading() })
 setTrySpace('home')
@@ -346,11 +353,58 @@ function setRolesTab(tab, animate = true) {
   rolesSeg.dataset.at = tab === 'biz' ? '1' : '0'
   for (const button of $$('[data-tab]', roles)) button.setAttribute('aria-selected', String(button.dataset.tab === tab))
   if (!animate || still()) { fillRoles(); return }
+  /* A view transition where the browser has one: the card's copy and phone glide over, no blink. */
+  if (document.startViewTransition) { document.startViewTransition(fillRoles); return }
   roles.classList.add('is-swapping')
   setTimeout(() => { fillRoles(); requestAnimationFrame(() => roles.classList.remove('is-swapping')) }, 260)
 }
 for (const button of $$('[data-tab]', roles)) button.addEventListener('click', () => setRolesTab(button.dataset.tab))
 painters.push(() => setRolesTab(rolesTab, false))
+
+/* ── Home or Business, for the whole page ──────────────────────────────────────────────────────
+ * The switch under the hero pill is the page's own: the headline, the phone, the picture in the sky,
+ * the "try it" box and the roles section all follow it, the way the app switches spaces. Where the
+ * browser can, the change is a view transition — the old state glides out as the new one settles in,
+ * like a screen change in the app — and otherwise a plain swap. */
+let mode = 'home'
+const heroEl = $('[data-hero]'), modeSeg = $('[data-mode-seg]')
+const heroTitle = $('[data-hero-title]'), heroLede = $('[data-hero-lede]')
+const heroShot = $('.phone--hero picture')
+const copyFor = key => (language === 'en' ? COPY.en?.[key] : hebrew[key]) ?? ''
+function paintMode() {
+  const biz = mode === 'biz'
+  heroEl.dataset.mode = mode
+  modeSeg.dataset.at = biz ? '1' : '0'
+  for (const button of $$('[data-mode]', modeSeg)) button.setAttribute('aria-selected', String(button.dataset.mode === mode))
+  heroTitle.dataset.i18n = biz ? 'heroTitleBiz' : 'heroTitle'
+  heroTitle.innerHTML = copyFor(heroTitle.dataset.i18n)
+  heroLede.dataset.i18n = biz ? 'heroLedeBiz' : 'heroLede'
+  heroLede.innerHTML = copyFor(heroLede.dataset.i18n)
+  if (heroShot) paintShot(heroShot, biz ? 'office' : 'today')
+  /* The live app, if it is open, moves to the same space. */
+  const live = $('.phone__frame iframe')
+  if (live) {
+    try { live.contentWindow.sessionStorage.setItem('ravo-demo-workspace', biz ? 'office' : 'home') } catch { /* cross-origin never; ignore */ }
+    live.contentWindow?.location.reload()
+  }
+}
+function setMode(next) {
+  if (next === mode) return
+  mode = next
+  const apply = () => {
+    paintMode()
+    setTrySpace(next === 'biz' ? 'office' : 'home')
+    setRolesTab(next === 'biz' ? 'biz' : 'home', false)
+  }
+  if (!still() && document.startViewTransition) document.startViewTransition(apply)
+  else apply()
+}
+/* Both phone pictures are fetched ahead, so a switch never waits on an image. */
+for (const shot of ['today', 'office', 'household']) for (const theme of ['', 'light/']) {
+  const image = new Image(); image.src = `assets/screens/${language}/${theme}${shot}.webp`
+}
+for (const button of $$('[data-mode]', modeSeg ?? document)) button.addEventListener('click', () => setMode(button.dataset.mode))
+painters.push(() => { if (mode === 'biz') paintMode() })
 
 /* ── start ─────────────────────────────────────────────────────────────────────────────────── */
 

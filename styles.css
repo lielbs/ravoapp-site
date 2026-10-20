@@ -509,3 +509,45 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 /* On a phone the hero device sinks behind the next section; a live one comes up to be used. */
 @media (max-width:860px){.hero__device:has(.phone.is-live){inline-size:min(300px,80vw);margin-block-end:32px}}
 @media (prefers-reduced-motion:reduce){.phone__try{animation:none}}
+
+/* ── Home or Business: the hero's switch, the office street ─────────────────────────────────────── */
+.seg--hero{inline-size:min(260px,100%);margin-block:6px 18px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.seg--hero button{color:rgba(246,244,239,.8);min-block-size:42px;font-size:15px}
+.seg--hero button[aria-selected='true']{color:#1E2418}
+.seg--hero .seg__pill{background:#F6F4EF;box-shadow:0 6px 16px -6px rgba(0,0,0,.45)}
+.hero .city{opacity:0;pointer-events:none;transition:opacity 500ms ease,translate 700ms var(--spring);translate:0 18px}
+.hero .house{transition:opacity 500ms ease,translate 700ms var(--spring)}
+.hero[data-mode='biz'] .city{opacity:1;translate:0 0}
+.js .hero.is-in[data-mode='biz'] .house,.hero[data-mode='biz'] .house{opacity:0 !important;translate:0 18px;animation:none}
+.city .tower{fill:#35574B}.city .tower-shade{fill:rgba(0,0,0,.18)}.city .awning{fill:#C56347}
+.city .pane{fill:rgba(205,225,232,.42)}
+.hero:is([data-part='dusk'],[data-part='night']) .city .pane.is-lit{fill:var(--sky-window,#FFCF7A)}
+.hero[data-part='night'] .city .tower{fill:#22362F}
+.city .sign{fill:#1F2A30}.city .sign-text{fill:#F2EEE6;font-family:var(--display,inherit)}
+.hero:is([data-part='dusk'],[data-part='night']) .city .sign-text{fill:var(--sky-window,#FFCF7A)}
+/* The house's window no longer pulses (the app dropped it too). */
+.house .window-glow{animation:none;opacity:0}
+@media (max-width:860px){.hero .city{display:none}.seg--hero{margin-inline:auto}}
+
+/* ── how a tap feels: the app's own spring, everywhere ─────────────────────────────────────────── */
+a,button,[role='tab'],[role='radio']{-webkit-tap-highlight-color:transparent}
+:is(.store-badge,.ghost,.header-cta,.phone__try,.seg button,.composer__examples button,.hb-chips button,.faq summary,.site-nav a,.lang-toggle,[data-lang]){transition:transform 260ms cubic-bezier(.34,1.56,.64,1),color 250ms ease,background-color 200ms ease}
+:is(.store-badge,.ghost,.header-cta,.phone__try,.seg button,.composer__examples button,.faq summary,.site-nav a):active{transform:scale(.95)}
+.shelf__item:active,.looks__item:active{transform:scale(.97)}
+.seg__pill{transition:translate 520ms cubic-bezier(.34,1.4,.64,1)}
+
+/* ── view transitions: a change of space is a screen change, not a blink ────────────────────────── */
+#hero-title{view-transition-name:hero-title}
+[data-hero-lede]{view-transition-name:hero-lede}
+.phone--hero{view-transition-name:hero-phone}
+.roles__copy{view-transition-name:roles-copy}
+.phone--roles{view-transition-name:roles-phone}
+.composer__result{view-transition-name:try-result}
+::view-transition-old(*){animation:vt-out 220ms ease both}
+::view-transition-new(*){animation:vt-in 520ms cubic-bezier(.2,.9,.3,1.1) both}
+::view-transition-old(root),::view-transition-new(root){animation:none}
+@keyframes vt-out{to{opacity:0;transform:translateY(-8px) scale(.985)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(12px) scale(.985)}}
+@media (prefers-reduced-motion:reduce){::view-transition-old(*),::view-transition-new(*){animation:none}}
+/* On a phone the hero device is half hidden by the next section, so its button sits mid-screen. */
+@media (max-width:860px){.phone__try{inset-block-end:auto;inset-block-start:46%;padding:11px 18px;font-size:14.5px}}
