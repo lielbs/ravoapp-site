@@ -219,6 +219,11 @@ if (tryApp && appScreen) tryApp.addEventListener('click', () => {
   tilt.classList.add('is-live')
   device?.classList.add('is-live')
   if (closeApp) closeApp.hidden = false
+  /* The whole phone, tab bar included, on screen: scroll just enough to show its bottom. */
+  setTimeout(() => {
+    const over = tilt.getBoundingClientRect().bottom + 24 - innerHeight
+    if (over > 0) scrollBy({ top: over, behavior: still() ? 'auto' : 'smooth' })
+  }, 80)
   /* The app is laid out at 430 points wide, like the phone it is drawn for, and shrunk to fit. */
   const fit = () => {
     const box = holder.getBoundingClientRect(), scale = box.width / 430

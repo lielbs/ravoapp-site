@@ -506,7 +506,9 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 .phone__close svg{inline-size:18px;block-size:18px}
 .phone__close:active{transform:scale(.9)}
 /* On a phone the hero device sinks behind the next section; a live one comes up to be used. */
-@media (max-width:860px){.hero__device:has(.phone.is-live){inline-size:min(300px,80vw);margin-block-end:32px}}
+/* A live phone is used, not admired: it comes all the way out of the hill so its tab bar can be reached. */
+.hero__device.is-live{margin-block-end:40px;inline-size:min(320px,82%,calc((100svh - 180px) * .4614))}
+@media (max-width:860px){.hero__device.is-live{inline-size:min(300px,80vw);margin-block-end:32px}}
 @media (prefers-reduced-motion:reduce){.phone__hand{animation:none}}
 
 /* ── Home or Business: the hero's switch, the office street ─────────────────────────────────────── */
