@@ -73,10 +73,10 @@ if (builder && 'IntersectionObserver' in window) {
     if (!entries.some(entry => entry.isIntersecting)) return
     load.disconnect()
     const style = document.createElement('link')
-    style.rel = 'stylesheet'; style.href = 'assets/builder/house-builder.css'
+    style.rel = 'stylesheet'; style.href = 'assets/builder/house-builder.css?v=20261020b'
     document.head.appendChild(style)
     const code = document.createElement('script')
-    code.src = 'assets/builder/house-builder.js'; code.defer = true
+    code.src = 'assets/builder/house-builder.js?v=20261020b'; code.defer = true
     document.body.appendChild(code)
   }, { rootMargin: '600px 0px' })
   load.observe(builder)
