@@ -8,6 +8,11 @@
  */
 @import url('./styles.css');
 
+/* The reading page's own roles, named on the site's tokens. A link must clear 4.5:1 against the page
+   in both appearances; the site's clay is a decoration colour and does not on the light page. */
+:root{--bg:var(--cream);--subtle:var(--ink-2);--link:#A2482F}
+@media (prefers-color-scheme:dark){:root{--link:var(--clay)}}
+
 body{background:var(--bg);color:var(--ink)}
 /* No sticky glass bar and no scroll-driven anything on a reading page. */
 .legal-header{
@@ -33,7 +38,7 @@ body{background:var(--bg);color:var(--ink)}
 .legal-content li{margin-bottom:8px}
 .legal-content strong{color:var(--ink)}
 .legal-content ul{padding-inline-start:22px;list-style:disc;margin-bottom:18px}
-.legal-content a{color:var(--clay);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.legal-content a{color:var(--link);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .legal-content a:hover{color:var(--ink)}
 /* The opening paragraph, set apart because it is the part most people actually read. */
 .legal-note{

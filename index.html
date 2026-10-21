@@ -6,7 +6,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>RAVO — הבית במקום אחד: משימות, קניות, יומן וחשבונות</title>
-  <meta name="description" content="RAVO מרכז את כל מה שמחזיק בית — משימות, קניות, יומן וחשבונות — במקום אחד שכל בני הבית רואים, כל אחד לפי התפקיד שלו. חינם לאייפון, גם לעסק.">
+  <meta name="description" content="RAVO מרכז את כל מה שמחזיק בית — משימות, קניות, יומן וחשבונות — במקום אחד שכל בני הבית רואים, כל אחד לפי התפקיד שלו. חינם לאייפון ולאייפד, גם לעסק.">
   <link rel="canonical" href="https://ravoapp.app/">
   <meta property="og:type" content="website"><meta property="og:locale" content="he_IL"><meta property="og:site_name" content="RAVO">
   <meta property="og:title" content="RAVO — פחות לנהל אחד את השני. יותר לחיות ביחד.">
@@ -24,7 +24,7 @@
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/rubik-hebrew.woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=20261020j">
+  <link rel="stylesheet" href="styles.css?v=20261021a">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"MobileApplication","name":"RAVO","applicationCategory":"ProductivityApplication","operatingSystem":"iOS 15.0 or later","url":"https://ravoapp.app/","installUrl":"https://apps.apple.com/app/id6807432532","downloadUrl":"https://apps.apple.com/app/id6807432532","image":"https://ravoapp.app/assets/social-preview.png","description":"RAVO מרכז משימות, קניות, יומן וחשבונות במקום אחד שכל בני הבית רואים, כל אחד לפי התפקיד שלו — לבית ולעסק.","inLanguage":["he","en"],"datePublished":"2026-09-17","contentRating":"4+","author":{"@type":"Organization","name":"RAVO"},"offers":{"@type":"Offer","price":"0","priceCurrency":"ILS","availability":"https://schema.org/InStock"}}</script>
 </head>
 <body>
@@ -140,10 +140,10 @@
 
       <div class="wrap hero__grid">
         <div class="hero__copy">
-          <p class="pill rise" style="--i:0"><span class="pill__dot"></span><span data-i18n="heroPill">חינם ב־App Store · לאייפון</span></p>
-          <div class="seg seg--hero rise" style="--i:0" role="tablist" aria-label="מרחב" data-i18n-aria="trySpace" data-mode-seg>
-            <button type="button" role="tab" aria-selected="true" data-mode="home"><span data-i18n="modeHome">לבית</span></button>
-            <button type="button" role="tab" aria-selected="false" data-mode="biz"><span data-i18n="modeBiz">לעסק</span></button>
+          <p class="pill rise" style="--i:0"><span class="pill__dot"></span><span data-i18n="heroPill">חינם ב־App Store · לאייפון ולאייפד</span></p>
+          <div class="seg seg--hero rise" style="--i:0" role="group" aria-label="מרחב" data-i18n-aria="trySpace" data-mode-seg>
+            <button type="button" aria-pressed="true" data-mode="home"><span data-i18n="modeHome">לבית</span></button>
+            <button type="button" aria-pressed="false" data-mode="biz"><span data-i18n="modeBiz">לעסק</span></button>
             <i class="seg__pill" aria-hidden="true"></i>
           </div>
           <div hidden><span data-i18n="heroTitleBiz">פחות מרדפים.<br><em>יותר עבודה שנסגרת.</em></span><span data-i18n="heroLedeBiz">RAVO Business מרכז את מה שמחזיק עסק — משימות לצוות, רכש, תקלות, ספקים ועדכונים — במקום אחד, וכל אחד רואה לפי התפקיד שלו.</span></div>
@@ -171,8 +171,8 @@
       <div class="wrap">
         <div class="head reveal">
           <p class="eyebrow" data-i18n="placeEyebrow">מקום אחד</p>
-          <h2 id="place-title" data-i18n="placeTitle">במקום חמש קבוצות ופתק על המקרר.</h2>
-          <p class="lede" data-i18n="placeLede">כל מה שהבית צריך לזכור יושב במקום אחד, מסונכרן אצל כולם בזמן אמת. מי שהוסיף, מי שקנה ומי שסיים — כולם רואים את אותו הדבר.</p>
+          <h2 id="place-title" data-i18n="placeTitle" data-biz="placeTitleBiz">במקום חמש קבוצות ופתק על המקרר.</h2>
+          <p class="lede" data-i18n="placeLede" data-biz="placeLedeBiz">כל מה שהבית צריך לזכור יושב במקום אחד, מסונכרן אצל כולם בזמן אמת. מי שהוסיף, מי שקנה ומי שסיים — כולם רואים את אותו הדבר.</p>
         </div>
         <ul class="shelf">
           <li class="shelf__item reveal" style="--i:0;--tone:var(--c-tasks)">
@@ -193,7 +193,7 @@
               <g class="aa-drop aa-drop--0"><circle cx="38" cy="62" r="10" fill="#D0503A"/><path d="M38 52 q4 -7 9 -5 q-3 6 -9 5" fill="#7E9B57"/></g>
               <g class="aa-basket"><path d="M22 64 H98 L90 100 Q89 106 83 106 H37 Q31 106 30 100 Z" fill="#C56347"/><path d="M22 64 H98 V71 H22 Z" fill="#A9533C"/><path d="M44 77 V98 M60 77 V98 M76 77 V98" stroke="#E08A6C" stroke-width="4" stroke-linecap="round"/></g>
             </svg>
-            <b data-i18n="aShop">קניות</b><span data-i18n="aShopL">רשימה אחת, אצל כולם</span>
+            <b data-i18n="aShop" data-biz="aShopBiz">קניות</b><span data-i18n="aShopL" data-biz="aShopLBiz">רשימה אחת, אצל כולם</span>
           </li>
           <li class="shelf__item reveal" style="--i:2;--tone:var(--c-cal)">
             <svg class="area-art area-art--calendar" viewBox="0 0 120 120" aria-hidden="true">
@@ -204,7 +204,7 @@
               <g class="aa-page"><rect x="16" y="46" width="72" height="56" fill="#F3EBDD"/><rect x="16" y="90" width="72" height="12" rx="10" fill="#F3EBDD"/></g>
               <g transform="translate(92 80)"><circle r="17" fill="#D4A85A"/><circle r="13" fill="#FBF6EC"/><path class="aa-hand aa-hand--h" d="M0 0 V-7" stroke="#3B4529" stroke-width="2.6" stroke-linecap="round"/><path class="aa-hand aa-hand--m" d="M0 0 V-10" stroke="#C56347" stroke-width="2" stroke-linecap="round"/><circle r="2" fill="#3B4529"/></g>
             </svg>
-            <b data-i18n="aCal">יומן</b><span data-i18n="aCalL">חוגים, תורים וארוחות</span>
+            <b data-i18n="aCal">יומן</b><span data-i18n="aCalL" data-biz="aCalLBiz">חוגים, תורים וארוחות</span>
           </li>
           <li class="shelf__item reveal" style="--i:3;--tone:var(--c-money)">
             <svg class="area-art area-art--bills" viewBox="0 0 120 120" aria-hidden="true">
@@ -214,11 +214,11 @@
               <g class="aa-coin aa-coin--2" transform="translate(0 -18)"><ellipse cx="36" cy="98" rx="20" ry="7" fill="#9A7230"/><rect x="16" y="91" width="40" height="7" fill="#9A7230"/><ellipse cx="36" cy="91" rx="20" ry="7" fill="#D4A85A"/></g>
               <g class="aa-paid" transform="translate(94 22)"><circle r="13" fill="#7E9B57"/><path d="M-5.5 0.5 L-1.5 4.5 L6 -4" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
             </svg>
-            <b data-i18n="aBills">חשבונות</b><span data-i18n="aBillsL">מה שולם ומה ממתין</span>
+            <b data-i18n="aBills" data-biz="aBillsBiz">חשבונות</b><span data-i18n="aBillsL" data-biz="aBillsLBiz">מה שולם ומה ממתין</span>
           </li>
           <li class="shelf__item reveal" style="--i:4;--tone:var(--c-people)">
             <span class="faces" aria-hidden="true"><i style="--c:#2F6B57">ל</i><i style="--c:#A2482F">נ</i><i style="--c:#3D6077">ד</i><i style="--c:#6E4A7E">מ</i></span>
-            <b data-i18n="aPeople">בני הבית</b><span data-i18n="aPeopleL">כל אחד לפי התפקיד שלו</span>
+            <b data-i18n="aPeople" data-biz="aPeopleBiz">בני הבית</b><span data-i18n="aPeopleL">כל אחד לפי התפקיד שלו</span>
           </li>
         </ul>
       </div>
@@ -230,58 +230,59 @@
         <div class="story__stage" aria-hidden="true">
           <div class="story__orb"></div>
           <div class="phone phone--story">
-            <picture class="is-on" data-shot="tasks" data-for="tasks"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/tasks.webp"><img src="assets/screens/he/light/tasks.webp" width="720" height="1560" alt="" loading="lazy"></picture>
-            <picture data-shot="shopping" data-for="shopping"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/shopping.webp"><img src="assets/screens/he/light/shopping.webp" width="720" height="1560" alt="" loading="lazy"></picture>
-            <picture data-shot="calendar" data-for="calendar"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/calendar.webp"><img src="assets/screens/he/light/calendar.webp" width="720" height="1560" alt="" loading="lazy"></picture>
-            <picture data-shot="money" data-for="money"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/money.webp"><img src="assets/screens/he/light/money.webp" width="720" height="1560" alt="" loading="lazy"></picture>
+            <picture class="is-on" data-shot="tasks" data-for="tasks" data-biz-shot="biz-tasks"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/tasks.webp"><img src="assets/screens/he/light/tasks.webp" width="720" height="1560" alt="" loading="lazy"></picture>
+            <picture data-shot="shopping" data-for="shopping" data-biz-shot="procurement"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/shopping.webp"><img src="assets/screens/he/light/shopping.webp" width="720" height="1560" alt="" loading="lazy"></picture>
+            <picture data-shot="calendar" data-for="calendar" data-biz-shot="biz-calendar"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/calendar.webp"><img src="assets/screens/he/light/calendar.webp" width="720" height="1560" alt="" loading="lazy"></picture>
+            <picture data-shot="money" data-for="money" data-biz-shot="maintenance"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/money.webp"><img src="assets/screens/he/light/money.webp" width="720" height="1560" alt="" loading="lazy"></picture>
           </div>
         </div>
 
         <div class="story__chapters">
+          <div hidden><span data-i18n="lookEyebrowBiz">העסק שלכם</span><span data-i18n="lookTitleBiz">העסק שלכם, עם השם שלכם.</span><span data-i18n="lookLedeBiz">בוחרים צבע, ושם העסק עולה על השלט מעל הבניין. בערב נדלק האור בחלונות.</span><span data-i18n="placeTitleBiz">במקום קבוצת וואטסאפ של הצוות ופתק על הדלפק.</span><span data-i18n="placeLedeBiz">כל מה שהעסק צריך לזכור יושב במקום אחד, מסונכרן אצל כל הצוות בזמן אמת. מי שפתח, מי שהזמין ומי שסגר — כולם רואים את אותו הדבר.</span><span data-i18n="aShopBiz">רכש</span><span data-i18n="aShopLBiz">רשימה אחת לכל העסק</span><span data-i18n="aCalLBiz">ישיבות, ספקים ואירועים</span><span data-i18n="aBillsBiz">הוצאות</span><span data-i18n="aBillsLBiz">מה יצא ומה ממתין</span><span data-i18n="aPeopleBiz">הצוות</span><span data-i18n="bTitleBiz">משימות לצוות, בלי לרדוף אחרי אף אחד.</span><span data-i18n="bLedeBiz">לכל משימה יש אחראי ומועד. מי שקיבל אותה מקבל תזכורת בזמן, ומי שסיים מסמן — וכל הצוות רואה שזה נעשה.</span><span data-i18n="bRow1Biz">לאשר הזמנת טונר · 10:30</span><span data-i18n="bRow2Biz">להכין חדר ישיבות · 12:00</span><span data-i18n="bRow3Biz">בדיקת תקלה במדפסת</span><span data-i18n="cEyebrowBiz">רכש</span><span data-i18n="cTitleBiz">מישהו סימן שחסר טונר. זה כבר ברשימת הרכש.</span><span data-i18n="cLedeBiz">רשימת רכש אחת לכל העסק, מסודרת לפי תחומים. מי שמטפל ברכש מסמן מה הוזמן, וכל הצוות רואה בזמן אמת מה עוד חסר.</span><span data-i18n="cRow1Biz">חלב</span><span data-i18n="cRow2Biz">נייר למדפסת</span><span data-i18n="cRow3Biz">טונר שחור</span><span data-i18n="cDept1Biz">מטבחון</span><span data-i18n="cDept2Biz">ציוד משרדי</span><span data-i18n="cDept3Biz">מחשוב ואלקטרוניקה</span><span data-i18n="dTitleBiz">ב־08:30 בבוקר, כל אחד בצוות יודע מה שלו.</span><span data-i18n="dLedeBiz">ישיבות, ביקורי ספקים ואירועים ביומן משותף, עם תזכורת לפני. ובימים שיש מה לדעת, RAVO שולח בבוקר לכל אחד בצוות הודעה קצרה עם מה שמחכה לו היום — רק מה שהתפקיד שלו מאפשר לראות.</span><span data-i18n="dParentBiz">בוקר טוב ליאל ☀️</span><span data-i18n="dParent1Biz">📅 ישיבת צוות שבועית ב־10:00</span><span data-i18n="dParent2Biz">🔧 תקלה פתוחה: המדפסת לא מושכת נייר</span><span data-i18n="dChildBiz">בוקר טוב מריה ☀️</span><span data-i18n="dChild1Biz">✅ להכין חדר ישיבות</span><span data-i18n="eEyebrowBiz">תקלות ותחזוקה</span><span data-i18n="eTitleBiz">משהו התקלקל? כולם יודעים מי מטפל.</span><span data-i18n="eLedeBiz">מדווחים על תקלה עם רמת דחיפות, משייכים אחראי או ספק, ורואים מה פתוח, מה בטיפול ומה נסגר. הוצאות העסק נשמרות בנפרד, רק למי שמורשה לראות אותן.</span><span data-i18n="eIcoBiz">🔧</span><span data-i18n="eBillBiz">המדפסת לא מושכת נייר</span><span data-i18n="eDueBiz">נפתחה היום · דחיפות גבוהה</span><span data-i18n="ePaidBiz">בטיפול · מריה</span><span data-i18n="eLockBiz">ספק: קלין פלוס</span><span data-i18n="trustTitleBiz">המידע של העסק שלכם<br><em>הוא לא המוצר.</em></span><span data-i18n="altTasksBiz">מסך המשימות של RAVO Business: משימות הצוות, עם האחראי לכל אחת</span><span data-i18n="altShoppingBiz">רשימת הרכש של RAVO Business, מסודרת לפי תחומים</span><span data-i18n="altCalendarBiz">היומן של העסק ב־RAVO: ישיבות וביקורי ספקים</span><span data-i18n="altMoneyBiz">תקלות ותחזוקה ב־RAVO Business: מה פתוח, מה בטיפול ומי מטפל</span></div>
           <article class="chapter" data-chapter="tasks" style="--tone:var(--c-tasks)" aria-labelledby="ch-tasks">
             <p class="eyebrow" data-i18n="bEyebrow">משימות</p>
-            <h2 id="ch-tasks" data-i18n="bTitle">משימות, בלי לרדוף אחרי אף אחד.</h2>
-            <p class="lede" data-i18n="bLede">לכל משימה יש אחראי ומועד. מי שקיבל אותה מקבל תזכורת בזמן, ומי שסיים מסמן — וכולם רואים שזה נעשה.</p>
+            <h2 id="ch-tasks" data-i18n="bTitle" data-biz="bTitleBiz">משימות, בלי לרדוף אחרי אף אחד.</h2>
+            <p class="lede" data-i18n="bLede" data-biz="bLedeBiz">לכל משימה יש אחראי ומועד. מי שקיבל אותה מקבל תזכורת בזמן, ומי שסיים מסמן — וכולם רואים שזה נעשה.</p>
             <ul class="mini mini--tasks" aria-hidden="true">
-              <li style="--i:0"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="bRow1">להוציא את הכלב</span><em class="who" style="--c:#2F6B57">ל</em></li>
-              <li style="--i:1"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="bRow2">לאסוף את דניאל מהחוג · 16:30</span><em class="who" style="--c:#A2482F">נ</em></li>
-              <li style="--i:2"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="bRow3">להחליף מצעים · כל שבוע</span><em class="who" style="--c:#3D6077">ד</em></li>
+              <li style="--i:0"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="bRow1" data-biz="bRow1Biz">להוציא את הכלב</span><em class="who" style="--c:#2F6B57">ל</em></li>
+              <li style="--i:1"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="bRow2" data-biz="bRow2Biz">לאסוף את דניאל מהחוג · 16:30</span><em class="who" style="--c:#A2482F">נ</em></li>
+              <li style="--i:2"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="bRow3" data-biz="bRow3Biz">להחליף מצעים · כל שבוע</span><em class="who" style="--c:#3D6077">ד</em></li>
             </ul>
-            <picture class="chapter__phone" data-shot="tasks"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/tasks.webp"><img src="assets/screens/he/light/tasks.webp" width="720" height="1560" alt="מסך המשימות של RAVO: משימות הבית לפי יום, עם האחראי לכל אחת" data-i18n-alt="altTasks" loading="lazy"></picture>
+            <picture class="chapter__phone" data-shot="tasks" data-biz-shot="biz-tasks"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/tasks.webp"><img src="assets/screens/he/light/tasks.webp" width="720" height="1560" alt="מסך המשימות של RAVO: משימות הבית לפי יום, עם האחראי לכל אחת" data-i18n-alt="altTasks" data-biz-alt="altTasksBiz" loading="lazy"></picture>
           </article>
 
           <article class="chapter" data-chapter="shopping" style="--tone:var(--c-shop)" aria-labelledby="ch-shop">
-            <p class="eyebrow" data-i18n="cEyebrow">קניות</p>
-            <h2 id="ch-shop" data-i18n="cTitle">מישהו הוסיף חלב. זה כבר אצלכם בסופר.</h2>
-            <p class="lede" data-i18n="cLede">רשימה אחת לכל הבית, מסודרת לפי מחלקות. מי שבסופר מסמן מה נכנס לסל, ומי שנשאר בבית רואה בזמן אמת מה כבר נלקח.</p>
+            <p class="eyebrow" data-i18n="cEyebrow" data-biz="cEyebrowBiz">קניות</p>
+            <h2 id="ch-shop" data-i18n="cTitle" data-biz="cTitleBiz">מישהו הוסיף חלב. זה כבר אצלכם בסופר.</h2>
+            <p class="lede" data-i18n="cLede" data-biz="cLedeBiz">רשימה אחת לכל הבית, מסודרת לפי מחלקות. מי שבסופר מסמן מה נכנס לסל, ומי שנשאר בבית רואה בזמן אמת מה כבר נלקח.</p>
             <ul class="mini mini--shop" aria-hidden="true">
-              <li style="--i:0"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="cRow1">חלב</span><small data-i18n="cDept1">מוצרי חלב</small></li>
-              <li style="--i:1"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="cRow2">עגבניות</span><small data-i18n="cDept2">ירקות ופירות</small></li>
-              <li style="--i:2"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="cRow3">לחם מלא</span><small data-i18n="cDept3">מאפייה</small></li>
+              <li style="--i:0"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="cRow1" data-biz="cRow1Biz">חלב</span><small data-i18n="cDept1" data-biz="cDept1Biz">מוצרי חלב</small></li>
+              <li style="--i:1"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="cRow2" data-biz="cRow2Biz">עגבניות</span><small data-i18n="cDept2" data-biz="cDept2Biz">ירקות ופירות</small></li>
+              <li style="--i:2"><i class="mini__tick"><svg><use href="#i-check"/></svg></i><span data-i18n="cRow3" data-biz="cRow3Biz">לחם מלא</span><small data-i18n="cDept3" data-biz="cDept3Biz">מאפייה</small></li>
             </ul>
-            <picture class="chapter__phone" data-shot="shopping"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/shopping.webp"><img src="assets/screens/he/light/shopping.webp" width="720" height="1560" alt="רשימת הקניות של RAVO, מסודרת לפי מחלקות" data-i18n-alt="altShopping" loading="lazy"></picture>
+            <picture class="chapter__phone" data-shot="shopping" data-biz-shot="procurement"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/shopping.webp"><img src="assets/screens/he/light/shopping.webp" width="720" height="1560" alt="רשימת הקניות של RAVO, מסודרת לפי מחלקות" data-i18n-alt="altShopping" data-biz-alt="altShoppingBiz" loading="lazy"></picture>
           </article>
 
           <article class="chapter" data-chapter="calendar" style="--tone:var(--c-cal)" aria-labelledby="ch-cal">
             <p class="eyebrow" data-i18n="dEyebrow">יומן ובריף בוקר</p>
-            <h2 id="ch-cal" data-i18n="dTitle">כל בוקר ב־08:30, כל אחד יודע מה שלו.</h2>
-            <p class="lede" data-i18n="dLede">חוגים, תורים וארוחות ביומן משותף, עם תזכורת לפני. ובבוקר RAVO שולח לכל אחד הודעה אחת קצרה עם מה שמחכה לו היום — רק מה שהתפקיד שלו מאפשר לראות.</p>
+            <h2 id="ch-cal" data-i18n="dTitle" data-biz="dTitleBiz">ב־08:30 בבוקר, כל אחד יודע מה שלו.</h2>
+            <p class="lede" data-i18n="dLede" data-biz="dLedeBiz">חוגים, תורים וארוחות ביומן משותף, עם תזכורת לפני. ובימים שיש מה לדעת, RAVO שולח בבוקר לכל אחד הודעה קצרה עם מה שמחכה לו היום — רק מה שהתפקיד שלו מאפשר לראות.</p>
             <div class="notes" aria-hidden="true">
-              <div class="note" style="--i:0"><div class="note__top"><img src="logo.svg" width="18" height="18" alt=""><b>RAVO</b><span data-i18n="dNow">עכשיו</span></div><strong data-i18n="dParent">בוקר טוב נועה ☀️</strong><p data-i18n="dParent1">📅 חוג ג׳ודו של דניאל ב־16:30</p><p data-i18n="dParent2">💳 חשבון חשמל לתשלום עד חמישי</p></div>
-              <div class="note" style="--i:1"><div class="note__top"><img src="logo.svg" width="18" height="18" alt=""><b>RAVO</b><span data-i18n="dNow">עכשיו</span></div><strong data-i18n="dChild">בוקר טוב דניאל ☀️</strong><p data-i18n="dChild1">✅ להאכיל את הדגים</p></div>
+              <div class="note" style="--i:0"><div class="note__top"><img src="logo.svg" width="18" height="18" alt=""><b>RAVO</b><span data-i18n="dNow">עכשיו</span></div><strong data-i18n="dParent" data-biz="dParentBiz">בוקר טוב נועה ☀️</strong><p data-i18n="dParent1" data-biz="dParent1Biz">📅 חוג ג׳ודו של דניאל ב־16:30</p><p data-i18n="dParent2" data-biz="dParent2Biz">💳 חשבון חשמל לתשלום עד חמישי</p></div>
+              <div class="note" style="--i:1"><div class="note__top"><img src="logo.svg" width="18" height="18" alt=""><b>RAVO</b><span data-i18n="dNow">עכשיו</span></div><strong data-i18n="dChild" data-biz="dChildBiz">בוקר טוב דניאל ☀️</strong><p data-i18n="dChild1" data-biz="dChild1Biz">✅ להאכיל את הדגים</p></div>
             </div>
-            <picture class="chapter__phone" data-shot="calendar"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/calendar.webp"><img src="assets/screens/he/light/calendar.webp" width="720" height="1560" alt="יומן הבית של RAVO: אירועי השבוע של כל המשפחה" data-i18n-alt="altCalendar" loading="lazy"></picture>
+            <picture class="chapter__phone" data-shot="calendar" data-biz-shot="biz-calendar"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/calendar.webp"><img src="assets/screens/he/light/calendar.webp" width="720" height="1560" alt="יומן הבית של RAVO: אירועי השבוע של כל המשפחה" data-i18n-alt="altCalendar" data-biz-alt="altCalendarBiz" loading="lazy"></picture>
           </article>
 
           <article class="chapter" data-chapter="money" style="--tone:var(--c-money)" aria-labelledby="ch-money">
-            <p class="eyebrow" data-i18n="eEyebrow">חשבונות והוצאות</p>
-            <h2 id="ch-money" data-i18n="eTitle">גם הכסף של הבית, ברור.</h2>
-            <p class="lede" data-i18n="eLede">חשבונות עם סכום ומועד, תזכורת לפני שהם מגיעים, הוצאות החודש והוראות קבע. מי שמסמן ששולם — כולם יודעים, ואף אחד לא משלם פעמיים.</p>
+            <p class="eyebrow" data-i18n="eEyebrow" data-biz="eEyebrowBiz">חשבונות והוצאות</p>
+            <h2 id="ch-money" data-i18n="eTitle" data-biz="eTitleBiz">גם הכסף של הבית, ברור.</h2>
+            <p class="lede" data-i18n="eLede" data-biz="eLedeBiz">חשבונות עם סכום ומועד, תזכורת לפני שהם מגיעים, הוצאות החודש והוראות קבע. מי שמסמן ששולם — כולם יודעים, ואף אחד לא משלם פעמיים.</p>
             <div class="bill" aria-hidden="true">
-              <div class="bill__row"><span class="bill__ico">⚡</span><span><b data-i18n="eBill">חשמל</b><small data-i18n="eDue">עד יום חמישי</small></span><strong dir="ltr">₪428</strong></div>
-              <div class="bill__state"><span class="bill__paid"><svg><use href="#i-check"/></svg><span data-i18n="ePaid">שולם</span></span><span class="bill__lock"><svg><use href="#i-lock"/></svg><span data-i18n="eLock">רק להורים</span></span></div>
+              <div class="bill__row"><span class="bill__ico" data-i18n="eIco" data-biz="eIcoBiz">⚡</span><span><b data-i18n="eBill" data-biz="eBillBiz">חשמל</b><small data-i18n="eDue" data-biz="eDueBiz">עד יום חמישי</small></span><strong dir="ltr">₪428</strong></div>
+              <div class="bill__state"><span class="bill__paid"><svg><use href="#i-check"/></svg><span data-i18n="ePaid" data-biz="ePaidBiz">שולם</span></span><span class="bill__lock"><svg><use href="#i-lock"/></svg><span data-i18n="eLock" data-biz="eLockBiz">רק להורים</span></span></div>
             </div>
-            <picture class="chapter__phone" data-shot="money"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/money.webp"><img src="assets/screens/he/light/money.webp" width="720" height="1560" alt="כספי הבית ב־RAVO: חשבונות לתשלום והוצאות החודש" data-i18n-alt="altMoney" loading="lazy"></picture>
+            <picture class="chapter__phone" data-shot="money" data-biz-shot="maintenance"><source media="(prefers-color-scheme: dark)" srcset="assets/screens/he/money.webp"><img src="assets/screens/he/light/money.webp" width="720" height="1560" alt="כספי הבית ב־RAVO: חשבונות לתשלום והוצאות החודש" data-i18n-alt="altMoney" data-biz-alt="altMoneyBiz" loading="lazy"></picture>
           </article>
         </div>
       </div>
@@ -291,9 +292,9 @@
     <section class="section looks-band" id="your-home" aria-labelledby="look-title">
       <div class="wrap">
         <div class="head reveal">
-          <p class="eyebrow" data-i18n="lookEyebrow">הבית שלכם</p>
-          <h2 id="look-title" data-i18n="lookTitle">הבית שלכם, עם השם שלכם.</h2>
-          <p class="lede" data-i18n="lookLede">בוחרים צבע, בית או בניין, מה גדל בחצר ומי יושב ליד הדלת — והשם שלכם על השלט. בערב נדלק האור בחלונות.</p>
+          <p class="eyebrow" data-i18n="lookEyebrow" data-biz="lookEyebrowBiz">הבית שלכם</p>
+          <h2 id="look-title" data-i18n="lookTitle" data-biz="lookTitleBiz">הבית שלכם, עם השם שלכם.</h2>
+          <p class="lede" data-i18n="lookLede" data-biz="lookLedeBiz">בוחרים צבע, בית או בניין, מה גדל בחצר ומי יושב ליד הדלת — והשם שלכם על השלט. בערב נדלק האור בחלונות.</p>
         </div>
         <!-- The playable picture loads here when the section comes into view; the three photographs
              below are what shows until then, and without scripts. -->
@@ -341,9 +342,9 @@
           <p class="lede" data-i18n="rolesLede">מזמינים את מי שצריך ובוחרים לו תפקיד. ההרשאות נאכפות בשרת, לא רק במסך: ילדים לא רואים חשבונות, ועובדים לא רואים הוצאות.</p>
         </div>
         <div class="roles__card reveal">
-          <div class="seg seg--big" role="tablist" aria-label="מרחב" data-i18n-aria="trySpace">
-            <button type="button" role="tab" aria-selected="true" data-tab="home">RAVO Home</button>
-            <button type="button" role="tab" aria-selected="false" data-tab="biz">RAVO Business</button>
+          <div class="seg seg--big" role="group" aria-label="מרחב" data-i18n-aria="trySpace">
+            <button type="button" aria-pressed="true" data-tab="home">RAVO Home</button>
+            <button type="button" aria-pressed="false" data-tab="biz">RAVO Business</button>
             <i class="seg__pill" aria-hidden="true"></i>
           </div>
           <div class="roles__body">
@@ -363,10 +364,10 @@
       <div class="wrap">
         <div class="head reveal">
           <p class="eyebrow" data-i18n="trustEyebrow">פרטיות</p>
-          <h2 id="trust-title" data-i18n="trustTitle">המידע של הבית שלכם<br><em>הוא לא המוצר.</em></h2>
+          <h2 id="trust-title" data-i18n="trustTitle" data-biz="trustTitleBiz">המידע של הבית שלכם<br><em>הוא לא המוצר.</em></h2>
         </div>
         <ul class="trust__list">
-          <li class="reveal" style="--i:0"><span class="trust__icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><b data-i18n="t1t">כל אחד רואה את מה שלו</b><span data-i18n="t1">כל מרחב פרטי לחברים שלו, וכל אחד רואה רק מה שהתפקיד שלו מאפשר. ההרשאות נאכפות בשרת.</span></li>
+          <li class="reveal" style="--i:0"><span class="trust__icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><b data-i18n="t1t">כל אחד רואה את מה שלו</b><span data-i18n="t1">מרחב אחר לא רואה את שלכם, ובתוך המרחב כל אחד רואה רק מה שהתפקיד שלו מאפשר. ההרשאות נאכפות בשרת.</span></li>
           <li class="reveal" style="--i:1"><span class="trust__icon"><svg aria-hidden="true"><use href="#i-noads"/></svg></span><b data-i18n="t2t">בלי פרסומות</b><span data-i18n="t2">לא מוכרים מידע ולא מציגים מודעות. התוכן משמש רק להפעלת השירות.</span></li>
           <li class="reveal" style="--i:2"><span class="trust__icon"><svg aria-hidden="true"><use href="#i-trash"/></svg></span><b data-i18n="t3t">מחיקה בהקשה</b><span data-i18n="t3">מוחקים את החשבון מההגדרות, והוא נמחק מיד.</span></li>
         </ul>
@@ -384,7 +385,7 @@
           <details><summary data-i18n="q4">מה העוזר עושה?</summary><p data-i18n="a4">העוזר מציף משימות שנתקעו או נשארו בלי אחראי, חשבונות שמועדם מתקרב, תקלות דחופות, כפילויות ואירועים חופפים — ומציע את הצעד הבא. הוא לא משנה ולא מוחק שום דבר בעצמו.</p></details>
           <details><summary data-i18n="q5">מה ילדים או עובדים רואים?</summary><p data-i18n="a5">רק את מה שהתפקיד שלהם מאפשר. בבית, ילדים לא רואים חשבונות וסכומים. בעסק, עובדים לא רואים הוצאות ומידע ניהולי.</p></details>
           <details><summary data-i18n="q6">איך עובדות התזכורות?</summary><p data-i18n="a6">משימה עם שעה מזכירה בשעה שלה, חשבון כמה ימים לפני המועד, ואירוע שעה לפני. בהגדרות בוחרים איזה סוג התראה מצלצל.</p></details>
-          <details><summary data-i18n="q7">על אילו מכשירים זה עובד?</summary><p data-i18n="a7">RAVO זמין כרגע לאייפון, בעברית ובאנגלית.</p></details>
+          <details><summary data-i18n="q7">על אילו מכשירים זה עובד?</summary><p data-i18n="a7">RAVO זמין כרגע לאייפון ולאייפד, בעברית ובאנגלית.</p></details>
           <details><summary data-i18n="q8">איפה נשמר המידע?</summary><p data-i18n="a8">אצל ספק התשתית Supabase, בשרתים בסיאול שבדרום קוריאה, והתקשורת והאחסון מוצפנים (לא מקצה לקצה). באפליקציה, רק חברי המרחב רואים אותו, כל אחד לפי התפקיד שלו; למפעיל ולספקי התשתית יש גישה טכנית מוגבלת לצורכי תפעול ואבטחה בלבד. הפרטים המלאים ב<a href="privacy/">מדיניות הפרטיות</a>.</p></details>
         </div>
       </div>
@@ -426,7 +427,7 @@
         <h2 id="finale-title" data-i18n="finaleTitle">הבית מסתדר.<br><em>אתם נושמים.</em></h2>
         <p class="lede" data-i18n="finaleLede">מורידים, פותחים בית או עסק, ומזמינים את מי שצריך. לוקח דקה.</p>
         <a class="store-badge store-badge--big" href="https://apps.apple.com/app/id6807432532" data-store-link aria-label="Download RAVO on the App Store"><svg class="store-badge__mark" aria-hidden="true"><use href="#apple"/></svg><span class="store-badge__text"><small data-i18n="downloadOn">להורדה ב־</small><strong>App Store</strong></span></a>
-        <p class="fine" data-i18n="finaleNote">RAVO זמין כרגע בחינם · לאייפון</p>
+        <p class="fine" data-i18n="finaleNote">RAVO זמין כרגע בחינם · לאייפון ולאייפד</p>
       </div>
     </section>
   </main>
@@ -454,7 +455,7 @@
     </div>
     <p class="wrap footer__fine">© <span data-year></span> RAVO <span data-i18n="rights">· כל הזכויות שמורות</span></p>
   </footer>
-  <script src="copy.js?v=20261020j" defer></script>
-  <script src="script.js?v=20261020j" type="module"></script>
+  <script src="copy.js?v=20261021a" defer></script>
+  <script src="script.js?v=20261021a" type="module"></script>
 </body>
 </html>

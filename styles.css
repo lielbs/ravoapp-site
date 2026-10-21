@@ -23,7 +23,7 @@
   --clay:#C56347; --sand:#B98B3E;
   --cream:#F3F1EA; --surface:#FFFFFF; --surface-2:#F8F6F0; --surface-3:#EFEDE5;
   --line:rgba(60,56,40,.12); --line-strong:rgba(60,56,40,.2);
-  --ink:#1F221C; --ink-2:#5E6355; --ink-3:#8B8F82; --paper:#F6F4EF; --muted:var(--ink-2);
+  --ink:#1F221C; --ink-2:#5E6355; --ink-3:#6A6E61; --paper:#F6F4EF; --muted:var(--ink-2);
   --action:var(--brand); --on-action:#FFF;
   --c-tasks:#6F8C4A; --c-shop:#C56347; --c-cal:#4F8A7E; --c-money:#B98B3E; --c-people:#7C7FB8;
   --glass:rgba(252,251,247,.72); --glass-edge:inset 0 .5px 0 rgba(255,255,255,.7);
@@ -43,7 +43,7 @@
     --brand:#9BAA72; --brand-strong:#B7C38F; --brand-soft:#29301F; --sage:#9BAA72; --clay:#E0A088;
     --cream:#10120F; --surface:#181B17; --surface-2:#21251E; --surface-3:#2A2F26;
     --line:rgba(255,255,255,.08); --line-strong:rgba(255,255,255,.14);
-    --ink:#F1F0EA; --ink-2:#A7AA9C; --ink-3:#7C8073;
+    --ink:#F1F0EA; --ink-2:#A7AA9C; --ink-3:#8A8E80;
     --action:#9BAA72; --on-action:#10120F;
     --glass:rgba(28,31,26,.66); --glass-edge:inset 0 .5px 0 rgba(255,255,255,.12);
     --e2:0 0 0 .5px var(--line),0 14px 30px -18px rgba(0,0,0,.7);
@@ -266,7 +266,7 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 .js .mini li{opacity:0}
 .js .chapter.is-in .mini li{animation:rise 700ms var(--spring) calc(var(--i) * 120ms) both}
 .mini span{flex:1;min-inline-size:0}
-.mini small{color:var(--ink-3);font-size:13px;font-weight:600}
+.mini small{color:var(--ink-2);font-size:13px;font-weight:600}
 .mini__tick{display:grid;place-items:center;flex:none;inline-size:26px;block-size:26px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--line-strong);color:transparent}
 .mini__tick svg{inline-size:15px;block-size:15px}
 .chapter.is-in .mini li:nth-child(-n+2) .mini__tick{animation:tick 600ms var(--spring-bounce) calc(1.1s + var(--i) * .7s) both}
@@ -276,7 +276,7 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 .note{padding:14px 16px;border-radius:22px;background:var(--surface);box-shadow:var(--e2)}
 .js .note{opacity:0}
 .js .chapter.is-in .note{animation:note-in 800ms var(--spring-bounce) calc(var(--i) * 450ms + 200ms) both}
-.note__top{display:flex;align-items:center;gap:7px;margin-block-end:4px;color:var(--ink-3);font-size:12.5px;font-weight:650}
+.note__top{display:flex;align-items:center;gap:7px;margin-block-end:4px;color:var(--ink-2);font-size:13px;font-weight:650}
 .note__top img{border-radius:5px}
 .note__top b{color:var(--ink-2)}
 .note__top span{margin-inline-start:auto}
@@ -293,7 +293,7 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 .bill__state{display:flex;gap:8px;flex-wrap:wrap}
 .bill__state > span{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:13.5px;font-weight:700}
 .bill__state svg{inline-size:15px;block-size:15px}
-.bill__paid{background:var(--surface-3);color:var(--ink-3)}
+.bill__paid{background:var(--surface-3);color:var(--ink-2)}
 .chapter.is-in .bill__paid{animation:paid 600ms var(--spring-bounce) 1.4s both}
 .bill__lock{background:color-mix(in srgb,var(--c-money) 14%,transparent);color:var(--sand)}
 
@@ -316,7 +316,7 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 .composer{padding:18px;border-radius:var(--r-2xl);background:var(--surface);color:var(--ink);box-shadow:0 40px 80px -36px rgba(0,0,0,.6)}
 .seg{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:var(--surface-3)}
 .seg button{position:relative;z-index:1;min-block-size:40px;border-radius:999px;font-size:14.5px;font-weight:700;color:var(--ink-2);transition:color 250ms ease}
-.seg button:is([aria-checked='true'],[aria-selected='true']){color:var(--ink)}
+.seg button:is([aria-checked='true'],[aria-selected='true'],[aria-pressed='true']){color:var(--ink)}
 .seg__pill{position:absolute;inset-block:4px;inset-inline-start:4px;inline-size:calc(50% - 4px);border-radius:999px;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.14);transition:translate 450ms var(--spring)}
 .seg[data-at='1'] .seg__pill{translate:100% 0}
 [dir='rtl'] .seg[data-at='1'] .seg__pill{translate:-100% 0}
@@ -368,7 +368,7 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 .trust__icon{display:grid;place-items:center;inline-size:46px;block-size:46px;border-radius:15px;background:var(--brand-soft);color:var(--brand)}
 .trust__icon svg{inline-size:22px;block-size:22px}
 .trust__list b{margin-block-start:6px;font-family:var(--display);font-size:19px;font-weight:700}
-.trust__list span{color:var(--ink-2);font-size:15.5px;line-height:1.55}
+.trust__list span{color:var(--ink-2);font-size:16px;line-height:1.55}
 @media (max-width:860px){.trust__list{grid-template-columns:1fr}}
 
 /* ── FAQ ────────────────────────────────────────────────────────────────────────────────────── */
@@ -514,7 +514,7 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 /* ── Home or Business: the hero's switch, the office street ─────────────────────────────────────── */
 .seg--hero{inline-size:min(260px,100%);margin-block:6px 18px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .seg--hero button{color:rgba(246,244,239,.8);min-block-size:42px;font-size:15px}
-.seg--hero button[aria-selected='true']{color:#1E2418}
+.seg--hero button[aria-pressed='true']{color:#1E2418}
 .seg--hero .seg__pill{background:#F6F4EF;box-shadow:0 6px 16px -6px rgba(0,0,0,.45)}
 .hero .city{opacity:0;pointer-events:none;transition:opacity 500ms ease,translate 700ms var(--spring);translate:0 18px}
 .hero .house{transition:opacity 500ms ease,translate 700ms var(--spring)}
@@ -559,3 +559,6 @@ a,button,[role='tab'],[role='radio']{-webkit-tap-highlight-color:transparent}
 .house .sign-text{fill:var(--sky-sign-ink,#F6EBD9);font-family:var(--display,inherit)}
 :is(.hero,.finale):is([data-part='dusk'],[data-part='night']) .house .lamp{fill:#FFE7B0}
 :is(.hero,.finale)[data-part='night'] .house{--sky-wall:#8A8072;--sky-trim:#B8AE9C;--sky-sill:#8E826F;--sky-stone:#6F6556;--sky-leaf-deep:#2E3D1E;--sky-sign-wood:#4E3A27;--sky-sign-edge:#6E553A;--sky-sign-ink:#E9DCC6;--sky-roof-fill:#7E3E2E;--sky-chimney:#5E3326}
+
+/* ── Business: a fault card, not a bill ─────────────────────────────────────────────────────── */
+:root[data-mode='biz'] .bill__row strong,:root[data-mode='biz'] .bill__lock svg{display:none}

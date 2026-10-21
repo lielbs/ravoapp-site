@@ -13,6 +13,12 @@ const COPY = window.RAVO_COPY ?? { en: {}, scenes: {} }
 const SCENES = COPY.scenes ?? {}
 const reduced = matchMedia('(prefers-reduced-motion: reduce)')
 const still = () => reduced.matches
+/* A view transition is skipped when the tab is hidden or another one starts; the change itself still
+   happens, so the rejected promises are expected and need no report. */
+const morph = update => {
+  const transition = document.startViewTransition(update)
+  transition.ready.catch(() => {})
+}
 const $ = (selector, scope = document) => scope.querySelector(selector)
 const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)]
 const el = (tag, className, text) => {
@@ -73,10 +79,10 @@ if (builder && 'IntersectionObserver' in window) {
     if (!entries.some(entry => entry.isIntersecting)) return
     load.disconnect()
     const style = document.createElement('link')
-    style.rel = 'stylesheet'; style.href = 'assets/builder/house-builder.css?v=20261020i'
+    style.rel = 'stylesheet'; style.href = 'assets/builder/house-builder.css?v=20261021b'
     document.head.appendChild(style)
     const code = document.createElement('script')
-    code.src = 'assets/builder/house-builder.js?v=20261020i'; code.defer = true
+    code.src = 'assets/builder/house-builder.js?v=20261021b'; code.defer = true
     document.body.appendChild(code)
   }, { rootMargin: '600px 0px' })
   load.observe(builder)
@@ -128,7 +134,16 @@ $$('.reveal').forEach(node => revealWatch.observe(node))
 
 const sticky = $('[data-sticky-cta]')
 let heroGone = false, finaleHere = false
-const paintSticky = () => sticky.classList.toggle('show', heroGone && !finaleHere)
+let playing = 0
+const paintSticky = () => sticky.classList.toggle('show', heroGone && !finaleHere && playing === 0)
+/* The house builder and the Quick Add try are worked with a thumb at the bottom of the screen; a
+   button floating over their last row would be pressed by accident or hide the choice. */
+const playWatch = new IntersectionObserver(entries => {
+  for (const entry of entries) entry.target.dataset.inView = entry.isIntersecting ? '1' : ''
+  playing = $$('#your-home, #try').filter(section => section.dataset.inView === '1').length
+  paintSticky()
+}, { rootMargin: '-15% 0px -15% 0px' })
+$$('#your-home, #try').forEach(section => playWatch.observe(section))
 new IntersectionObserver(([entry]) => { heroGone = !entry.isIntersecting; paintSticky() }).observe($('.hero .cta-row'))
 new IntersectionObserver(([entry]) => { finaleHere = entry.isIntersecting; paintSticky() }).observe($('.finale'))
 
@@ -327,7 +342,7 @@ function paintExamples() {
 }
 function setTrySpace(space, animate = false) {
   if (animate && space !== trySpace && !still() && document.startViewTransition) {
-    document.startViewTransition(() => setTrySpace(space))
+    morph(() => setTrySpace(space))
     return
   }
   trySpace = space
@@ -368,10 +383,10 @@ function fillRoles() {
 function setRolesTab(tab, animate = true) {
   rolesTab = tab
   rolesSeg.dataset.at = tab === 'biz' ? '1' : '0'
-  for (const button of $$('[data-tab]', roles)) button.setAttribute('aria-selected', String(button.dataset.tab === tab))
+  for (const button of $$('[data-tab]', roles)) button.setAttribute('aria-pressed', String(button.dataset.tab === tab))
   if (!animate || still()) { fillRoles(); return }
   /* A view transition where the browser has one: the card's copy and phone glide over, no blink. */
-  if (document.startViewTransition) { document.startViewTransition(fillRoles); return }
+  if (document.startViewTransition) { morph(fillRoles); return }
   roles.classList.add('is-swapping')
   setTimeout(() => { fillRoles(); requestAnimationFrame(() => roles.classList.remove('is-swapping')) }, 260)
 }
@@ -388,16 +403,36 @@ const heroEl = $('[data-hero]'), modeSeg = $('[data-mode-seg]')
 const heroTitle = $('[data-hero-title]'), heroLede = $('[data-hero-lede]')
 const heroShot = $('.phone--hero picture')
 const copyFor = key => (language === 'en' ? COPY.en?.[key] : hebrew[key]) ?? ''
+/* Every line, picture and description that reads differently for a business remembers its Home
+   key, so the switch can go both ways and a language change keeps whichever space is showing. */
+for (const node of $$('[data-biz]')) node.dataset.home = node.dataset.i18n
+for (const node of $$('[data-biz-alt]')) node.dataset.homeAlt = node.dataset.i18nAlt
+for (const picture of $$('picture[data-biz-shot]')) picture.dataset.homeShot = picture.dataset.shot
+function paintSpace(biz) {
+  root.dataset.mode = biz ? 'biz' : 'home'
+  for (const node of $$('[data-biz]')) {
+    node.dataset.i18n = biz ? node.dataset.biz : node.dataset.home
+    node.innerHTML = copyFor(node.dataset.i18n)
+  }
+  for (const node of $$('[data-biz-alt]')) {
+    const key = biz ? node.dataset.bizAlt : node.dataset.homeAlt
+    node.dataset.i18nAlt = key
+    const value = biz ? copyFor(key) : language === 'en' ? COPY.en?.[key] : hebrewAlt[key]
+    if (value) node.setAttribute('alt', value)
+  }
+  for (const picture of $$('picture[data-biz-shot]')) paintShot(picture, biz ? picture.dataset.bizShot : picture.dataset.homeShot)
+}
 function paintMode() {
   const biz = mode === 'biz'
   heroEl.dataset.mode = mode
   modeSeg.dataset.at = biz ? '1' : '0'
-  for (const button of $$('[data-mode]', modeSeg)) button.setAttribute('aria-selected', String(button.dataset.mode === mode))
+  for (const button of $$('[data-mode]', modeSeg)) button.setAttribute('aria-pressed', String(button.dataset.mode === mode))
   heroTitle.dataset.i18n = biz ? 'heroTitleBiz' : 'heroTitle'
   heroTitle.innerHTML = copyFor(heroTitle.dataset.i18n)
   heroLede.dataset.i18n = biz ? 'heroLedeBiz' : 'heroLede'
   heroLede.innerHTML = copyFor(heroLede.dataset.i18n)
   if (heroShot) paintShot(heroShot, biz ? 'office' : 'today')
+  paintSpace(biz)
   /* The live app, if it is open, moves to the same space. */
   const live = $('.phone__frame iframe')
   if (live) {
@@ -413,7 +448,7 @@ function setMode(next) {
     setTrySpace(next === 'biz' ? 'office' : 'home')
     setRolesTab(next === 'biz' ? 'biz' : 'home', false)
   }
-  if (!still() && document.startViewTransition) document.startViewTransition(apply)
+  if (!still() && document.startViewTransition) morph(apply)
   else apply()
 }
 /* Both phone pictures are fetched ahead, so a switch never waits on an image. */
@@ -422,6 +457,15 @@ for (const shot of ['today', 'office', 'household']) for (const theme of ['', 'l
 }
 for (const button of $$('[data-mode]', modeSeg ?? document)) button.addEventListener('click', () => setMode(button.dataset.mode))
 painters.push(() => { if (mode === 'biz') paintMode() })
+
+/* A campaign for businesses links to ?for=business and lands on the Business page, not on Home with a
+   switch to find. */
+if (new URLSearchParams(location.search).get('for') === 'business') {
+  mode = 'biz'
+  paintMode()
+  setTrySpace('office')
+  setRolesTab('biz', false)
+}
 
 /* ── start ─────────────────────────────────────────────────────────────────────────────────── */
 
