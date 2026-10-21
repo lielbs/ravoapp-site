@@ -214,8 +214,8 @@ h1 em,h2 em{font-style:normal;color:var(--brand)}
 .faces{position:relative;display:flex;justify-content:center;align-items:center;block-size:96px;margin-block-end:8px}
 .faces i{display:grid;place-items:center;inline-size:46px;block-size:46px;margin-inline:-7px;border-radius:50%;background:var(--c);color:#FFF;font-family:var(--display);font-style:normal;font-weight:700;font-size:18px;box-shadow:0 0 0 3px var(--surface);animation:bob 4s ease-in-out infinite}
 .faces i:nth-child(2){animation-delay:-1s}.faces i:nth-child(3){animation-delay:-2s}.faces i:nth-child(4){animation-delay:-3s}
-@media (max-width:980px){.shelf{grid-template-columns:repeat(6,1fr)}.shelf__item{grid-column:span 2}.shelf__item:nth-child(4){grid-column:2 / span 2}.shelf__item:nth-child(5){grid-column:4 / span 2}}
-@media (max-width:620px){.shelf{grid-template-columns:1fr 1fr;gap:12px;margin-block-start:36px}.shelf__item,.shelf__item:nth-child(4){grid-column:auto}.shelf__item:nth-child(5){grid-column:1 / -1}.shelf__item{padding:20px 10px 18px}.shelf__item .area-art{inline-size:78px;block-size:78px}.shelf__item::before{block-size:76px}}
+@media (max-width:980px){.shelf{grid-template-columns:repeat(6,1fr)}.shelf__item{grid-column:span 2}.shelf__item--bills{grid-column:2 / span 2}.shelf__item--people{grid-column:4 / span 2}}
+@media (max-width:620px){.shelf{grid-template-columns:1fr 1fr;gap:12px;margin-block-start:36px}.shelf__item,.shelf__item--bills{grid-column:auto}.shelf__item--people{grid-column:1 / -1}.shelf__item{padding:20px 10px 18px}.shelf__item .area-art{inline-size:78px;block-size:78px}.shelf__item::before{block-size:76px}}
 
 /* area art motion — the app's own keyframes (src/styles/system/art.css) */
 .area-art :is(.aa-fill,.aa-tick,.aa-drop,.aa-basket,.aa-today,.aa-paid,.aa-coin,.aa-receipt){transform-box:fill-box;transform-origin:center}
@@ -562,3 +562,14 @@ a,button,[role='tab'],[role='radio']{-webkit-tap-highlight-color:transparent}
 
 /* ── Business: a fault card, not a bill ─────────────────────────────────────────────────────── */
 :root[data-mode='biz'] .bill__row strong,:root[data-mode='biz'] .bill__lock svg{display:none}
+
+/* ── Business: the shelf grows to the areas a business runs on ─────────────────────────────── */
+.shelf__item--biz{display:none}
+:root[data-mode='biz'] .shelf__item--biz{display:grid}
+:root[data-mode='biz'] .shelf{grid-template-columns:repeat(4,1fr)}
+:root[data-mode='biz'] .shelf__item--people{grid-column:1 / -1}
+@media (max-width:980px){:root[data-mode='biz'] .shelf{grid-template-columns:repeat(6,1fr)}:root[data-mode='biz'] .shelf__item,:root[data-mode='biz'] .shelf__item--bills{grid-column:span 3}:root[data-mode='biz'] .shelf__item--people{grid-column:1 / -1}}
+@media (max-width:620px){:root[data-mode='biz'] .shelf{grid-template-columns:1fr 1fr}:root[data-mode='biz'] .shelf__item,:root[data-mode='biz'] .shelf__item--bills{grid-column:auto}:root[data-mode='biz'] .shelf__item--people{grid-column:1 / -1}}
+.aa-gear{transform-box:fill-box;transform-origin:50% 50%;animation:aa-spin 9s linear infinite}
+@keyframes aa-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.aa-gear{animation:none}}
